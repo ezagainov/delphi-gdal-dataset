@@ -1,0 +1,44 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{782efa7a-69af-4139-8a74-45004dff9470}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Projects Include="pkg\GdalDT.dproj" />
+    <Projects Include="test\Unittests.dproj" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Default.Personality</Borland.Personality>
+    <Borland.ProjectType />
+    <BorlandProject>
+  <BorlandProject xmlns=""> <Default.Personality> </Default.Personality> </BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Target Name="Unittests">
+    <MSBuild Projects="test\Unittests.dproj" Targets="" />
+  </Target>
+  <Target Name="Unittests:Clean">
+    <MSBuild Projects="test\Unittests.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="Unittests:Make">
+    <MSBuild Projects="test\Unittests.dproj" Targets="Make" />
+  </Target>
+  <Target Name="GdalDT">
+    <MSBuild Projects="pkg\GdalDT.dproj" Targets="" />
+  </Target>
+  <Target Name="GdalDT:Clean">
+    <MSBuild Projects="pkg\GdalDT.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="GdalDT:Make">
+    <MSBuild Projects="pkg\GdalDT.dproj" Targets="Make" />
+  </Target>
+  <Target Name="Build">
+    <CallTarget Targets="Unittests;GdalDT" />
+  </Target>
+  <Target Name="Clean">
+    <CallTarget Targets="Unittests:Clean;GdalDT:Clean" />
+  </Target>
+  <Target Name="Make">
+    <CallTarget Targets="Unittests:Make;GdalDT:Make" />
+  </Target>
+  <Import Condition="Exists('$(MSBuildBinPath)\Borland.Group.Targets')" Project="$(MSBuildBinPath)\Borland.Group.Targets" />
+</Project>

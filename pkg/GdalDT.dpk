@@ -1,0 +1,58 @@
+package GdalDT;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  vclx,
+  vcl,
+  dbrtl,
+  adortl;
+
+contains
+  gdal in '..\src\gdal_h\gdal.pas',
+  gdalcore in '..\src\gdal_h\gdalcore.pas',
+  ogr in '..\src\gdal_h\ogr.pas',
+  osr in '..\src\gdal_h\osr.pas',
+  GDALBaseHandleObjectUnit in '..\src\ObjectWrapper\GDALBaseHandleObjectUnit.pas',
+  GDALDatasetUnit in '..\src\ObjectWrapper\GDALDatasetUnit.pas',
+  GDALMajorObjectUnit in '..\src\ObjectWrapper\GDALMajorObjectUnit.pas',
+  OGRDatasetUnit in '..\src\ObjectWrapper\OGRDatasetUnit.pas',
+  OGREnvelopeUnit in '..\src\ObjectWrapper\OGREnvelopeUnit.pas',
+  OGRFeatureDefnUnit in '..\src\ObjectWrapper\OGRFeatureDefnUnit.pas',
+  OGRFeatureUnit in '..\src\ObjectWrapper\OGRFeatureUnit.pas',
+  OGRFieldDefnUnit in '..\src\ObjectWrapper\OGRFieldDefnUnit.pas',
+  OGRGeometryUnit in '..\src\ObjectWrapper\OGRGeometryUnit.pas',
+  OGRLayerUnit in '..\src\ObjectWrapper\OGRLayerUnit.pas',
+  OGRSpatialReferenceUnit in '..\src\ObjectWrapper\OGRSpatialReferenceUnit.pas',
+  CPLUtils in '..\src\gdal_utils\CPLUtils.pas',
+  GdalErrorHandler in '..\src\gdal_utils\GdalErrorHandler.pas',
+  OgrUtils in '..\src\gdal_utils\OgrUtils.pas',
+  OgrDatasetRegister in '..\src\OgrDatasetRegister.pas',
+  OgrDBDataset.Fields in '..\src\OgrDBDataset.Fields.pas',
+  OgrDBDataset in '..\src\OgrDBDataset.pas',
+  OgrDBDataset.SpatialFilter in '..\src\OgrDBDataset.SpatialFilter.pas';
+
+end.

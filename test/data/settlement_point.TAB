@@ -1,0 +1,17 @@
+!table
+!version 300
+!charset WindowsCyrillic
+
+Definition Table
+  Type NATIVE Charset "WindowsCyrillic"
+  Fields 10
+    OSM_ID Decimal (19, 0) ;
+    NAME Char (110) ;
+    NAME_EN Char (16) ;
+    NAME_RU Char (30) ;
+    PLACE Char (8) ;
+    A_CNTR Char (2) ;
+    A_RGN Char (29) ;
+    A_DSTRCT Char (39) ;
+    A_PSTCD Char (6) ;
+    POPULATION Char (7) ;
