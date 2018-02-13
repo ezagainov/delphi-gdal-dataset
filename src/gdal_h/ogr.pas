@@ -1,30 +1,4 @@
-{
-  Delphi API for OGR Geometry, Feature, Layers, DataSource and drivers
-
-  Copyright (C) 2010 Alexander Bruy (alexander.bruy@gmail.com)
-
-  Based on the sources automatically converted by H2Pas 1.0.0
-  The original files are: ogr_core.h, ogr_api.h
-
-  Permission is hereby granted, free of charge, to any person obtaining a
-  copy of this software and associated documentation files (the "Software"),
-  to deal in the Software without restriction, including without limitation
-  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-  and/or sell copies of the Software, and to permit persons to whom the
-  Software is furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included
-  in all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-  DEALINGS IN THE SOFTWARE.
-}
-
+п»ї
 {******************************************************************************
  * $Id: ogr_core.h 17722 2009-10-01 16:40:26Z warmerdam $
  *
@@ -95,13 +69,12 @@ unit ogr;
 interface
 
 uses
-  gdalcore, gdal;
+  gdal, gdalcore, windows;
 
-//----------------------------------------------------------------------------
 const
-  { ************************* ogr_core.h constants ************************* }
+
   OGRERR_NONE           = 0;
-  OGRERR_NOT_ENOUGH_DATA = 1;    { not enough data to deserialize }
+  OGRERR_NOT_ENOUGH_DATA = 1;
   OGRERR_NOT_ENOUGH_MEMORY = 2;
   OGRERR_UNSUPPORTED_GEOMETRY_TYPE = 3;
   OGRERR_UNSUPPORTED_OPERATION = 4;
@@ -118,7 +91,6 @@ const
   OGRNullFID     = -1;
   OGRUnsetMarker = -21121;
 
-  { Constants from ogrsf_frmts.h for capabilities }
   OLCRandomRead         = 'RandomRead';
   OLCSequentialWrite    = 'SequentialWrite';
   OLCRandomWrite        = 'RandomWrite';
@@ -138,18 +110,13 @@ const
   ODrCCreateDataSource = 'CreateDataSource';
   ODrCDeleteDataSource = 'DeleteDataSource';
 
-{ ************************* ogr_api.h constants *************************** }
-
-//-----------------------------------------------------------------------------
 type
-  { **************************** ogr_core.h types ************************** }
   OGREnvelope = packed record
     MinX: double;
     MaxX: double;
     MinY: double;
     MaxY: double;
   end;
-
 
   OGRErr  = integer;
   POGRErr = ^OGRErr;
@@ -158,65 +125,47 @@ type
 
   OGRwkbGeometryType =
     (
-    wkbUnknown = 0,                      { < unknown type, non-standard }
+    wkbUnknown = 0,
     wkbPoint = 1,
-    { < 0-dimensional geometric object, standard WKB }
-    wkbLineString = 2,                   { < 1-dimensional geometric object with linear
-                                             interpolation between Points, standard WKB }
-    wkbPolygon = 3,                      { < planar 2-dimensional geometric object defined
-                                             by 1 exterior boundary and 0 or more interior
-                                             boundaries, standard WKB }
-    wkbMultiPoint = 4,                   { < GeometryCollection of Points, standard WKB }
+
+    wkbLineString = 2,
+    wkbPolygon = 3,
+    wkbMultiPoint = 4,
     wkbMultiLineString = 5,
-    { < GeometryCollection of LineStrings, standard WKB }
+
     wkbMultiPolygon = 6,
-    { < GeometryCollection of Polygons, standard WKB }
-    wkbGeometryCollection = 7,           { < geometric object that is a collection of 1
-                                             or more geometric objects, standard WKB }
-    wkbNone = 100,                       { < non-standard, for pure attribute records }
-    wkbLinearRing = 101                 { < non-standard, just for createGeometry() }
-    //    wkbPoint25D = $80000001,             { < 2.5D extension as per 99-402 }
-    //    wkbLineString25D = $80000002,        { < 2.5D extension as per 99-402 }
-    //    wkbPolygon25D = $80000003,           { < 2.5D extension as per 99-402 }
-    //    wkbMultiPoint25D = $80000004,        { < 2.5D extension as per 99-402 }
-    //    wkbMultiLineString25D = $80000005,   { < 2.5D extension as per 99-402 }
-    //    wkbMultiPolygon25D = $80000006      { < 2.5D extension as per 99-402 }
-    //    wkbGeometryCollection25D = $80000007 { < 2.5D extension as per 99-402 }
+
+    wkbGeometryCollection = 7,
+    wkbNone = 100,
+    wkbLinearRing = 101
+
     );
-  { TODO -oJh : 50 вербендымбомбинс }
 
   OGRwkbByteOrder =
     (
-    wkbXDR = 0, { MSB/Sun/Motoroloa: Most Significant Byte First }
-    wkbNDR = 1  { LSB/Intel/Vax: Least Significant Byte First }
+    wkbXDR = 0,
+    wkbNDR = 1
     );
 
-  { ogr_feature.h related definitions }
-
-  { List of feature field types. This list is likely to be extended in the
-    future ... avoid coding applications based on the assumption that all
-    field types can be known.
-  }
   OGRFieldType =
     (
-    OFTInteger = 0,        { Simple 32bit integer }
-    OFTIntegerList = 1,    { List of 32bit integers }
-    OFTReal = 2,           { Double Precision floating point }
-    OFTRealList = 3,       { List of doubles }
-    OFTString = 4,         { String of ASCII chars }
-    OFTStringList = 5,     { Array of strings }
-    OFTWideString = 6,     { deprecated }
-    OFTWideStringList = 7, { deprecated }
-    OFTBinary = 8,         { Raw Binary data }
-    OFTDate = 9,           { Date }
-    OFTTime = 10,          { Time }
-    OFTDateTime = 11,      { Date and Time }
+    OFTInteger = 0,
+    OFTIntegerList = 1,
+    OFTReal = 2,
+    OFTRealList = 3,
+    OFTString = 4,
+    OFTStringList = 5,
+    OFTWideString = 6,
+    OFTWideStringList = 7,
+    OFTBinary = 8,
+    OFTDate = 9,
+    OFTTime = 10,
+    OFTDateTime = 11,
     OFTInteger64 = 12,
     OFTInteger64List = 13,
     OFTMaxType = 13
     );
 
-  { Display justification for field values }
   OGRJustification =
     (
     OJUndefined = 0,
@@ -224,13 +173,9 @@ type
     OJRight = 2
     );
 
-  { OGRFeature field attribute value union }
   OGRField = record
   end;
 
-  { ogr_featurestyle.h related definitions }
-
-  { OGRStyleTool derived class types (returned by GetType()) }
   ogr_style_tool_class_id =
     (
     OGRSTCNone = 0,
@@ -242,7 +187,6 @@ type
     );
   OGRSTClassId = ogr_style_tool_class_id;
 
-  { List of units supported by OGRStyleTools }
   ogr_style_tool_units_id =
     (
     OGRSTUGround = 0,
@@ -254,7 +198,6 @@ type
     );
   OGRSTUnitId = ogr_style_tool_units_id;
 
-  { List of parameters for use with OGRStylePen }
   ogr_style_tool_param_pen_id =
     (
     OGRSTPenColor = 0,
@@ -269,7 +212,6 @@ type
     );
   OGRSTPenParam = ogr_style_tool_param_pen_id;
 
-  { List of parameters for use with OGRStyleBrush }
   ogr_style_tool_param_brush_id =
     (
     OGRSTBrushFColor = 0,
@@ -284,7 +226,6 @@ type
     );
   OGRSTBrushParam = ogr_style_tool_param_brush_id;
 
-  { List of parameters for use with OGRStyleSymbol }
   ogr_style_tool_param_symbol_id =
     (
     OGRSTSymbolId = 0,
@@ -303,7 +244,6 @@ type
     );
   OGRSTSymbolParam = ogr_style_tool_param_symbol_id;
 
-  { List of parameters for use with OGRStyleLabel }
   ogr_style_tool_param_label_id =
     (
     OGRSTLabelFontName = 0,
@@ -331,1082 +271,715 @@ type
     );
   OGRSTLabelParam = ogr_style_tool_param_label_id;
 
-  { **************************** ogr_api.h types *************************** }
   OGRGeometryH         = Pointer;
   OGRSpatialReferenceH = Pointer;
   OGRCoordinateTransformationH = Pointer;
 
-  { Feature related (ogr_feature.h) }
   OGRFieldDefnH   = Pointer;
   OGRFeatureDefnH = Pointer;
   OGRFeatureH     = Pointer;
   OGRStyleTableH  = Pointer;
 
-  { Driver related (ogrsf_frmts.h) }
   OGRLayerH      = Pointer;
   OGRDataSourceH = Pointer;
   OGRSFDriverH   = Pointer;
 
-  { Style related (ogrsf_featurestyle.h) }
   OGRStyleMgrH  = Pointer;
   OGRStyleToolH = Pointer;
 
-//----------------------------------------------------------------------------
-
-{ ************************* ogr_core.h functions *************************** }
-function OGRGeometryTypeToName(eType: OGRwkbGeometryType): CPChar;
-  cdecl; external LibName;
-
-function OGRMergeGeometryTypes(eMain: OGRwkbGeometryType;
-  eExtra: OGRwkbGeometryType): OGRwkbGeometryType;
-  cdecl; external LibName;
-
-function OGRParseDate(pszInput: CPChar; psOutput: OGRField;
-  nOptions: GIntBig): GIntBig; cdecl; external LibName;
-
-function GDALVersionInfo(pszRequest: CPChar): CPChar; cdecl; external LibName;
-
-function GDALCheckVersion(nVersionMajor: GIntBig; nVersionMinor: GIntBig;
-  pszCallingComponentName: CPChar): GIntBig; cdecl; external LibName;
-
-{ ************************** ogr_api.h functions *************************** }
-
-{ From base OGRGeometry class }
-{ Create a geometry object of the appropriate type from it's well known binary
-  representation.
-}
-function OGR_G_CreateFromWkb(pabyData: CPChar; hSRS: OGRSpatialReferenceH;
-  phGeometry: OGRGeometryH; nBytes: GIntBig): OGRErr;
-  cdecl; external LibName;
-
-{ Create a geometry object of the appropriate type from it's well known text
-  representation
-}
-function OGR_G_CreateFromWkt(ppszData: CPChar; hSRS: OGRSpatialReferenceH;
-  phGeometry: OGRGeometryH): OGRErr; cdecl; external LibName;
-
-
-//function OGR_G_CreateFromFgf();
-
-{ Destroy geometry object }
-procedure OGR_G_DestroyGeometry(hGeom: OGRGeometryH);
-  cdecl; external LibName;
-
-{ Create an empty geometry of desired type }
-function OGR_G_CreateGeometry(eGeometryType: OGRwkbGeometryType): OGRGeometryH;
-  cdecl; external LibName;
-
-//function OGR_G_ApproximateArcAngles();
-
-{ Convert to polygon }
-function OGR_G_ForceToPolygon(hGeom: OGRGeometryH): OGRGeometryH;
-  cdecl; external LibName;
-
-{ Convert to multipolygon }
-function OGR_G_ForceToMultiPolygon(hGeom: OGRGeometryH): OGRGeometryH;
-  cdecl; external LibName;
-
-{ Convert to multipoint }
-function OGR_G_ForceToMultiPoint(hGeom: OGRGeometryH): OGRGeometryH;
-  cdecl; external LibName;
-
-{ Convert to multilinestring }
-function OGR_G_ForceToMultiLineString(hGeom: OGRGeometryH): OGRGeometryH;
-  cdecl; external LibName;
-
-{ Get the dimension of this geometry }
-function OGR_G_GetDimension(hGeom: OGRGeometryH): GIntBig;
-  cdecl; external LibName;
-
-{ Get the dimension of the coordinates in this geometry }
-function OGR_G_GetCoordinateDimension(hGeom: OGRGeometryH): GIntBig;
-  cdecl; external LibName;
-
-//procedure OGR_G_SetCoordinateDimension();
-
-{ Make a copy of this object }
-function OGR_G_Clone(hGeom: OGRGeometryH): OGRGeometryH;
-  cdecl; external LibName;
-
-{ Computes and returns the bounding envelope for this geometry in the passed
-  psEnvelope structure
-}
-procedure OGR_G_GetEnvelope(hGeom: OGRGeometryH; psEnvelope: OGREnvelope);
-  cdecl; external LibName;
-
-{ Assign geometry from well known binary data }
-function OGR_G_ImportFromWkb(hGeom: OGRGeometryH; pabyData: CPChar;
-  nSize: GIntBig): OGRErr; cdecl; external LibName;
-
-{ Convert a geometry into well known binary format }
-function OGR_G_ExportToWkb(hGeom: OGRGeometryH; eOrder: OGRwkbByteOrder;
-  pabyDstBuffer: CPChar): OGRErr; cdecl; external LibName;
-
-{ Returns size of related binary representation }
-function OGR_G_WkbSize(hGeom: OGRGeometryH): GIntBig;
-  cdecl; external LibName;
-
-{ Assign geometry from well known text data }
-function OGR_G_ImportFromWkt(hGeom: OGRGeometryH; ppszSrcText: PCPChar): OGRErr;
-  cdecl; external LibName;
-
-{ Convert a geometry into well known text format }
-function OGR_G_ExportToWkt(hGeom: OGRGeometryH; ppszSrcText: PCPChar): OGRErr;
-  cdecl; external LibName;
-
-{ Convert a geometry into JSON format }
-function OGR_G_ExportToJson(hGeom: OGRGeometryH): CPChar;
-  cdecl; external LibName;
-
-
-{ Fetch geometry type }
-function OGR_G_GetGeometryType(hGeom: OGRGeometryH): OGRwkbGeometryType;
-  cdecl; external LibName;
-
-{ Fetch WKT name for geometry type }
-function OGR_G_GetGeometryName(hGeom: OGRGeometryH): CPChar;
-  cdecl; external LibName;
-
-{ Dump geometry in well known text format to indicated output file }
-procedure OGR_G_DumpReadable(hGeom: OGRGeometryH; fp: Pointer; pszPrefix: CPChar);
-  cdecl; external LibName;
-
-{ Convert geometry to strictly 2D. In a sense this converts all Z coordinates
-  to 0.0
-}
-procedure OGR_G_FlattenTo2D(hGeom: OGRGeometryH); cdecl; external LibName;
-
- //procedure OGR_G_CloseRings();
- //function OGR_G_CreateFromGML();
- //function OGR_G_ExportToGML();
- //function OGR_G_CreateFromGMLTree();
- //function OGR_G_ExportToGMLTree();
- //function OGR_G_ExportEnvelopeToGMLTree();
- //function OGR_G_ExportToKML();
- //function OGR_G_ExportToJson();
- //function OGR_G_CreateGeometryFromJson();
-
-{ Assign spatial reference to this object }
-procedure OGR_G_AssignSpatialReference(hGeom: OGRGeometryH;
-  hSRS: OGRSpatialReferenceH); cdecl; external LibName;
-
-//function OGR_G_GetSpatialReference();
-
-{ Apply arbitrary coordinate transformation to geometry }
-function OGR_G_Transform(hGeom: OGRGeometryH;
-  hTransform: OGRCoordinateTransformationH): OGRErr;
-  cdecl; external LibName;
-
-{ Transform geometry to new spatial reference system }
-function OGR_G_TransformTo(hGeom: OGRGeometryH;
-  hSRS: OGRSpatialReferenceH): OGRErr; cdecl; external LibName;
-
-{ Modify the geometry such it has no segment longer then the given distance }
-procedure OGR_G_Segmentize(hGeom: OGRGeometryH; dfMaxLength: double);
-  cdecl; external LibName;
-
-{ Do these features intersect? }
-function OGR_G_Intersects(hGeom: OGRGeometryH;
-  hOtherGeom: OGRGeometryH): GIntBig;
-  cdecl; external LibName;
-
-{ Returns TRUE if two geometries are equivalent }
-function OGR_G_Equals(hGeom: OGRGeometryH; hOther: OGRGeometryH): GIntBig;
-  cdecl; external LibName;
-
-{ Test for disjointness. Tests if this geometry and the other geometry
-  are disjoint
-}
-function OGR_G_Disjoint(hGeom: OGRGeometryH; hOther: OGRGeometryH): GIntBig;
-  cdecl; external LibName;
-
-{ Test for touching. Tests if this geometry and the other geometry
-  are touching
-}
-function OGR_G_Touches(hThis: OGRGeometryH; hOther: OGRGeometryH): GIntBig;
-  cdecl; external LibName;
-
-{ Test for crossing. Tests if this geometry and the other geometry
-  are crossing
-}
-function OGR_G_Crosses(hThis: OGRGeometryH; hOther: OGRGeometryH): GIntBig;
-  cdecl; external LibName;
-
-{ Test for containment. Tests if this geometry is within the other geometry }
-function OGR_G_Within(hThis: OGRGeometryH; hOther: OGRGeometryH): GIntBig;
-  cdecl; external LibName;
-
-{ Test for containment. Tests if this geometry contains the other geometry }
-function OGR_G_Contains(hThis: OGRGeometryH; hOther: OGRGeometryH): GIntBig;
-  cdecl; external LibName;
-
-{ Test for overlap. Tests if this geometry and the other geometry overlap,
-  that is their intersection has a non-zero area
-}
-function OGR_G_Overlaps(hThis: OGRGeometryH; hOther: OGRGeometryH): GIntBig;
-  cdecl; external LibName;
-
-{ Compute boundary (deprecated) }
-function OGR_G_GetBoundary(hTarget: OGRGeometryH): OGRGeometryH;
-  cdecl; external LibName;
-
-{ Compute convex hull }
-function OGR_G_ConvexHull(hTarget: OGRGeometryH): OGRGeometryH;
-  cdecl; external LibName;
-
-{ Compute buffer of geometry }
-function OGR_G_Buffer(hTarget: OGRGeometryH; dfDist: double;
-  nQuadSegs: GIntBig): OGRGeometryH; cdecl; external LibName;
-
-{ Compute intersection }
-function OGR_G_Intersection(hThis: OGRGeometryH;
-  hOther: OGRGeometryH): OGRGeometryH; cdecl; external LibName;
-
-{ Compute union }
-function OGR_G_Union(hThis: OGRGeometryH; hOther: OGRGeometryH): OGRGeometryH;
-  cdecl; external LibName;
-
-{ Compute union using cascading }
-function OGR_G_UnionCascaded(hThis: OGRGeometryH): OGRGeometryH;
-  cdecl; external LibName;
-
-{ Compute difference }
-function OGR_G_Difference(hThis: OGRGeometryH;
-  hOther: OGRGeometryH): OGRGeometryH; cdecl; external LibName;
-
-{ Compute symmetric difference (deprecated) }
-function OGR_G_SymmetricDifference(hThis: OGRGeometryH;
-  hOther: OGRGeometryH): OGRGeometryH; cdecl; external LibName;
-
-{ Compute distance between two geometries }
-function OGR_G_Distance(hFirst: OGRGeometryH; hOther: OGRGeometryH): double;
-  cdecl; external LibName;
-
-{ Compute geometry area (deprecated) }
-function OGR_G_GetArea(hGeom: OGRGeometryH): double;
-  cdecl; external LibName;
-
-{ Compute the geometry centroid }
-function OGR_G_Centroid(hGeom: OGRGeometryH;
-  hCentroidPoint: OGRGeometryH): GIntBig; cdecl; external LibName;
-
-{ Clear geometry information. This restores the geometry to it's initial
-  state after construction, and before assignment of actual geometry
-}
-procedure OGR_G_Empty(hGeom: OGRGeometryH); cdecl; external LibName;
-
-{ Test if the geometry is empty }
-function OGR_G_IsEmpty(hGeom: OGRGeometryH): GIntBig;
-  cdecl; external LibName;
-
-{ Test if the geometry is valid }
-function OGR_G_IsValid(hGeom: OGRGeometryH): GIntBig;
-  cdecl; external LibName;
-
-{ Returns TRUE if the geometry is simple }
-function OGR_G_IsSimple(hGeom: OGRGeometryH): GIntBig;
-  cdecl; external LibName;
-
-{ Test if the geometry is a ring }
-function OGR_G_IsRing(hGeom: OGRGeometryH): GIntBig;
-  cdecl; external LibName;
-
-{ backward compatibility }
-
-function OGR_G_Intersect(hGeom: OGRGeometryH; hOtherGeom: OGRGeometryH): GIntBig;
-  cdecl; external LibName;
-
-
-function OGR_G_Equal(hGeom: OGRGeometryH; hOther: OGRGeometryH): GIntBig;
-  cdecl; external LibName;
-
-{ Methods for getting/setting vertices in points, line strings and rings }
-
-{ Fetch number of points from a geometry. Only wkbPoint[25D] or
-  wkbLineString[25D] may return a valid value. Other geometry types will
-  silently return 0
-}
-function OGR_G_GetPointCount(hGeom: OGRGeometryH): GIntBig;
-  cdecl; external LibName;
-
-{ Fetch the X coordinate of a point from a geometry }
-function OGR_G_GetX(hGeom: OGRGeometryH; i: GIntBig): double;
-  cdecl; external LibName;
-
-{ Fetch the Y coordinate of a point from a geometry }
-function OGR_G_GetY(hGeom: OGRGeometryH; i: GIntBig): double;
-  cdecl; external LibName;
-
-{ Fetch the Z coordinate of a point from a geometry }
-function OGR_G_GetZ(hGeom: OGRGeometryH; i: GIntBig): double;
-  cdecl; external LibName;
-
-{ Fetch a point in line string or a point geometry }
-procedure OGR_G_GetPoint(hGeom: OGRGeometryH; i: GIntBig; pdfX: double;
-  pdfY: double; pdfZ: double); cdecl; external LibName;
-
-
-{ Set the location of a vertex in a point or linestring geometry }procedure OGR_G_SetPoint(hGeom: OGRGeometryH; i: GIntBig; dfX: double;
-  dfY: double; dfZ: double); cdecl; external LibName;
-
-{ Set the location of a vertex in a point or linestring geometry }
-procedure OGR_G_SetPoint_2D(hGeom: OGRGeometryH; i: GIntBig;
-  pdfX: double; pdfY: double); cdecl; external LibName;
-
-
-{ Add a point to a geometry (line string or point) }procedure OGR_G_AddPoint(hGeom: OGRGeometryH; dfX: double;
-  dfY: double; dfZ: double); cdecl; external LibName;
-
-{ Add a point to a geometry (line string or point) }
-procedure OGR_G_AddPoint_2D(hGeom: OGRGeometryH; dfX: double; dfY: double);
-  cdecl; external LibName;
-
-{ Methods for getting/setting rings and members collections }
-
-{ Fetch the number of elements in a geometry or number of geometries
-  in container
-}
-function OGR_G_GetGeometryCount(hGeom: OGRGeometryH): GIntBig;
-  cdecl; external LibName;
-
-{ Fetch geometry from a geometry container }
-function OGR_G_GetGeometryRef(hGeom: OGRGeometryH;
-  iSubGeom: GIntBig): OGRGeometryH; cdecl; external LibName;
-
-{ Add a geometry to a geometry container }
-function OGR_G_AddGeometry(hGeom: OGRGeometryH;
-  hNewSubGeom: OGRGeometryH): OGRErr; cdecl; external LibName;
-
-{ Add a geometry directly to an existing geometry container }
-function OGR_G_AddGeometryDirectly(hGeom: OGRGeometryH;
-  hNewSubGeom: OGRGeometryH): OGRErr; cdecl; external LibName;
-
-{ Remove a geometry from an exiting geometry container }
-function OGR_G_RemoveGeometry(hGeom: OGRGeometryH; iGeom: GIntBig;
-  bDelete: GIntBig): OGRErr; cdecl; external LibName;
-
-{ Build a ring from a bunch of arcs }
-function OGRBuildPolygonFromEdges(hLines: OGRGeometryH; bBestEffort: GIntBig;
-  bAutoClose: GIntBig; dfTolerance: double; peErr: OGRErr): OGRGeometryH;
-  cdecl; external LibName;
-
-{ Feature related (ogr_feature.h) }
-
-{ Create a new field definition }
-function OGR_Fld_Create(pszName: CPChar; eType: OGRFieldType): OGRFieldDefnH;
-  cdecl; external LibName;
-
-{ Destroy a field definition }
-procedure OGR_Fld_Destroy(hDefn: OGRFieldDefnH); cdecl; external LibName;
-
-{ Reset the name of this field }
-procedure OGR_Fld_SetName(hDefn: OGRFieldDefnH; pszName: CPChar);
-  cdecl; external LibName;
-
-{ Fetch name of this field }
-function OGR_Fld_GetNameRef(hDefn: OGRFieldDefnH): CPChar;
-  cdecl; external LibName;
-
-{ Fetch type of this field }
-function OGR_Fld_GetType(hDefn: OGRFieldDefnH): OGRFieldType;
-  cdecl; external LibName;
-
-{ Set the type of this field. This should never be done to an OGRFieldDefn
-  that is already part of an OGRFeatureDefn
-}
-procedure OGR_Fld_SetType(hDefn: OGRFieldDefnH; eType: OGRFieldType);
-  cdecl; external LibName;
-
-{ Get the justification for this field }
-function OGR_Fld_GetJustify(hDefn: OGRFieldDefnH): OGRJustification;
-  cdecl; external LibName;
-
-{ Set the justification for this field }
-procedure OGR_Fld_SetJustify(hDefn: OGRFieldDefnH; eJustify: OGRJustification);
-  cdecl; external LibName;
-
-{ Get the formatting width for this field }
-function OGR_Fld_GetWidth(hDefn: OGRFieldDefnH): GIntBig;
-  cdecl; external LibName;
-
-{ Set the formatting width for this field in characters }
-procedure OGR_Fld_SetWidth(hDefn: OGRFieldDefnH; nNewWidth: GIntBig);
-  cdecl; external LibName;
-
-{ Get the formatting precision for this field. This should normally be
-  zero for fields of types other than OFTReal
-}
-function OGR_Fld_GetPrecision(hDefn: OGRFieldDefnH): GIntBig;
-  cdecl; external LibName;
-
-{ Set the formatting precision for this field in characters }
-procedure OGR_Fld_SetPrecision(hDefn: OGRFieldDefnH; nPrecision: GIntBig);
-  cdecl; external LibName;
-
-{ Set defining parameters for a field in one call }
-procedure OGR_Fld_Set(hDefn: OGRFieldDefnH; pszNameIn: CPChar;
-  eTypeIn: OGRFieldType; nWidthIn: GIntBig; nPrecision: GIntBig;
-  eJustifyIn: OGRJustification); cdecl; external LibName;
-
-{ Return whether this field should be omitted when fetching features }
-function OGR_Fld_IsIgnored(hDefn: OGRFieldDefnH): GIntBig;
-  cdecl; external LibName;
-
-{ Set whether this field should be omitted when fetching features }
-procedure OGR_Fld_SetIgnored(hDefn: OGRFieldDefnH; fieldIndex: GIntBig);
-  cdecl; external LibName;
-
-{ Fetch human readable name for a field type }
-function OGR_GetFieldTypeName(eType: OGRFieldType): CPChar;
-  cdecl; external LibName;
-
-{ OGRFeatureDefn }
-
-{ Create a new feature definition object to hold the field definitions }
-function OGR_FD_Create(pszName: CPChar): OGRFeatureDefnH;
-  cdecl; external LibName;
-
-{ Destroy a feature definition object and release all memory associated
-  with it
-}
-procedure OGR_FD_Destroy(hDefn: OGRFeatureDefnH); cdecl; external LibName;
-
-{ Drop a reference, and destroy if unreferenced }
-procedure OGR_FD_Release(hDefn: OGRFeatureDefnH); cdecl; external LibName;
-
-{ Get name of the OGRFeatureDefn passed as an argument }
-function OGR_FD_GetName(hDefn: OGRFeatureDefnH): CPChar;
-  cdecl; external LibName;
-
-{ Fetch number of fields on the passed feature definition }
-function OGR_FD_GetFieldCount(hDefn: OGRFeatureDefnH): GIntBig;
-  cdecl; external LibName;
-
-{ Fetch field definition of the passed feature definition }
-function OGR_FD_GetFieldDefn(hDefn: OGRFeatureDefnH;
-  iField: GIntBig): OGRFieldDefnH; cdecl; external LibName;
-
-{ Find field by name }
-function OGR_FD_GetFieldIndex(hDefn: OGRFeatureDefnH;
-  pszFieldName: CPChar): GIntBig; cdecl; external LibName;
-
-{ Add a new field definition to the passed feature definition }
-procedure OGR_FD_AddFieldDefn(hDefn: OGRFeatureDefnH; hNewField: OGRFieldDefnH);
-  cdecl; external LibName;
-
-{ Fetch the geometry base type of the passed feature definition }
-function OGR_FD_GetGeomType(hDefn: OGRFeatureDefnH): OGRwkbGeometryType;
-  cdecl; external LibName;
-
-{ Assign the base geometry type for the passed layer (the same as the
-  feature definition)
-}
-procedure OGR_FD_SetGeomType(hDefn: OGRFeatureDefnH; eType: OGRwkbGeometryType);
-  cdecl; external LibName;
-
-{ Determine whether the geometry can be omitted when fetching features }
-function OGR_FD_IsGeometryIgnored(hDefn: OGRFeatureDefnH): GIntBig;
-  cdecl; external LibName;
-
-{ Set whether the geometry can be omitted when fetching features }
-procedure OGR_FD_SetGeometryIgnored(hDefn: OGRFeatureDefnH; bIgnored: GIntBig);
-  cdecl; external LibName;
-
-{ Determine whether the style can be omitted when fetching features }
-function OGR_FD_IsStyleIgnored(hDefn: OGRFeatureDefnH): GIntBig;
-  cdecl; external LibName;
-
-{ Set whether the style can be omitted when fetching features }
-procedure OGR_FD_SetStyleIgnored(hDefn: OGRFeatureDefnH; bIgnored: GIntBig);
-  cdecl; external LibName;
-
-{ Increments the reference count by one }
-function OGR_FD_Reference(hDefn: OGRFeatureDefnH): GIntBig;
-  cdecl; external LibName;
-
-{ Decrements the reference count by one }
-function OGR_FD_Dereference(hDefn: OGRFeatureDefnH): GIntBig;
-  cdecl; external LibName;
-
-//function OGR_FD_GetReferenceCount(hDefn: OGRFeatureDefnH): GIntBig;
-
-{ OGRFeature }
-
-{ Feature factory }
-function OGR_F_Create(hDefn: OGRFeatureDefnH): OGRFeatureH;
-  cdecl; external LibName;
-
-{ Destroy feature }
-procedure OGR_F_Destroy(hFeat: OGRFeatureH);
-  cdecl; external LibName;
-
-{ Fetch feature definition }
-function OGR_F_GetDefnRef(hFeat: OGRFeatureH): OGRFeatureDefnH;
-  cdecl; external LibName;
-
-
-{ Set feature geometry }function OGR_F_SetGeometryDirectly(hFeat: OGRFeatureH;
-  hGeom: OGRGeometryH): OGRErr; cdecl; external LibName;
-
-{ Set feature geometry }
-function OGR_F_SetGeometry(hFeat: OGRFeatureH; hGeom: OGRGeometryH): OGRErr;
-  cdecl; external LibName;
-
-{ Fetch an handle to feature geometry }
-function OGR_F_GetGeometryRef(hFeat: OGRFeatureH): OGRGeometryH;
-  cdecl; external LibName;
-
-{ Duplicate feature }
-function OGR_F_Clone(hFeat: OGRFeatureH): OGRFeatureH;
-  cdecl; external LibName;
-
-{ Test if two features are the same }
-function OGR_F_Equal(hFeat: OGRFeatureH; hOtherFeat: OGRFeatureH): GIntBig;
-  cdecl; external LibName;
-
-{ Fetch number of fields on this feature This will always be the same
-  as the field count for the OGRFeatureDefn
-}
-function OGR_F_GetFieldCount(hFeat: OGRFeatureH): GIntBig;
-  cdecl; external LibName;
-
-{ Fetch definition for this field }
-function OGR_F_GetFieldDefnRef(hFeat: OGRFeatureH; i: GIntBig): OGRFieldDefnH;
-  cdecl; external LibName;
-
-{ Fetch the field index given field name }
-function OGR_F_GetFieldIndex(hFeat: OGRFeatureH; pszName: CPChar): GIntBig;
-  cdecl; external LibName;
-
-{ Test if a field has ever been assigned a value or not }
-function OGR_F_IsFieldSet(hFeat: OGRFeatureH; iField: GIntBig): GIntBig;
-  cdecl; external LibName;
-
-{ Clear a field, marking it as unset }
-procedure OGR_F_UnsetField(hFeat: OGRFeatureH; iField: GIntBig);
-  cdecl; external LibName;
-
-{ Fetch an handle to the internal field value given the index }
-function OGR_F_GetRawFieldRef(hFeat: OGRFeatureH; iField: GIntBig): OGRField;
-  cdecl; external LibName;
-
-{ Fetch field value as integer }
-function OGR_F_GetFieldAsInteger(hFeat: OGRFeatureH; iField: GIntBig): GIntBig;
-  cdecl; external LibName;
-
-{ Fetch field value as a double }
-function OGR_F_GetFieldAsDouble(hFeat: OGRFeatureH; iField: GIntBig): double;
-  cdecl; external LibName;
-
-{ Fetch field value as a string }
-function OGR_F_GetFieldAsString(hFeat: OGRFeatureH; iField: GIntBig): CPChar;
-  cdecl; external LibName;
-
-{ Fetch field value as a list of integers }
-function OGR_F_GetFieldAsIntegerList(hFeat: OGRFeatureH; iField: GIntBig;
-  pnCount: GIntBig): GIntBig; cdecl; external LibName;
-
-{ Fetch field value as a list of doubles }
-function OGR_F_GetFieldAsDoubleList(hFeat: OGRFeatureH; iField: GIntBig;
-  pnCount: PLongInt): double; cdecl; external LibName;
-
-{ Fetch field value as a list of strings }
-function OGR_F_GetFieldAsStringList(hFeat: OGRFeatureH; iField: GIntBig): CPChar;
-  cdecl; external LibName;
-
-{ Fetch field value as binary }
-function OGR_F_GetFieldAsBinary(hFeat: OGRFeatureH; iField: GIntBig;
-  pnBytes: PLongInt): GByte; cdecl; external LibName;
-
-{ Fetch field value as date and time }
-function OGR_F_GetFieldAsDateTime(hFeat: OGRFeatureH; iField: GIntBig;
-  pnYear: PLongInt; pnMonth: PLongInt; pnDay: PLongInt;
-  pnHour: PLongInt; pnMinute: PLongInt; pnSecond: PLongInt;
-  pnTZFlag: PLongInt): GIntBig; cdecl; external LibName;
-
-{ Set field to integer value }
-procedure OGR_F_SetFieldInteger(hFeat: OGRFeatureH; iField: GIntBig;
-  nValue: GIntBig); cdecl; external LibName;
-
-{ Set field to double value }
-procedure OGR_F_SetFieldDouble(hFeat: OGRFeatureH; iField: GIntBig;
-  dfValue: double); cdecl; external LibName;
-
-{ Set field to string value }
-procedure OGR_F_SetFieldString(hFeat: OGRFeatureH; iField: integer;
-  pszValue: CPChar); cdecl; external LibName;
-
-{ Set field to list of integers value }
-procedure OGR_F_SetFieldIntegerList(hFeat: OGRFeatureH; iField: GIntBig;
-  nCount: GIntBig; panValues: PLongInt); cdecl; external LibName;
-
-{ Set field to list of doubles value }
-procedure OGR_F_SetFieldDoubleList(hFeat: OGRFeatureH; iField: GIntBig;
-  nCount: GIntBig; padfValues: Pdouble); cdecl; external LibName;
-
-{ Set field to list of strings value }
-procedure OGR_F_SetFieldStringList(hFeat: OGRFeatureH; iField: GIntBig;
-  papszValues: PCPChar); cdecl; external LibName;
-
-{ Set field }
-procedure OGR_F_SetFieldRaw(hFeat: OGRFeatureH; iField: GIntBig;
-  psValue: OGRField); cdecl; external LibName;
-
-{ Set field to binary data }
-procedure OGR_F_SetFieldBinary(hFeat: OGRFeatureH; iField: GIntBig;
-  nBytes: GIntBig; pabyData: GByte); cdecl; external LibName;
-
-{ Set field to datetime }
-procedure OGR_F_SetFieldDateTime(hFeat: OGRFeatureH; iField: GIntBig;
-  nYear: GIntBig; nMonth: GIntBig; nDay: GIntBig; nHour: GIntBig;
-  nMinute: GIntBig; nSecond: GIntBig; nTZFlag: GIntBig);
-  cdecl; external LibName;
-
-{ Get feature identifier }
-function OGR_F_GetFID(hFeat: OGRFeatureH): GIntBig; cdecl; external LibName;
-
-{ Set the feature identifier }
-function OGR_F_SetFID(hFeat: OGRFeatureH; nFID: GIntBig): OGRErr;
-  cdecl; external LibName;
-
-{ Dump this feature in a human readable form }
-procedure OGR_F_DumpReadable(hFeat: OGRFeatureH; fpOut: Pointer);
-  cdecl; external LibName;
-
-
-{ Set one feature from another }function OGR_F_SetFrom(hFeat: OGRFeatureH; hOtherFeat: OGRFeatureH;
-  bForgiving: GIntBig): OGRErr; cdecl; external LibName;
-
-{ Set one feature from another }
-function OGR_F_SetFromWithMap(hFeat: OGRFeatureH; hOtherFeat: OGRFeatureH;
-  bForgiving: GIntBig; panMap: PLongInt): OGRErr;
-  cdecl; external LibName;
-
-{ Fetch style string for this feature }
-function OGR_F_GetStyleString(hFeat: OGRFeatureH): CPChar;
-  cdecl; external LibName;
-
-{ Set feature style string. This method operate exactly as
-  OGR_F_SetStyleStringDirectly() except that it does not assume ownership
-  of the passed string, but instead makes a copy of it
-}
-procedure OGR_F_SetStyleString(hFeat: OGRFeatureH; pszStyle: CPChar);
-  cdecl; external LibName;
-
-{ Set feature style string. This method operate exactly as
-  OGR_F_SetStyleString() except that it assumes ownership of the passed
-  string
-}
-procedure OGR_F_SetStyleStringDirectly(hFeat: OGRFeatureH; pszStyle: CPChar);
-  cdecl; external LibName;
-
- //function OGR_F_GetStyleTable(hFeat:OGRFeatureH):OGRStyleTableH;
- //procedure OGR_F_SetStyleTableDirectly(hFeat:OGRFeatureH; _para2:OGRStyleTableH);
- //procedure OGR_F_SetStyleTable(hFeat:OGRFeatureH; _para2:OGRStyleTableH);                                                      f
-
-{ OGRLayer }
-
-function OGR_L_Update(pLayerInput, pLayerMethod, pLayerResult: OGRLayerH;
-  papszOptions: PCPChar; pfnProgress: GDALProgressFunc; pProgressData: Pointer): OGRErr;
-  cdecl; external LibName;
-
-{ This function returns the current spatial filter for this layer }
-function OGR_L_GetSpatialFilter(hLayer: OGRLayerH): OGRGeometryH;
-  cdecl; external LibName;
-
-{ Set a new spatial filter }
-procedure OGR_L_SetSpatialFilter(hLayer: OGRLayerH; hGeom: OGRGeometryH);
-  cdecl; external LibName;
-
-{ Set a new rectangular spatial filter }
-procedure OGR_L_SetSpatialFilterRect(hLayer: OGRLayerH; dfMinX: double;
-  dfMinY: double; dfMaxX: double; dfMaxY: double);
-  cdecl; external LibName;
-
-{ Set a new attribute query }
-function OGR_L_SetAttributeFilter(hLayer: OGRLayerH; pszQuery: CPChar): OGRErr;
-  cdecl; external LibName;
-
-{ Reset feature reading to start on the first feature }
-procedure OGR_L_ResetReading(hLayer: OGRLayerH); cdecl; external LibName;
-
-{ Fetch the next available feature from this layer }
-function OGR_L_GetNextFeature(hLayer: OGRLayerH): OGRFeatureH;
-  cdecl; external LibName;
-
-  function OGR_L_GetName(hLayer: OGRLayerH): CPChar; cdecl; external LibName;
-
-{ Move read cursor to the nIndex'th feature in the current resultset }
-function OGR_L_SetNextByIndex(hLayer: OGRLayerH; nIndex: GIntBig): OGRErr;
-  cdecl; external LibName;
-
-{ Fetch a feature by its identifier }
-function OGR_L_GetFeature(hLayer: OGRLayerH; nFeatureId: GIntBig): OGRFeatureH;
-  cdecl; external LibName;
-
-{ Rewrite an existing feature }
-function OGR_L_SetFeature(hLayer: OGRLayerH; hFeat: OGRFeatureH): OGRErr;
-  cdecl; external LibName;
-
-{ Create and write a new feature within a layer }
-function OGR_L_CreateFeature(hLayer: OGRLayerH; hFeat: OGRFeatureH): OGRErr;
-  cdecl; external LibName;
-
-{ Delete feature from layer }
-function OGR_L_DeleteFeature(hLayer: OGRLayerH; nFID: GIntBig): OGRErr;
- cdecl; external LibName;
-
-{ Fetch the schema information for this layer }
-function OGR_L_GetLayerDefn(hLayer: OGRLayerH): OGRFeatureDefnH;
-  cdecl; external LibName;
-
-{ Fetch the spatial reference system for this layer }
-function OGR_L_GetSpatialRef(hLayer: OGRLayerH): OGRSpatialReferenceH;
-  cdecl; external LibName;
-
-{ Fetch the feature count in this layer }
-function OGR_L_GetFeatureCount(hLayer: OGRLayerH; bForce: GIntBig): GIntBig;
-  cdecl; external LibName;
-
-{ Fetch the extent of this layer }
-function OGR_L_GetExtent(hLayer: OGRLayerH; var psExtent: OGREnvelope;
-  bForce: integer): OGRErr; cdecl; external LibName;
-
-{ Test if this layer supported the named capability }
-function OGR_L_TestCapability(hLayer: OGRLayerH; pszCap: CPChar): integer;
-  cdecl; external LibName;
-
-{ Create a new field on a layer }
-function OGR_L_CreateField(hLayer: OGRLayerH; hField: OGRFieldDefnH;
-  bApproxOK: GIntBig): OGRErr; cdecl; external LibName;
-
-{ For datasources which support transactions, StartTransaction creates
-
-  a transaction
-}function OGR_L_StartTransaction(hLayer: OGRLayerH): OGRErr;
-  cdecl; external LibName;
-
-{ For datasources which support transactions, CommitTransaction commits
-  a transaction
-}
-function OGR_L_CommitTransaction(hLayer: OGRLayerH): OGRErr;
-  cdecl; external LibName;
-
-{ For datasources which support transactions, RollbackTransaction will
-  roll back a datasource to its state before the start of the current
-  transaction. If no transaction is active, or the rollback fails, will
-  return OGRERR_FAILURE. Datasources which do not support transactions
-  will always return OGRERR_NONE
-}
-function OGR_L_RollbackTransaction(hLayer: OGRLayerH): OGRErr;
-  cdecl; external LibName;
-
- //function OGR_L_Reference(hLayer:OGRLayerH):GIntBig;
- //function OGR_L_Dereference(hLayer:OGRLayerH):GIntBig;
- //function OGR_L_GetRefCount(hLayer:OGRLayerH):GIntBig;
-
-{ Flush pending changes to disk }
-function OGR_L_SyncToDisk(hLayer: OGRLayerH): OGRErr;
-  cdecl; external LibName;
-
-//function OGR_L_GetFeaturesRead(hLayer:OGRLayerH):GIntBig;
-
-
-{ This method returns the name of the underlying database column being  used as the FID column, or "" if not supported
-
-}function OGR_L_GetFIDColumn(hLayer: OGRLayerH): CPChar;
-  cdecl; external LibName;
-
-{ This method returns the name of the underlying database column being
-  used as the geometry column, or "" if not supported
-}
-function OGR_L_GetGeometryColumn(hLayer: OGRLayerH): CPChar;
-  cdecl; external LibName;
-
- //function OGR_L_GetStyleTable(hLayer:OGRLayerH):OGRStyleTableH;
- //procedure OGR_L_SetStyleTableDirectly(hLayer:OGRLayerH; _para2:OGRStyleTableH);
- //procedure OGR_L_SetStyleTable(hLayer:OGRLayerH; _para2:OGRStyleTableH);
-
-{ Set which fields can be omitted when retrieving features from the layer.
-
-  By default, no fields are ignored.
-}
-function OGR_L_SetIgnoredFields(hLayer: OGRLayerH; fields: CPChar): OGRErr;
-  cdecl; external LibName;
-
-{ OGRDataSource }
-
-{ Closes opened datasource and releases allocated resources }
-procedure OGR_DS_Destroy(hDataSource: OGRDataSourceH);
-  cdecl; external LibName;
-
-{ Returns the name of the data source }
-function OGR_DS_GetName(hDS: OGRDataSourceH): CPChar;
-  cdecl; external LibName;
-
-{ Get the number of layers in this data source }
-function OGR_DS_GetLayerCount(hDS: OGRDataSourceH): GIntBig;
-  cdecl; external LibName;
-
-{ Fetch a layer by index }
-function OGR_DS_GetLayer(hDS: OGRDataSourceH; iLayer: GIntBig): OGRLayerH;
-  cdecl; external LibName;
-
-{ Fetch a layer by name }
-function OGR_DS_GetLayerByName(hDS: OGRDataSourceH;
-  pszLayerName: CPChar): OGRLayerH; cdecl; external LibName;
-
-{ Delete the indicated layer from the datasource }
-function OGR_DS_DeleteLayer(hDS: OGRDataSourceH; iLayer: GIntBig): OGRErr;
-  cdecl; external LibName;
-
-{ Returns the driver that the dataset was opened with }
-function OGR_DS_GetDriver(hDS: OGRDataSourceH): OGRSFDriverH;
-  cdecl; external LibName;
-
-{ This function attempts to create a new layer on the data source with
-  the indicated name, coordinate system, geometry type
-}
-function OGR_DS_CreateLayer(hDS: OGRDataSourceH; pszName: CPChar;
-  hSpatialRef: OGRSpatialReferenceH; eType: OGRwkbGeometryType;
-  papszOptions: PCPChar): OGRLayerH; cdecl; external LibName;
-
-{ Duplicate an existing layer }
-function OGR_DS_CopyLayer(hDS: OGRDataSourceH; hSrcLayer: OGRLayerH;
-  pszNewName: CPChar; papszOptions: PCPChar): OGRLayerH;
-  cdecl; external LibName;
-
-{ Test if capability is available }
-function OGR_DS_TestCapability(hDS: OGRDataSourceH;
-  pszCapability: CPChar): GIntBig; cdecl; external LibName;
-
-{ Execute an SQL statement against the data store }
-function OGR_DS_ExecuteSQL(hDS: OGRDataSourceH; pszSQLCommand: CPChar;
-  hSpatialFilter: OGRGeometryH; pszDialect: CPChar): OGRLayerH;
-  cdecl; external LibName;
-
-{ Release results of OGR_DS_ExecuteSQL() }
-procedure OGR_DS_ReleaseResultSet(hDS: OGRDataSourceH; hLayer: OGRLayerH);
-  cdecl; external LibName;
-
- //function OGR_DS_Reference(hDS:OGRDataSourceH):GIntBig;
- //function OGR_DS_Dereference(hDS:OGRDataSourceH):GIntBig;
- //function OGR_DS_GetRefCount(hDS:OGRDataSourceH):GIntBig;
- //function OGR_DS_GetSummaryRefCount(hDS:OGRDataSourceH):GIntBig;
-
-{ Flush pending changes to disk }
-function OGR_DS_SyncToDisk(hDS: OGRDataSourceH): OGRErr;
-  cdecl; external LibName;
-
- //function OGR_DS_GetStyleTable(hDS:OGRDataSourceH):OGRStyleTableH;
- //procedure OGR_DS_SetStyleTableDirectly(hDS:OGRDataSourceH; _para2:OGRStyleTableH);
- //procedure OGR_DS_SetStyleTable(hDS:OGRDataSourceH; _para2:OGRStyleTableH);
-
-{ OGRSFDriver }
-
-{ Fetch name of driver (file format). This name should be relatively short
-  (10-40 characters), and should reflect the underlying file format. For
-  instance "ESRI Shapefile"
-}
-function OGR_Dr_GetName(hDriver: OGRSFDriverH): CPChar;
-  cdecl; external LibName;
-
-{ Attempt to open file with this driver }
-function OGR_Dr_Open(hDriver: OGRSFDriverH; pszName: CPChar;
-  bUpdate: GIntBig): OGRDataSourceH; cdecl; external LibName;
-
-{ Test if capability is available }
-function OGR_Dr_TestCapability(hDriver: OGRSFDriverH; pszCap: CPChar): GIntBig;
-  cdecl; external LibName;
-
-{ This function attempts to create a new data source based on the passed
-  driver
-
-}function OGR_Dr_CreateDataSource(hDriver: OGRSFDriverH; pszName: CPChar;
-  papszOptions: PCPChar): OGRDataSourceH; cdecl; external LibName;
-
-{ This function creates a new datasource by copying all the layers from
-  the source datasource
-}
-function OGR_Dr_CopyDataSource(hDriver: OGRSFDriverH; hSrcDS: OGRDataSourceH;
-  pszNewName: CPChar; papszOptions: PCPChar): OGRDataSourceH;
-  cdecl; external LibName;
-
-{ Delete a datasource }
-function OGR_Dr_DeleteDataSource(hDriver: OGRSFDriverH;
-  pszDataSource: CPChar): OGRErr; cdecl; external LibName;
-
-{ OGRSFDriverRegistrar }
-
-{ Open a file / data source with one of the registered drivers }
-function OGROpen(pszName: CPChar; bUpdate: integer;
-  pahDriverList: OGRSFDriverH): OGRDataSourceH;
-  cdecl; external LibName;
-
-//function OGROpenShared(_para1:CPChar; _para2:GIntBig; _para3:POGRSFDriverH):OGRDataSourceH;
-
-{ Drop a reference to this datasource, and if the reference count drops
-  to zero close (destroy) the datasource
-}
-function OGRReleaseDataSource(hDS: OGRDataSourceH): OGRErr;
-  cdecl; external LibName;
-
-{ Add a driver to the list of registered drivers }
-procedure OGRRegisterDriver(hDriver: OGRSFDriverH);
-  cdecl; external LibName;
-
-{ Remove the passed driver from the list of registered drivers }
-procedure OGRDeregisterDriver(hDriver: OGRSFDriverH);
-  cdecl; external LibName;
-
-{ Fetch the number of registered drivers }
-function OGRGetDriverCount: GIntBig; cdecl; external LibName;
-
-{ Fetch the indicated driver }
-function OGRGetDriver(iDriver: GIntBig): OGRSFDriverH;
-  cdecl; external LibName;
-
-{ Fetch the indicated driver }
-function OGRGetDriverByName(pszName: CPChar): OGRSFDriverH;
-  cdecl; external LibName;
-
-{ Return the number of opened datasources }
-function OGRGetOpenDSCount: GIntBig; cdecl; external LibName;
-
-{ Return the iDS th datasource opened }
-function OGRGetOpenDS(iDS: GIntBig): OGRDataSourceH;
-  cdecl; external LibName;
-
-{ note: this is also declared in ogrsf_frmts.h }
-
-{ Register all drivers }
-procedure OGRRegisterAll; cdecl; external LibName;
-
-{ Cleanup all OGR related resources }
-procedure OGRCleanupAll; cdecl; external LibName;
-
-{ OGRStyleMgr }
-
-{ OGRStyleMgr factory }
-function OGR_SM_Create(hStyleTable: OGRStyleTableH): OGRStyleMgrH;
-  cdecl; external LibName;
-
-{ Destroy Style Manager }
-procedure OGR_SM_Destroy(hSM: OGRStyleMgrH); cdecl; external LibName;
-
-{ Initialize style manager from the style string of a feature }
-function OGR_SM_InitFromFeature(hSM: OGRStyleMgrH; hFeat: OGRFeatureH): CPChar;
-  cdecl; external LibName;
-
-{ Initialize style manager from the style string }
-function OGR_SM_InitStyleString(hSM: OGRStyleMgrH;
-  pszStyleString: CPChar): GIntBig; cdecl; external LibName;
-
-{ Get the number of parts in a style }
-function OGR_SM_GetPartCount(hSM: OGRStyleMgrH; pszStyleString: CPChar): GIntBig;
-  cdecl; external LibName;
-
-{ Fetch a part (style tool) from the current style }
-function OGR_SM_GetPart(hSM: OGRStyleMgrH; nPartId: GIntBig;
-  pszStyleString: CPChar): OGRStyleToolH; cdecl; external LibName;
-
-{ Add a part (style tool) to the current style }
-function OGR_SM_AddPart(hSM: OGRStyleMgrH; hST: OGRStyleToolH): GIntBig;
-  cdecl; external LibName;
-
-{ Add a style to the current style table }
-function OGR_SM_AddStyle(hSM: OGRStyleMgrH; pszStyleName: CPChar;
-  pszStyleString: CPChar): GIntBig; cdecl; external LibName;
-
-{ OGRStyleTool }
-
-{ OGRStyleTool factory }
-function OGR_ST_Create(eClassId: OGRSTClassId): OGRStyleToolH;
-  cdecl; external LibName;
-
-{ Destroy Style Tool }
-procedure OGR_ST_Destroy(hST: OGRStyleToolH); cdecl; external LibName;
-
-{ Determine type of Style Tool }
-function OGR_ST_GetType(hST: OGRStyleToolH): OGRSTClassId;
-  cdecl; external LibName;
-
-{ Get Style Tool units }
-function OGR_ST_GetUnit(hST: OGRStyleToolH): OGRSTUnitId;
-  cdecl; external LibName;
-
-{ Set Style Tool units }
-procedure OGR_ST_SetUnit(hST: OGRStyleToolH; eUnit: OGRSTUnitId;
-  dfGroundPaperScale: double); cdecl; external LibName;
-
-{ Get Style Tool parameter value as string }
-function OGR_ST_GetParamStr(hST: OGRStyleToolH; eParam: GIntBig;
-  bValueIsNull: PLongInt): PChar; cdecl; external LibName;
-
-{ Get Style Tool parameter value as an integer }
-function OGR_ST_GetParamNum(hST: OGRStyleToolH; eParam: GIntBig;
-  bValueIsNull: PLongInt): GIntBig; cdecl; external LibName;
-
-{ Get Style Tool parameter value as a double }
-function OGR_ST_GetParamDbl(hST: OGRStyleToolH; eParam: GIntBig;
-  bValueIsNull: PLongInt): double; cdecl; external LibName;
-
-{ Set Style Tool parameter value from a string }
-procedure OGR_ST_SetParamStr(hST: OGRStyleToolH; eParam: GIntBig;
-  pszValue: CPChar); cdecl; external LibName;
-
-{ Set Style Tool parameter value from an integer }
-procedure OGR_ST_SetParamNum(hST: OGRStyleToolH; eParam: GIntBig;
-  nValue: GIntBig); cdecl; external LibName;
-
-{ Set Style Tool parameter value from a double }
-procedure OGR_ST_SetParamDbl(hST: OGRStyleToolH; eParam: GIntBig;
-  dfValue: double); cdecl; external LibName;
-
-{ Get the style string for this Style Tool }
-function OGR_ST_GetStyleString(hST: OGRStyleToolH): CPChar;
-  cdecl; external LibName;
-
-{ Return the r,g,b,a components of a color encoded in #RRGGBB[AA] format }
-function OGR_ST_GetRGBFromString(hST: OGRStyleToolH; pszColor: CPChar;
-  pnRed: PLongInt; pnGreen: PLongInt; pnBlue: PLongInt;
-  pnAlpha: PLongInt): GIntBig; cdecl; external LibName;
-
-{ OGRStyleTable }
-
-{ OGRStyleTable factory }
-function OGR_STBL_Create: OGRStyleTableH; cdecl; external LibName;
-
-{ Destroy Style Table }
-procedure OGR_STBL_Destroy(hSTBL: OGRStyleTableH); cdecl; external LibName;
-
-{ Save a style table to a file }
-function OGR_STBL_SaveStyleTable(hStyleTable: OGRStyleTableH;
-  pszFilename: CPChar): GIntBig; cdecl; external LibName;
-
-{ Load a style table from a file }
-function OGR_STBL_LoadStyleTable(hStyleTable: OGRStyleTableH;
-  pszFilename: CPChar): GIntBig; cdecl; external LibName;
-
-{ Get a style string by name }
-function OGR_STBL_Find(hStyleTable: OGRStyleTableH; pszName: CPChar): CPChar;
-  cdecl; external LibName;
-
-{ Reset the next style pointer to 0 }
-procedure OGR_STBL_ResetStyleStringReading(hStyleTable: OGRStyleTableH);
-  cdecl; external LibName;
-
-{ Get the next style string from the table }
-function OGR_STBL_GetNextStyle(hStyleTable: OGRStyleTableH): CPChar;
-  cdecl; external LibName;
-
-{ Get the style name of the last style string fetched with
-  OGR_STBL_GetNextStyle
-}
-function OGR_STBL_GetLastStyleName(hStyleTable: OGRStyleTableH): CPChar;
-  cdecl; external LibName;
+type
+  TOGRMergeGeometryTypes = function(eMain: OGRwkbGeometryType; eExtra: OGRwkbGeometryType): OGRwkbGeometryType; cdecl;
+  TOGRParseDate = function(pszInput: CPChar; psOutput: OGRField; nOptions: GIntBig): GIntBig; cdecl;
+  TGDALVersionInfo = function(pszRequest: CPChar): CPChar; cdecl;
+  TGDALCheckVersion = function(nVersionMajor: GIntBig; nVersionMinor: GIntBig; pszCallingComponentName: CPChar): GIntBig; cdecl;
+  TOGR_G_CreateFromWkb = function(pabyData: CPChar; hSRS: OGRSpatialReferenceH; phGeometry: OGRGeometryH; nBytes: GIntBig): OGRErr; cdecl;
+  TOGR_G_CreateFromWkt = function(ppszData: CPChar; hSRS: OGRSpatialReferenceH; phGeometry: OGRGeometryH): OGRErr; cdecl;
+  TOGR_G_DestroyGeometry = procedure(hGeom: OGRGeometryH); cdecl;
+  TOGR_G_CreateGeometry = function(eGeometryType: OGRwkbGeometryType): OGRGeometryH; cdecl;
+  TOGR_G_ForceToPolygon = function(hGeom: OGRGeometryH): OGRGeometryH; cdecl;
+  TOGR_G_ForceToMultiPolygon = function(hGeom: OGRGeometryH): OGRGeometryH; cdecl;
+  TOGR_G_ForceToMultiPoint = function(hGeom: OGRGeometryH): OGRGeometryH; cdecl;
+  TOGR_G_ForceToMultiLineString = function(hGeom: OGRGeometryH): OGRGeometryH; cdecl;
+  TOGR_G_GetDimension = function(hGeom: OGRGeometryH): GIntBig; cdecl;
+  TOGR_G_GetCoordinateDimension = function(hGeom: OGRGeometryH): GIntBig; cdecl;
+  TOGR_G_Clone = function(hGeom: OGRGeometryH): OGRGeometryH; cdecl;
+  TOGR_G_GetEnvelope = procedure(hGeom: OGRGeometryH; psEnvelope: OGREnvelope); cdecl;
+  TOGR_G_ImportFromWkb = function(hGeom: OGRGeometryH; pabyData: CPChar; nSize: GIntBig): OGRErr; cdecl;
+  TOGR_G_ExportToWkb = function(hGeom: OGRGeometryH; eOrder: OGRwkbByteOrder; pabyDstBuffer: CPChar): OGRErr; cdecl;
+  TOGR_G_WkbSize = function(hGeom: OGRGeometryH): GIntBig; cdecl;
+  TOGR_G_ImportFromWkt = function(hGeom: OGRGeometryH; ppszSrcText: PCPChar): OGRErr; cdecl;
+  TOGR_G_ExportToWkt = function(hGeom: OGRGeometryH; ppszSrcText: PCPChar): OGRErr; cdecl;
+  TOGR_G_ExportToJson = function(hGeom: OGRGeometryH): CPChar; cdecl;
+  TOGR_G_GetGeometryType = function(hGeom: OGRGeometryH): OGRwkbGeometryType; cdecl;
+  TOGR_G_GetGeometryName = function(hGeom: OGRGeometryH): CPChar; cdecl;
+  TOGR_G_DumpReadable = procedure(hGeom: OGRGeometryH; fp: Pointer; pszPrefix: CPChar); cdecl;
+  TOGR_G_FlattenTo2D = procedure(hGeom: OGRGeometryH); cdecl;
+  TOGR_G_AssignSpatialReference = procedure(hGeom: OGRGeometryH; hSRS: OGRSpatialReferenceH); cdecl;
+  TOGR_G_Transform = function(hGeom: OGRGeometryH; hTransform: OGRCoordinateTransformationH): OGRErr; cdecl;
+  TOGR_G_TransformTo = function(hGeom: OGRGeometryH; hSRS: OGRSpatialReferenceH): OGRErr; cdecl;
+  TOGR_G_Segmentize = procedure(hGeom: OGRGeometryH; dfMaxLength: double); cdecl;
+  TOGR_G_Intersects = function(hGeom: OGRGeometryH; hOtherGeom: OGRGeometryH): GIntBig; cdecl;
+  TOGR_G_Equals = function(hGeom: OGRGeometryH; hOther: OGRGeometryH): GIntBig; cdecl;
+  TOGR_G_Disjoint = function(hGeom: OGRGeometryH; hOther: OGRGeometryH): GIntBig; cdecl;
+  TOGR_G_Touches = function(hThis: OGRGeometryH; hOther: OGRGeometryH): GIntBig; cdecl;
+  TOGR_G_Crosses = function(hThis: OGRGeometryH; hOther: OGRGeometryH): GIntBig; cdecl;
+  TOGR_G_Within = function(hThis: OGRGeometryH; hOther: OGRGeometryH): GIntBig; cdecl;
+  TOGR_G_Contains = function(hThis: OGRGeometryH; hOther: OGRGeometryH): GIntBig; cdecl;
+  TOGR_G_Overlaps = function(hThis: OGRGeometryH; hOther: OGRGeometryH): GIntBig; cdecl;
+  TOGR_G_GetBoundary = function(hTarget: OGRGeometryH): OGRGeometryH; cdecl;
+  TOGR_G_ConvexHull = function(hTarget: OGRGeometryH): OGRGeometryH; cdecl;
+  TOGR_G_Buffer = function(hTarget: OGRGeometryH; dfDist: double; nQuadSegs: GIntBig): OGRGeometryH; cdecl;
+  TOGR_G_Intersection = function(hThis: OGRGeometryH; hOther: OGRGeometryH): OGRGeometryH; cdecl;
+  TOGR_G_Union = function(hThis: OGRGeometryH; hOther: OGRGeometryH): OGRGeometryH; cdecl;
+  TOGR_G_UnionCascaded = function(hThis: OGRGeometryH): OGRGeometryH; cdecl;
+  TOGR_G_Difference = function(hThis: OGRGeometryH; hOther: OGRGeometryH): OGRGeometryH; cdecl;
+  TOGR_G_SymmetricDifference = function(hThis: OGRGeometryH; hOther: OGRGeometryH): OGRGeometryH; cdecl;
+  TOGR_G_Distance = function(hFirst: OGRGeometryH; hOther: OGRGeometryH): double; cdecl;
+  TOGR_G_GetArea = function(hGeom: OGRGeometryH): double; cdecl;
+  TOGR_G_Centroid = function(hGeom: OGRGeometryH; hCentroidPoint: OGRGeometryH): GIntBig; cdecl;
+  TOGR_G_Empty = procedure(hGeom: OGRGeometryH); cdecl;
+  TOGR_G_IsEmpty = function(hGeom: OGRGeometryH): GIntBig; cdecl;
+  TOGR_G_IsValid = function(hGeom: OGRGeometryH): GIntBig; cdecl;
+  TOGR_G_IsSimple = function(hGeom: OGRGeometryH): GIntBig; cdecl;
+  TOGR_G_IsRing = function(hGeom: OGRGeometryH): GIntBig; cdecl;
+  TOGR_G_Intersect = function(hGeom: OGRGeometryH; hOtherGeom: OGRGeometryH): GIntBig; cdecl;
+  TOGR_G_Equal = function(hGeom: OGRGeometryH; hOther: OGRGeometryH): GIntBig; cdecl;
+  TOGR_G_GetPointCount = function(hGeom: OGRGeometryH): GIntBig; cdecl;
+  TOGR_G_GetX = function(hGeom: OGRGeometryH; i: GIntBig): double; cdecl;
+  TOGR_G_GetY = function(hGeom: OGRGeometryH; i: GIntBig): double; cdecl;
+  TOGR_G_GetZ = function(hGeom: OGRGeometryH; i: GIntBig): double; cdecl;
+  TOGR_G_GetPoint = procedure(hGeom: OGRGeometryH; i: GIntBig; pdfX: double; pdfY: double; pdfZ: double); cdecl;
+  TOGR_G_SetPoint = procedure(hGeom: OGRGeometryH; i: GIntBig; dfX: double; dfY: double; dfZ: double); cdecl;
+  TOGR_G_SetPoint_2D = procedure(hGeom: OGRGeometryH; i: GIntBig; pdfX: double; pdfY: double); cdecl;
+  TOGR_G_AddPoint = procedure(hGeom: OGRGeometryH; dfX: double; dfY: double; dfZ: double); cdecl;
+  TOGR_G_AddPoint_2D = procedure(hGeom: OGRGeometryH; dfX: double; dfY: double); cdecl;
+  TOGR_G_GetGeometryCount = function(hGeom: OGRGeometryH): GIntBig; cdecl;
+  TOGR_G_GetGeometryRef = function(hGeom: OGRGeometryH; iSubGeom: GIntBig): OGRGeometryH; cdecl;
+  TOGR_G_AddGeometry = function(hGeom: OGRGeometryH; hNewSubGeom: OGRGeometryH): OGRErr; cdecl;
+  TOGR_G_AddGeometryDirectly = function(hGeom: OGRGeometryH; hNewSubGeom: OGRGeometryH): OGRErr; cdecl;
+  TOGR_G_RemoveGeometry = function(hGeom: OGRGeometryH; iGeom: GIntBig; bDelete: GIntBig): OGRErr; cdecl;
+  TOGRBuildPolygonFromEdges = function(hLines: OGRGeometryH; bBestEffort: GIntBig; bAutoClose: GIntBig; dfTolerance: double; peErr: OGRErr): OGRGeometryH; cdecl;
+  TOGR_Fld_Create = function(pszName: CPChar; eType: OGRFieldType): OGRFieldDefnH; cdecl;
+  TOGR_Fld_Destroy = procedure(hDefn: OGRFieldDefnH); cdecl;
+  TOGR_Fld_SetName = procedure(hDefn: OGRFieldDefnH; pszName: CPChar); cdecl;
+  TOGR_Fld_GetNameRef = function(hDefn: OGRFieldDefnH): CPChar; cdecl;
+  TOGR_Fld_GetType = function(hDefn: OGRFieldDefnH): OGRFieldType; cdecl;
+  TOGR_Fld_SetType = procedure(hDefn: OGRFieldDefnH; eType: OGRFieldType); cdecl;
+  TOGR_Fld_GetJustify = function(hDefn: OGRFieldDefnH): OGRJustification; cdecl;
+  TOGR_Fld_SetJustify = procedure(hDefn: OGRFieldDefnH; eJustify: OGRJustification); cdecl;
+  TOGR_Fld_GetWidth = function(hDefn: OGRFieldDefnH): GIntBig; cdecl;
+  TOGR_Fld_SetWidth = procedure(hDefn: OGRFieldDefnH; nNewWidth: GIntBig); cdecl;
+  TOGR_Fld_GetPrecision = function(hDefn: OGRFieldDefnH): GIntBig; cdecl;
+  TOGR_Fld_SetPrecision = procedure(hDefn: OGRFieldDefnH; nPrecision: GIntBig); cdecl;
+  TOGR_Fld_Set = procedure(hDefn: OGRFieldDefnH; pszNameIn: CPChar; eTypeIn: OGRFieldType; nWidthIn: GIntBig; nPrecision: GIntBig; eJustifyIn: OGRJustification); cdecl;
+  TOGR_Fld_IsIgnored = function(hDefn: OGRFieldDefnH): GIntBig; cdecl;
+  TOGR_Fld_SetIgnored = procedure(hDefn: OGRFieldDefnH; fieldIndex: GIntBig); cdecl;
+  TOGR_GetFieldTypeName = function(eType: OGRFieldType): CPChar; cdecl;
+  TOGR_FD_Create = function(pszName: CPChar): OGRFeatureDefnH; cdecl;
+  TOGR_FD_Destroy = procedure(hDefn: OGRFeatureDefnH); cdecl;
+  TOGR_FD_Release = procedure(hDefn: OGRFeatureDefnH); cdecl;
+  TOGR_FD_GetName = function(hDefn: OGRFeatureDefnH): CPChar; cdecl;
+  TOGR_FD_GetFieldCount = function(hDefn: OGRFeatureDefnH): GIntBig; cdecl;
+  TOGR_FD_GetFieldDefn = function(hDefn: OGRFeatureDefnH; iField: GIntBig): OGRFieldDefnH; cdecl;
+  TOGR_FD_GetFieldIndex = function(hDefn: OGRFeatureDefnH; pszFieldName: CPChar): GIntBig; cdecl;
+  TOGR_FD_AddFieldDefn = procedure(hDefn: OGRFeatureDefnH; hNewField: OGRFieldDefnH); cdecl;
+  TOGR_FD_GetGeomType = function(hDefn: OGRFeatureDefnH): OGRwkbGeometryType; cdecl;
+  TOGR_FD_SetGeomType = procedure(hDefn: OGRFeatureDefnH; eType: OGRwkbGeometryType); cdecl;
+  TOGR_FD_IsGeometryIgnored = function(hDefn: OGRFeatureDefnH): GIntBig; cdecl;
+  TOGR_FD_SetGeometryIgnored = procedure(hDefn: OGRFeatureDefnH; bIgnored: GIntBig); cdecl;
+  TOGR_FD_IsStyleIgnored = function(hDefn: OGRFeatureDefnH): GIntBig; cdecl;
+  TOGR_FD_SetStyleIgnored = procedure(hDefn: OGRFeatureDefnH; bIgnored: GIntBig); cdecl;
+  TOGR_FD_Reference = function(hDefn: OGRFeatureDefnH): GIntBig; cdecl;
+  TOGR_FD_Dereference = function(hDefn: OGRFeatureDefnH): GIntBig; cdecl;
+  TOGR_F_Create = function(hDefn: OGRFeatureDefnH): OGRFeatureH; cdecl;
+  TOGR_F_Destroy = procedure(hFeat: OGRFeatureH); cdecl;
+  TOGR_F_GetDefnRef = function(hFeat: OGRFeatureH): OGRFeatureDefnH; cdecl;
+  TOGR_F_SetGeometryDirectly = function(hFeat: OGRFeatureH; hGeom: OGRGeometryH): OGRErr; cdecl;
+  TOGR_F_SetGeometry = function(hFeat: OGRFeatureH; hGeom: OGRGeometryH): OGRErr; cdecl;
+  TOGR_F_GetGeometryRef = function(hFeat: OGRFeatureH): OGRGeometryH; cdecl;
+  TOGR_F_Clone = function(hFeat: OGRFeatureH): OGRFeatureH; cdecl;
+  TOGR_F_Equal = function(hFeat: OGRFeatureH; hOtherFeat: OGRFeatureH): GIntBig; cdecl;
+  TOGR_F_GetFieldCount = function(hFeat: OGRFeatureH): GIntBig; cdecl;
+  TOGR_F_GetFieldDefnRef = function(hFeat: OGRFeatureH; i: GIntBig): OGRFieldDefnH; cdecl;
+  TOGR_F_GetFieldIndex = function(hFeat: OGRFeatureH; pszName: CPChar): GIntBig; cdecl;
+  TOGR_F_IsFieldSet = function(hFeat: OGRFeatureH; iField: GIntBig): GIntBig; cdecl;
+  TOGR_F_UnsetField = procedure(hFeat: OGRFeatureH; iField: GIntBig); cdecl;
+  TOGR_F_GetRawFieldRef = function(hFeat: OGRFeatureH; iField: GIntBig): OGRField; cdecl;
+  TOGR_F_GetFieldAsInteger = function(hFeat: OGRFeatureH; iField: GIntBig): GIntBig; cdecl;
+  TOGR_F_GetFieldAsDouble = function(hFeat: OGRFeatureH; iField: GIntBig): double; cdecl;
+  TOGR_F_GetFieldAsString = function(hFeat: OGRFeatureH; iField: GIntBig): CPChar; cdecl;
+  TOGR_F_GetFieldAsIntegerList = function(hFeat: OGRFeatureH; iField: GIntBig; pnCount: GIntBig): GIntBig; cdecl;
+  TOGR_F_GetFieldAsDoubleList = function(hFeat: OGRFeatureH; iField: GIntBig; pnCount: PLongInt): double; cdecl;
+  TOGR_F_GetFieldAsStringList = function(hFeat: OGRFeatureH; iField: GIntBig): CPChar; cdecl;
+  TOGR_F_GetFieldAsBinary = function(hFeat: OGRFeatureH; iField: GIntBig; pnBytes: PLongInt): GByte; cdecl;
+  TOGR_F_GetFieldAsDateTime = function(hFeat: OGRFeatureH; iField: GIntBig; pnYear: PLongInt; pnMonth: PLongInt; pnDay: PLongInt; pnHour: PLongInt; pnMinute: PLongInt; pnSecond: PLongInt; pnTZFlag: PLongInt): GIntBig; cdecl;
+  TOGR_F_SetFieldInteger = procedure(hFeat: OGRFeatureH; iField: GIntBig; nValue: GIntBig); cdecl;
+  TOGR_F_SetFieldDouble = procedure(hFeat: OGRFeatureH; iField: GIntBig; dfValue: double); cdecl;
+  TOGR_F_SetFieldString = procedure(hFeat: OGRFeatureH; iField: integer; pszValue: CPChar); cdecl;
+  TOGR_F_SetFieldIntegerList = procedure(hFeat: OGRFeatureH; iField: GIntBig; nCount: GIntBig; panValues: PLongInt); cdecl;
+  TOGR_F_SetFieldDoubleList = procedure(hFeat: OGRFeatureH; iField: GIntBig; nCount: GIntBig; padfValues: Pdouble); cdecl;
+  TOGR_F_SetFieldStringList = procedure(hFeat: OGRFeatureH; iField: GIntBig; papszValues: PCPChar); cdecl;
+  TOGR_F_SetFieldRaw = procedure(hFeat: OGRFeatureH; iField: GIntBig; psValue: OGRField); cdecl;
+  TOGR_F_SetFieldBinary = procedure(hFeat: OGRFeatureH; iField: GIntBig; nBytes: GIntBig; pabyData: GByte); cdecl;
+  TOGR_F_SetFieldDateTime = procedure(hFeat: OGRFeatureH; iField: GIntBig; nYear: GIntBig; nMonth: GIntBig; nDay: GIntBig; nHour: GIntBig; nMinute: GIntBig; nSecond: GIntBig; nTZFlag: GIntBig); cdecl;
+  TOGR_F_GetFID = function(hFeat: OGRFeatureH): GIntBig; cdecl;
+  TOGR_F_SetFID = function(hFeat: OGRFeatureH; nFID: GIntBig): OGRErr; cdecl;
+  TOGR_F_DumpReadable = procedure(hFeat: OGRFeatureH; fpOut: Pointer); cdecl;
+  TOGR_F_SetFrom = function(hFeat: OGRFeatureH; hOtherFeat: OGRFeatureH; bForgiving: GIntBig): OGRErr; cdecl;
+  TOGR_F_SetFromWithMap = function(hFeat: OGRFeatureH; hOtherFeat: OGRFeatureH; bForgiving: GIntBig; panMap: PLongInt): OGRErr; cdecl;
+  TOGR_F_GetStyleString = function(hFeat: OGRFeatureH): CPChar; cdecl;
+  TOGR_F_SetStyleString = procedure(hFeat: OGRFeatureH; pszStyle: CPChar); cdecl;
+  TOGR_F_SetStyleStringDirectly = procedure(hFeat: OGRFeatureH; pszStyle: CPChar); cdecl;
+  TOGR_L_Update = function(pLayerInput, pLayerMethod, pLayerResult: OGRLayerH; papszOptions: PCPChar; pfnProgress: GDALProgressFunc; pProgressData: Pointer): OGRErr; cdecl;
+  TOGR_L_GetSpatialFilter = function(hLayer: OGRLayerH): OGRGeometryH; cdecl;
+  TOGR_L_SetSpatialFilter = procedure(hLayer: OGRLayerH; hGeom: OGRGeometryH); cdecl;
+  TOGR_L_SetSpatialFilterRect = procedure(hLayer: OGRLayerH; dfMinX: double; dfMinY: double; dfMaxX: double; dfMaxY: double); cdecl;
+  TOGR_L_SetAttributeFilter = function(hLayer: OGRLayerH; pszQuery: CPChar): OGRErr; cdecl;
+  TOGR_L_ResetReading = procedure(hLayer: OGRLayerH); cdecl;
+  TOGR_L_GetNextFeature = function(hLayer: OGRLayerH): OGRFeatureH; cdecl;
+  TOGR_L_GetName = function(hLayer: OGRLayerH): CPChar; cdecl;
+  TOGR_L_SetNextByIndex = function(hLayer: OGRLayerH; nIndex: GIntBig): OGRErr; cdecl;
+  TOGR_L_GetFeature = function(hLayer: OGRLayerH; nFeatureId: GIntBig): OGRFeatureH; cdecl;
+  TOGR_L_SetFeature = function(hLayer: OGRLayerH; hFeat: OGRFeatureH): OGRErr; cdecl;
+  TOGR_L_CreateFeature = function(hLayer: OGRLayerH; hFeat: OGRFeatureH): OGRErr; cdecl;
+  TOGR_L_DeleteFeature = function(hLayer: OGRLayerH; nFID: GIntBig): OGRErr; cdecl;
+  TOGR_L_GetLayerDefn = function(hLayer: OGRLayerH): OGRFeatureDefnH; cdecl;
+  TOGR_L_GetSpatialRef = function(hLayer: OGRLayerH): OGRSpatialReferenceH; cdecl;
+  TOGR_L_GetFeatureCount = function(hLayer: OGRLayerH; bForce: GIntBig): GIntBig; cdecl;
+  TOGR_L_GetExtent = function(hLayer: OGRLayerH; var psExtent: OGREnvelope; bForce: integer): OGRErr; cdecl;
+  TOGR_L_TestCapability = function(hLayer: OGRLayerH; pszCap: CPChar): integer; cdecl;
+  TOGR_L_CreateField = function(hLayer: OGRLayerH; hField: OGRFieldDefnH; bApproxOK: GIntBig): OGRErr; cdecl;
+  TOGR_L_StartTransaction = function(hLayer: OGRLayerH): OGRErr; cdecl;
+  TOGR_L_CommitTransaction = function(hLayer: OGRLayerH): OGRErr; cdecl;
+  TOGR_L_RollbackTransaction = function(hLayer: OGRLayerH): OGRErr; cdecl;
+  TOGR_L_SyncToDisk = function(hLayer: OGRLayerH): OGRErr; cdecl;
+  TOGR_L_GetFIDColumn = function(hLayer: OGRLayerH): CPChar; cdecl;
+  TOGR_L_GetGeometryColumn = function(hLayer: OGRLayerH): CPChar; cdecl;
+  TOGR_L_SetIgnoredFields = function(hLayer: OGRLayerH; fields: CPChar): OGRErr; cdecl;
+  TOGR_DS_Destroy = procedure(hDataSource: OGRDataSourceH); cdecl;
+  TOGR_DS_GetName = function(hDS: OGRDataSourceH): CPChar; cdecl;
+  TOGR_DS_GetLayerCount = function(hDS: OGRDataSourceH): GIntBig; cdecl;
+  TOGR_DS_GetLayer = function(hDS: OGRDataSourceH; iLayer: GIntBig): OGRLayerH; cdecl;
+  TOGR_DS_GetLayerByName = function(hDS: OGRDataSourceH; pszLayerName: CPChar): OGRLayerH; cdecl;
+  TOGR_DS_DeleteLayer = function(hDS: OGRDataSourceH; iLayer: GIntBig): OGRErr; cdecl;
+  TOGR_DS_GetDriver = function(hDS: OGRDataSourceH): OGRSFDriverH; cdecl;
+  TOGR_DS_CreateLayer = function(hDS: OGRDataSourceH; pszName: CPChar; hSpatialRef: OGRSpatialReferenceH; eType: OGRwkbGeometryType; papszOptions: PCPChar): OGRLayerH; cdecl;
+  TOGR_DS_CopyLayer = function(hDS: OGRDataSourceH; hSrcLayer: OGRLayerH; pszNewName: CPChar; papszOptions: PCPChar): OGRLayerH; cdecl;
+  TOGR_DS_TestCapability = function(hDS: OGRDataSourceH; pszCapability: CPChar): GIntBig; cdecl;
+  TOGR_DS_ExecuteSQL = function(hDS: OGRDataSourceH; pszSQLCommand: CPChar; hSpatialFilter: OGRGeometryH; pszDialect: CPChar): OGRLayerH; cdecl;
+  TOGR_DS_ReleaseResultSet = procedure(hDS: OGRDataSourceH; hLayer: OGRLayerH); cdecl;
+  TOGR_DS_SyncToDisk = function(hDS: OGRDataSourceH): OGRErr; cdecl;
+  TOGR_Dr_GetName = function(hDriver: OGRSFDriverH): CPChar; cdecl;
+  TOGR_Dr_Open = function(hDriver: OGRSFDriverH; pszName: CPChar; bUpdate: GIntBig): OGRDataSourceH; cdecl;
+  TOGR_Dr_TestCapability = function(hDriver: OGRSFDriverH; pszCap: CPChar): GIntBig; cdecl;
+  TOGR_Dr_CreateDataSource = function(hDriver: OGRSFDriverH; pszName: CPChar; papszOptions: PCPChar): OGRDataSourceH; cdecl;
+  TOGR_Dr_CopyDataSource = function(hDriver: OGRSFDriverH; hSrcDS: OGRDataSourceH; pszNewName: CPChar; papszOptions: PCPChar): OGRDataSourceH; cdecl;
+  TOGR_Dr_DeleteDataSource = function(hDriver: OGRSFDriverH; pszDataSource: CPChar): OGRErr; cdecl;
+  TOGROpen = function(pszName: CPChar; bUpdate: integer; pahDriverList: OGRSFDriverH): OGRDataSourceH; cdecl;
+  TOGRReleaseDataSource = function(hDS: OGRDataSourceH): OGRErr; cdecl;
+  TOGRRegisterDriver = procedure(hDriver: OGRSFDriverH); cdecl;
+  TOGRDeregisterDriver = procedure(hDriver: OGRSFDriverH); cdecl;
+  TOGRGetDriverCount = function: GIntBig; cdecl;
+  TOGRGetDriver = function(iDriver: GIntBig): OGRSFDriverH; cdecl;
+  TOGRGetDriverByName = function(pszName: CPChar): OGRSFDriverH; cdecl;
+  TOGRGetOpenDSCount = function: GIntBig; cdecl;
+  TOGRGetOpenDS = function(iDS: GIntBig): OGRDataSourceH; cdecl;
+  TOGRRegisterAll = procedure; cdecl;
+  TOGRCleanupAll = procedure; cdecl;
+  TOGR_SM_Create = function(hStyleTable: OGRStyleTableH): OGRStyleMgrH; cdecl;
+  TOGR_SM_Destroy = procedure(hSM: OGRStyleMgrH); cdecl;
+  TOGR_SM_InitFromFeature = function(hSM: OGRStyleMgrH; hFeat: OGRFeatureH): CPChar; cdecl;
+  TOGR_SM_InitStyleString = function(hSM: OGRStyleMgrH; pszStyleString: CPChar): GIntBig; cdecl;
+  TOGR_SM_GetPartCount = function(hSM: OGRStyleMgrH; pszStyleString: CPChar): GIntBig; cdecl;
+  TOGR_SM_GetPart = function(hSM: OGRStyleMgrH; nPartId: GIntBig; pszStyleString: CPChar): OGRStyleToolH; cdecl;
+  TOGR_SM_AddPart = function(hSM: OGRStyleMgrH; hST: OGRStyleToolH): GIntBig; cdecl;
+  TOGR_SM_AddStyle = function(hSM: OGRStyleMgrH; pszStyleName: CPChar; pszStyleString: CPChar): GIntBig; cdecl;
+  TOGR_ST_Create = function(eClassId: OGRSTClassId): OGRStyleToolH; cdecl;
+  TOGR_ST_Destroy = procedure(hST: OGRStyleToolH); cdecl;
+  TOGR_ST_GetType = function(hST: OGRStyleToolH): OGRSTClassId; cdecl;
+  TOGR_ST_GetUnit = function(hST: OGRStyleToolH): OGRSTUnitId; cdecl;
+  TOGR_ST_SetUnit = procedure(hST: OGRStyleToolH; eUnit: OGRSTUnitId; dfGroundPaperScale: double); cdecl;
+  TOGR_ST_GetParamStr = function(hST: OGRStyleToolH; eParam: GIntBig; bValueIsNull: PLongInt): PChar; cdecl;
+  TOGR_ST_GetParamNum = function(hST: OGRStyleToolH; eParam: GIntBig; bValueIsNull: PLongInt): GIntBig; cdecl;
+  TOGR_ST_GetParamDbl = function(hST: OGRStyleToolH; eParam: GIntBig; bValueIsNull: PLongInt): double; cdecl;
+  TOGR_ST_SetParamStr = procedure(hST: OGRStyleToolH; eParam: GIntBig; pszValue: CPChar); cdecl;
+  TOGR_ST_SetParamNum = procedure(hST: OGRStyleToolH; eParam: GIntBig; nValue: GIntBig); cdecl;
+  TOGR_ST_SetParamDbl = procedure(hST: OGRStyleToolH; eParam: GIntBig; dfValue: double); cdecl;
+  TOGR_ST_GetStyleString = function(hST: OGRStyleToolH): CPChar; cdecl;
+  TOGR_ST_GetRGBFromString = function(hST: OGRStyleToolH; pszColor: CPChar; pnRed: PLongInt; pnGreen: PLongInt; pnBlue: PLongInt; pnAlpha: PLongInt): GIntBig; cdecl;
+  TOGR_STBL_Create = function: OGRStyleTableH; cdecl;
+  TOGR_STBL_Destroy = procedure(hSTBL: OGRStyleTableH); cdecl;
+  TOGR_STBL_SaveStyleTable = function(hStyleTable: OGRStyleTableH; pszFilename: CPChar): GIntBig; cdecl;
+  TOGR_STBL_LoadStyleTable = function(hStyleTable: OGRStyleTableH; pszFilename: CPChar): GIntBig; cdecl;
+  TOGR_STBL_Find = function(hStyleTable: OGRStyleTableH; pszName: CPChar): CPChar; cdecl;
+  TOGR_STBL_ResetStyleStringReading = procedure(hStyleTable: OGRStyleTableH); cdecl;
+  TOGR_STBL_GetNextStyle = function(hStyleTable: OGRStyleTableH): CPChar; cdecl;
+  TOGR_STBL_GetLastStyfleName = function(hStyleTable: OGRStyleTableH): CPChar; cdecl;
+
+var
+  OGRMergeGeometryTypes: TOGRMergeGeometryTypes;
+  OGRParseDate:      TOGRParseDate;
+  GDALVersionInfo:   TGDALVersionInfo;
+  OGR_G_CreateFromWkb: TOGR_G_CreateFromWkb;
+  OGR_G_CreateFromWkt: TOGR_G_CreateFromWkt;
+  OGR_G_DestroyGeometry: TOGR_G_DestroyGeometry;
+  OGR_G_CreateGeometry: TOGR_G_CreateGeometry;
+  OGR_G_ForceToPolygon: TOGR_G_ForceToPolygon;
+  OGR_G_ForceToMultiPolygon: TOGR_G_ForceToMultiPolygon;
+  OGR_G_ForceToMultiPoint: TOGR_G_ForceToMultiPoint;
+  OGR_G_ForceToMultiLineString: TOGR_G_ForceToMultiLineString;
+  OGR_G_GetDimension: TOGR_G_GetDimension;
+  OGR_G_GetCoordinateDimension: TOGR_G_GetCoordinateDimension;
+  OGR_G_Clone:       TOGR_G_Clone;
+  OGR_G_GetEnvelope: TOGR_G_GetEnvelope;
+  OGR_G_ImportFromWkb: TOGR_G_ImportFromWkb;
+  OGR_G_ExportToWkb: TOGR_G_ExportToWkb;
+  OGR_G_WkbSize:     TOGR_G_WkbSize;
+  OGR_G_ImportFromWkt: TOGR_G_ImportFromWkt;
+  OGR_G_ExportToWkt: TOGR_G_ExportToWkt;
+  OGR_G_ExportToJson: TOGR_G_ExportToJson;
+  OGR_G_GetGeometryType: TOGR_G_GetGeometryType;
+  OGR_G_GetGeometryName: TOGR_G_GetGeometryName;
+  OGR_G_DumpReadable: TOGR_G_DumpReadable;
+  OGR_G_FlattenTo2D: TOGR_G_FlattenTo2D;
+  OGR_G_AssignSpatialReference: TOGR_G_AssignSpatialReference;
+  OGR_G_Transform:   TOGR_G_Transform;
+  OGR_G_TransformTo: TOGR_G_TransformTo;
+  OGR_G_Segmentize:  TOGR_G_Segmentize;
+  OGR_G_Intersects:  TOGR_G_Intersects;
+  OGR_G_Equals:      TOGR_G_Equals;
+  OGR_G_Disjoint:    TOGR_G_Disjoint;
+  OGR_G_Touches:     TOGR_G_Touches;
+  OGR_G_Crosses:     TOGR_G_Crosses;
+  OGR_G_Within:      TOGR_G_Within;
+  OGR_G_Contains:    TOGR_G_Contains;
+  OGR_G_Overlaps:    TOGR_G_Overlaps;
+  OGR_G_GetBoundary: TOGR_G_GetBoundary;
+  OGR_G_ConvexHull:  TOGR_G_ConvexHull;
+  OGR_G_Buffer:      TOGR_G_Buffer;
+  OGR_G_Intersection: TOGR_G_Intersection;
+  OGR_G_Union:       TOGR_G_Union;
+  OGR_G_UnionCascaded: TOGR_G_UnionCascaded;
+  OGR_G_Difference:  TOGR_G_Difference;
+  OGR_G_SymmetricDifference: TOGR_G_SymmetricDifference;
+  OGR_G_Distance:    TOGR_G_Distance;
+  OGR_G_GetArea:     TOGR_G_GetArea;
+  OGR_G_Centroid:    TOGR_G_Centroid;
+  OGR_G_Empty:       TOGR_G_Empty;
+  OGR_G_IsEmpty:     TOGR_G_IsEmpty;
+  OGR_G_IsValid:     TOGR_G_IsValid;
+  OGR_G_IsSimple:    TOGR_G_IsSimple;
+  OGR_G_IsRing:      TOGR_G_IsRing;
+  OGR_G_Intersect:   TOGR_G_Intersect;
+  OGR_G_Equal:       TOGR_G_Equal;
+  OGR_G_GetPointCount: TOGR_G_GetPointCount;
+  OGR_G_GetX:        TOGR_G_GetX;
+  OGR_G_GetY:        TOGR_G_GetY;
+  OGR_G_GetZ:        TOGR_G_GetZ;
+  OGR_G_GetPoint:    TOGR_G_GetPoint;
+  OGR_G_SetPoint:    TOGR_G_SetPoint;
+  OGR_G_SetPoint_2D: TOGR_G_SetPoint_2D;
+  OGR_G_AddPoint:    TOGR_G_AddPoint;
+  OGR_G_AddPoint_2D: TOGR_G_AddPoint_2D;
+  OGR_G_GetGeometryCount: TOGR_G_GetGeometryCount;
+  OGR_G_GetGeometryRef: TOGR_G_GetGeometryRef;
+  OGR_G_AddGeometry: TOGR_G_AddGeometry;
+  OGR_G_AddGeometryDirectly: TOGR_G_AddGeometryDirectly;
+  OGR_G_RemoveGeometry: TOGR_G_RemoveGeometry;
+  OGRBuildPolygonFromEdges: TOGRBuildPolygonFromEdges;
+  OGR_Fld_Create:    TOGR_Fld_Create;
+  OGR_Fld_Destroy:   TOGR_Fld_Destroy;
+  OGR_Fld_SetName:   TOGR_Fld_SetName;
+  OGR_Fld_GetNameRef: TOGR_Fld_GetNameRef;
+  OGR_Fld_GetType:   TOGR_Fld_GetType;
+  OGR_Fld_SetType:   TOGR_Fld_SetType;
+  OGR_Fld_GetJustify: TOGR_Fld_GetJustify;
+  OGR_Fld_SetJustify: TOGR_Fld_SetJustify;
+  OGR_Fld_GetWidth:  TOGR_Fld_GetWidth;
+  OGR_Fld_SetWidth:  TOGR_Fld_SetWidth;
+  OGR_Fld_GetPrecision: TOGR_Fld_GetPrecision;
+  OGR_Fld_SetPrecision: TOGR_Fld_SetPrecision;
+  OGR_Fld_Set:       TOGR_Fld_Set;
+  OGR_Fld_IsIgnored: TOGR_Fld_IsIgnored;
+  OGR_Fld_SetIgnored: TOGR_Fld_SetIgnored;
+  OGR_GetFieldTypeName: TOGR_GetFieldTypeName;
+  OGR_FD_Create:     TOGR_FD_Create;
+  OGR_FD_Destroy:    TOGR_FD_Destroy;
+  OGR_FD_Release:    TOGR_FD_Release;
+  OGR_FD_GetName:    TOGR_FD_GetName;
+  OGR_FD_GetFieldCount: TOGR_FD_GetFieldCount;
+  OGR_FD_GetFieldDefn: TOGR_FD_GetFieldDefn;
+  OGR_FD_GetFieldIndex: TOGR_FD_GetFieldIndex;
+  OGR_FD_AddFieldDefn: TOGR_FD_AddFieldDefn;
+  OGR_FD_GetGeomType: TOGR_FD_GetGeomType;
+  OGR_FD_SetGeomType: TOGR_FD_SetGeomType;
+  OGR_FD_IsGeometryIgnored: TOGR_FD_IsGeometryIgnored;
+  OGR_FD_SetGeometryIgnored: TOGR_FD_SetGeometryIgnored;
+  OGR_FD_IsStyleIgnored: TOGR_FD_IsStyleIgnored;
+  OGR_FD_SetStyleIgnored: TOGR_FD_SetStyleIgnored;
+  OGR_FD_Reference:  TOGR_FD_Reference;
+  OGR_FD_Dereference: TOGR_FD_Dereference;
+  OGR_F_Create:      TOGR_F_Create;
+  OGR_F_Destroy:     TOGR_F_Destroy;
+  OGR_F_GetDefnRef:  TOGR_F_GetDefnRef;
+  OGR_F_SetGeometryDirectly: TOGR_F_SetGeometryDirectly;
+  OGR_F_SetGeometry: TOGR_F_SetGeometry;
+  OGR_F_GetGeometryRef: TOGR_F_GetGeometryRef;
+  OGR_F_Clone:       TOGR_F_Clone;
+  OGR_F_Equal:       TOGR_F_Equal;
+  OGR_F_GetFieldCount: TOGR_F_GetFieldCount;
+  OGR_F_GetFieldDefnRef: TOGR_F_GetFieldDefnRef;
+  OGR_F_GetFieldIndex: TOGR_F_GetFieldIndex;
+  OGR_F_IsFieldSet:  TOGR_F_IsFieldSet;
+  OGR_F_UnsetField:  TOGR_F_UnsetField;
+  OGR_F_GetRawFieldRef: TOGR_F_GetRawFieldRef;
+  OGR_F_GetFieldAsInteger: TOGR_F_GetFieldAsInteger;
+  OGR_F_GetFieldAsDouble: TOGR_F_GetFieldAsDouble;
+  OGR_F_GetFieldAsString: TOGR_F_GetFieldAsString;
+  OGR_F_GetFieldAsIntegerList: TOGR_F_GetFieldAsIntegerList;
+  OGR_F_GetFieldAsDoubleList: TOGR_F_GetFieldAsDoubleList;
+  OGR_F_GetFieldAsStringList: TOGR_F_GetFieldAsStringList;
+  OGR_F_GetFieldAsBinary: TOGR_F_GetFieldAsBinary;
+  OGR_F_GetFieldAsDateTime: TOGR_F_GetFieldAsDateTime;
+  OGR_F_SetFieldInteger: TOGR_F_SetFieldInteger;
+  OGR_F_SetFieldDouble: TOGR_F_SetFieldDouble;
+  OGR_F_SetFieldString: TOGR_F_SetFieldString;
+  OGR_F_SetFieldIntegerList: TOGR_F_SetFieldIntegerList;
+  OGR_F_SetFieldDoubleList: TOGR_F_SetFieldDoubleList;
+  OGR_F_SetFieldStringList: TOGR_F_SetFieldStringList;
+  OGR_F_SetFieldRaw: TOGR_F_SetFieldRaw;
+  OGR_F_SetFieldBinary: TOGR_F_SetFieldBinary;
+  OGR_F_SetFieldDateTime: TOGR_F_SetFieldDateTime;
+  OGR_F_GetFID:      TOGR_F_GetFID;
+  OGR_F_SetFID:      TOGR_F_SetFID;
+  OGR_F_DumpReadable: TOGR_F_DumpReadable;
+  OGR_F_SetFrom:     TOGR_F_SetFrom;
+  OGR_F_SetFromWithMap: TOGR_F_SetFromWithMap;
+  OGR_F_GetStyleString: TOGR_F_GetStyleString;
+  OGR_F_SetStyleString: TOGR_F_SetStyleString;
+  OGR_F_SetStyleStringDirectly: TOGR_F_SetStyleStringDirectly;
+  OGR_L_Update:      TOGR_L_Update;
+  OGR_L_GetSpatialFilter: TOGR_L_GetSpatialFilter;
+  OGR_L_SetSpatialFilter: TOGR_L_SetSpatialFilter;
+  OGR_L_SetSpatialFilterRect: TOGR_L_SetSpatialFilterRect;
+  OGR_L_SetAttributeFilter: TOGR_L_SetAttributeFilter;
+  OGR_L_ResetReading: TOGR_L_ResetReading;
+  OGR_L_GetNextFeature: TOGR_L_GetNextFeature;
+  OGR_L_GetName:     TOGR_L_GetName;
+  OGR_L_SetNextByIndex: TOGR_L_SetNextByIndex;
+  OGR_L_GetFeature:  TOGR_L_GetFeature;
+  OGR_L_SetFeature:  TOGR_L_SetFeature;
+  OGR_L_CreateFeature: TOGR_L_CreateFeature;
+  OGR_L_DeleteFeature: TOGR_L_DeleteFeature;
+  OGR_L_GetLayerDefn: TOGR_L_GetLayerDefn;
+  OGR_L_GetSpatialRef: TOGR_L_GetSpatialRef;
+  OGR_L_GetFeatureCount: TOGR_L_GetFeatureCount;
+  OGR_L_GetExtent:   TOGR_L_GetExtent;
+  OGR_L_TestCapability: TOGR_L_TestCapability;
+  OGR_L_CreateField: TOGR_L_CreateField;
+  OGR_L_StartTransaction: TOGR_L_StartTransaction;
+  OGR_L_CommitTransaction: TOGR_L_CommitTransaction;
+  OGR_L_RollbackTransaction: TOGR_L_RollbackTransaction;
+  OGR_L_SyncToDisk:  TOGR_L_SyncToDisk;
+  OGR_L_GetFIDColumn: TOGR_L_GetFIDColumn;
+  OGR_L_GetGeometryColumn: TOGR_L_GetGeometryColumn;
+  OGR_L_SetIgnoredFields: TOGR_L_SetIgnoredFields;
+  OGR_DS_Destroy:    TOGR_DS_Destroy;
+  OGR_DS_GetName:    TOGR_DS_GetName;
+  OGR_DS_GetLayerCount: TOGR_DS_GetLayerCount;
+  OGR_DS_GetLayer:   TOGR_DS_GetLayer;
+  OGR_DS_GetLayerByName: TOGR_DS_GetLayerByName;
+  OGR_DS_DeleteLayer: TOGR_DS_DeleteLayer;
+  OGR_DS_GetDriver:  TOGR_DS_GetDriver;
+  OGR_DS_CreateLayer: TOGR_DS_CreateLayer;
+  OGR_DS_CopyLayer:  TOGR_DS_CopyLayer;
+  OGR_DS_TestCapability: TOGR_DS_TestCapability;
+  OGR_DS_ExecuteSQL: TOGR_DS_ExecuteSQL;
+  OGR_DS_ReleaseResultSet: TOGR_DS_ReleaseResultSet;
+  OGR_DS_SyncToDisk: TOGR_DS_SyncToDisk;
+  OGR_Dr_GetName:    TOGR_Dr_GetName;
+  OGR_Dr_Open:       TOGR_Dr_Open;
+  OGR_Dr_TestCapability: TOGR_Dr_TestCapability;
+  OGR_Dr_CreateDataSource: TOGR_Dr_CreateDataSource;
+  OGR_Dr_CopyDataSource: TOGR_Dr_CopyDataSource;
+  OGR_Dr_DeleteDataSource: TOGR_Dr_DeleteDataSource;
+  OGROpen:           TOGROpen;
+  OGRReleaseDataSource: TOGRReleaseDataSource;
+  OGRRegisterDriver: TOGRRegisterDriver;
+  OGRDeregisterDriver: TOGRDeregisterDriver;
+  OGRGetDriverCount: TOGRGetDriverCount;
+  OGRGetDriver:      TOGRGetDriver;
+  OGRGetDriverByName: TOGRGetDriverByName;
+  OGRGetOpenDSCount: TOGRGetOpenDSCount;
+  OGRGetOpenDS:      TOGRGetOpenDS;
+  OGRRegisterAll:    TOGRRegisterAll;
+  OGRCleanupAll:     TOGRCleanupAll;
+  OGR_SM_Create:     TOGR_SM_Create;
+  OGR_SM_Destroy:    TOGR_SM_Destroy;
+  OGR_SM_InitFromFeature: TOGR_SM_InitFromFeature;
+  OGR_SM_InitStyleString: TOGR_SM_InitStyleString;
+  OGR_SM_GetPartCount: TOGR_SM_GetPartCount;
+  OGR_SM_GetPart:    TOGR_SM_GetPart;
+  OGR_SM_AddPart:    TOGR_SM_AddPart;
+  OGR_SM_AddStyle:   TOGR_SM_AddStyle;
+  OGR_ST_Create:     TOGR_ST_Create;
+  OGR_ST_Destroy:    TOGR_ST_Destroy;
+  OGR_ST_GetType:    TOGR_ST_GetType;
+  OGR_ST_GetUnit:    TOGR_ST_GetUnit;
+  OGR_ST_SetUnit:    TOGR_ST_SetUnit;
+  OGR_ST_GetParamStr: TOGR_ST_GetParamStr;
+  OGR_ST_GetParamNum: TOGR_ST_GetParamNum;
+  OGR_ST_GetParamDbl: TOGR_ST_GetParamDbl;
+  OGR_ST_SetParamStr: TOGR_ST_SetParamStr;
+  OGR_ST_SetParamNum: TOGR_ST_SetParamNum;
+  OGR_ST_SetParamDbl: TOGR_ST_SetParamDbl;
+  OGR_ST_GetStyleString: TOGR_ST_GetStyleString;
+  OGR_ST_GetRGBFromString: TOGR_ST_GetRGBFromString;
+  OGR_STBL_Create:   TOGR_STBL_Create;
+  OGR_STBL_Destroy:  TOGR_STBL_Destroy;
+  OGR_STBL_SaveStyleTable: TOGR_STBL_SaveStyleTable;
+  OGR_STBL_LoadStyleTable: TOGR_STBL_LoadStyleTable;
+  OGR_STBL_Find:     TOGR_STBL_Find;
+  OGR_STBL_ResetStyleStringReading: TOGR_STBL_ResetStyleStringReading;
+  OGR_STBL_GetNextStyle: TOGR_STBL_GetNextStyle;
+//  OGR_STBL_GetLastStyleName: TOGR_STBL_GetLastStyleName;
 
 implementation
 
+procedure DynamicLoad(const ALibName: string);
+var
+  dllHandle: cardinal;
+begin
+  dllHandle := LoadLibrary(PAnsiChar(ALibName));
+  @OGRMergeGeometryTypes := GetProcAddress(dllHandle, 'OGRMergeGeometryTypes');
+  @OGRParseDate := GetProcAddress(dllHandle, 'OGRParseDate');
+  @GDALVersionInfo := GetProcAddress(dllHandle, 'GDALVersionInfo');
+  @GDALCheckVersion := GetProcAddress(dllHandle, 'GDALCheckVersion');
+  @OGR_G_CreateFromWkb := GetProcAddress(dllHandle, 'OGR_G_CreateFromWkb');
+  @OGR_G_CreateFromWkt := GetProcAddress(dllHandle, 'OGR_G_CreateFromWkt');
+  @OGR_G_DestroyGeometry := GetProcAddress(dllHandle, 'OGR_G_DestroyGeometry');
+  @OGR_G_CreateGeometry := GetProcAddress(dllHandle, 'OGR_G_CreateGeometry');
+  @OGR_G_ForceToPolygon := GetProcAddress(dllHandle, 'OGR_G_ForceToPolygon');
+  @OGR_G_ForceToMultiPolygon := GetProcAddress(dllHandle, 'OGR_G_ForceToMultiPolygon');
+  @OGR_G_ForceToMultiPoint := GetProcAddress(dllHandle, 'OGR_G_ForceToMultiPoint');
+  @OGR_G_ForceToMultiLineString := GetProcAddress(dllHandle, 'OGR_G_ForceToMultiLineString');
+  @OGR_G_GetDimension := GetProcAddress(dllHandle, 'OGR_G_GetDimension');
+  @OGR_G_GetCoordinateDimension := GetProcAddress(dllHandle, 'OGR_G_GetCoordinateDimension');
+  @OGR_G_Clone := GetProcAddress(dllHandle, 'OGR_G_Clone');
+  @OGR_G_GetEnvelope := GetProcAddress(dllHandle, 'OGR_G_GetEnvelope');
+  @OGR_G_ImportFromWkb := GetProcAddress(dllHandle, 'OGR_G_ImportFromWkb');
+  @OGR_G_ExportToWkb := GetProcAddress(dllHandle, 'OGR_G_ExportToWkb');
+  @OGR_G_WkbSize := GetProcAddress(dllHandle, 'OGR_G_WkbSize');
+  @OGR_G_ImportFromWkt := GetProcAddress(dllHandle, 'OGR_G_ImportFromWkt');
+  @OGR_G_ExportToWkt := GetProcAddress(dllHandle, 'OGR_G_ExportToWkt');
+  @OGR_G_ExportToJson := GetProcAddress(dllHandle, 'OGR_G_ExportToJson');
+  @OGR_G_GetGeometryType := GetProcAddress(dllHandle, 'OGR_G_GetGeometryType');
+  @OGR_G_GetGeometryName := GetProcAddress(dllHandle, 'OGR_G_GetGeometryName');
+  @OGR_G_DumpReadable := GetProcAddress(dllHandle, 'OGR_G_DumpReadable');
+  @OGR_G_FlattenTo2D := GetProcAddress(dllHandle, 'OGR_G_FlattenTo2D');
+  @OGR_G_AssignSpatialReference := GetProcAddress(dllHandle, 'OGR_G_AssignSpatialReference');
+  @OGR_G_Transform := GetProcAddress(dllHandle, 'OGR_G_Transform');
+  @OGR_G_TransformTo := GetProcAddress(dllHandle, 'OGR_G_TransformTo');
+  @OGR_G_Segmentize := GetProcAddress(dllHandle, 'OGR_G_Segmentize');
+  @OGR_G_Intersects := GetProcAddress(dllHandle, 'OGR_G_Intersects');
+  @OGR_G_Equals := GetProcAddress(dllHandle, 'OGR_G_Equals');
+  @OGR_G_Disjoint := GetProcAddress(dllHandle, 'OGR_G_Disjoint');
+  @OGR_G_Touches := GetProcAddress(dllHandle, 'OGR_G_Touches');
+  @OGR_G_Crosses := GetProcAddress(dllHandle, 'OGR_G_Crosses');
+  @OGR_G_Within := GetProcAddress(dllHandle, 'OGR_G_Within');
+  @OGR_G_Contains := GetProcAddress(dllHandle, 'OGR_G_Contains');
+  @OGR_G_Overlaps := GetProcAddress(dllHandle, 'OGR_G_Overlaps');
+  @OGR_G_GetBoundary := GetProcAddress(dllHandle, 'OGR_G_GetBoundary');
+  @OGR_G_ConvexHull := GetProcAddress(dllHandle, 'OGR_G_ConvexHull');
+  @OGR_G_Buffer := GetProcAddress(dllHandle, 'OGR_G_Buffer');
+  @OGR_G_Intersection := GetProcAddress(dllHandle, 'OGR_G_Intersection');
+  @OGR_G_Union := GetProcAddress(dllHandle, 'OGR_G_Union');
+  @OGR_G_UnionCascaded := GetProcAddress(dllHandle, 'OGR_G_UnionCascaded');
+  @OGR_G_Difference := GetProcAddress(dllHandle, 'OGR_G_Difference');
+  @OGR_G_SymmetricDifference := GetProcAddress(dllHandle, 'OGR_G_SymmetricDifference');
+  @OGR_G_Distance := GetProcAddress(dllHandle, 'OGR_G_Distance');
+  @OGR_G_GetArea := GetProcAddress(dllHandle, 'OGR_G_GetArea');
+  @OGR_G_Centroid := GetProcAddress(dllHandle, 'OGR_G_Centroid');
+  @OGR_G_Empty := GetProcAddress(dllHandle, 'OGR_G_Empty');
+  @OGR_G_IsEmpty := GetProcAddress(dllHandle, 'OGR_G_IsEmpty');
+  @OGR_G_IsValid := GetProcAddress(dllHandle, 'OGR_G_IsValid');
+  @OGR_G_IsSimple := GetProcAddress(dllHandle, 'OGR_G_IsSimple');
+  @OGR_G_IsRing := GetProcAddress(dllHandle, 'OGR_G_IsRing');
+  @OGR_G_Intersect := GetProcAddress(dllHandle, 'OGR_G_Intersect');
+  @OGR_G_Equal := GetProcAddress(dllHandle, 'OGR_G_Equal');
+  @OGR_G_GetPointCount := GetProcAddress(dllHandle, 'OGR_G_GetPointCount');
+  @OGR_G_GetX := GetProcAddress(dllHandle, 'OGR_G_GetX');
+  @OGR_G_GetY := GetProcAddress(dllHandle, 'OGR_G_GetY');
+  @OGR_G_GetZ := GetProcAddress(dllHandle, 'OGR_G_GetZ');
+  @OGR_G_GetPoint := GetProcAddress(dllHandle, 'OGR_G_GetPoint');
+  @OGR_G_SetPoint := GetProcAddress(dllHandle, 'OGR_G_SetPoint');
+  @OGR_G_SetPoint_2D := GetProcAddress(dllHandle, 'OGR_G_SetPoint_2D');
+  @OGR_G_AddPoint := GetProcAddress(dllHandle, 'OGR_G_AddPoint');
+  @OGR_G_AddPoint_2D := GetProcAddress(dllHandle, 'OGR_G_AddPoint_2D');
+  @OGR_G_GetGeometryCount := GetProcAddress(dllHandle, 'OGR_G_GetGeometryCount');
+  @OGR_G_GetGeometryRef := GetProcAddress(dllHandle, 'OGR_G_GetGeometryRef');
+  @OGR_G_AddGeometry := GetProcAddress(dllHandle, 'OGR_G_AddGeometry');
+  @OGR_G_AddGeometryDirectly := GetProcAddress(dllHandle, 'OGR_G_AddGeometryDirectly');
+  @OGR_G_RemoveGeometry := GetProcAddress(dllHandle, 'OGR_G_RemoveGeometry');
+  @OGRBuildPolygonFromEdges := GetProcAddress(dllHandle, 'OGRBuildPolygonFromEdges');
+  @OGR_Fld_Create := GetProcAddress(dllHandle, 'OGR_Fld_Create');
+  @OGR_Fld_Destroy := GetProcAddress(dllHandle, 'OGR_Fld_Destroy');
+  @OGR_Fld_SetName := GetProcAddress(dllHandle, 'OGR_Fld_SetName');
+  @OGR_Fld_GetNameRef := GetProcAddress(dllHandle, 'OGR_Fld_GetNameRef');
+  @OGR_Fld_GetType := GetProcAddress(dllHandle, 'OGR_Fld_GetType');
+  @OGR_Fld_SetType := GetProcAddress(dllHandle, 'OGR_Fld_SetType');
+  @OGR_Fld_GetJustify := GetProcAddress(dllHandle, 'OGR_Fld_GetJustify');
+  @OGR_Fld_SetJustify := GetProcAddress(dllHandle, 'OGR_Fld_SetJustify');
+  @OGR_Fld_GetWidth := GetProcAddress(dllHandle, 'OGR_Fld_GetWidth');
+  @OGR_Fld_SetWidth := GetProcAddress(dllHandle, 'OGR_Fld_SetWidth');
+  @OGR_Fld_GetPrecision := GetProcAddress(dllHandle, 'OGR_Fld_GetPrecision');
+  @OGR_Fld_SetPrecision := GetProcAddress(dllHandle, 'OGR_Fld_SetPrecision');
+  @OGR_Fld_Set := GetProcAddress(dllHandle, 'OGR_Fld_Set');
+  @OGR_Fld_IsIgnored := GetProcAddress(dllHandle, 'OGR_Fld_IsIgnored');
+  @OGR_Fld_SetIgnored := GetProcAddress(dllHandle, 'OGR_Fld_SetIgnored');
+  @OGR_GetFieldTypeName := GetProcAddress(dllHandle, 'OGR_GetFieldTypeName');
+  @OGR_FD_Create := GetProcAddress(dllHandle, 'OGR_FD_Create');
+  @OGR_FD_Destroy := GetProcAddress(dllHandle, 'OGR_FD_Destroy');
+  @OGR_FD_Release := GetProcAddress(dllHandle, 'OGR_FD_Release');
+  @OGR_FD_GetName := GetProcAddress(dllHandle, 'OGR_FD_GetName');
+  @OGR_FD_GetFieldCount := GetProcAddress(dllHandle, 'OGR_FD_GetFieldCount');
+  @OGR_FD_GetFieldDefn := GetProcAddress(dllHandle, 'OGR_FD_GetFieldDefn');
+  @OGR_FD_GetFieldIndex := GetProcAddress(dllHandle, 'OGR_FD_GetFieldIndex');
+  @OGR_FD_AddFieldDefn := GetProcAddress(dllHandle, 'OGR_FD_AddFieldDefn');
+  @OGR_FD_GetGeomType := GetProcAddress(dllHandle, 'OGR_FD_GetGeomType');
+  @OGR_FD_SetGeomType := GetProcAddress(dllHandle, 'OGR_FD_SetGeomType');
+  @OGR_FD_IsGeometryIgnored := GetProcAddress(dllHandle, 'OGR_FD_IsGeometryIgnored');
+  @OGR_FD_SetGeometryIgnored := GetProcAddress(dllHandle, 'OGR_FD_SetGeometryIgnored');
+  @OGR_FD_IsStyleIgnored := GetProcAddress(dllHandle, 'OGR_FD_IsStyleIgnored');
+  @OGR_FD_SetStyleIgnored := GetProcAddress(dllHandle, 'OGR_FD_SetStyleIgnored');
+  @OGR_FD_Reference := GetProcAddress(dllHandle, 'OGR_FD_Reference');
+  @OGR_FD_Dereference := GetProcAddress(dllHandle, 'OGR_FD_Dereference');
+  @OGR_F_Create := GetProcAddress(dllHandle, 'OGR_F_Create');
+  @OGR_F_Destroy := GetProcAddress(dllHandle, 'OGR_F_Destroy');
+  @OGR_F_GetDefnRef := GetProcAddress(dllHandle, 'OGR_F_GetDefnRef');
+  @OGR_F_SetGeometryDirectly := GetProcAddress(dllHandle, 'OGR_F_SetGeometryDirectly');
+  @OGR_F_SetGeometry := GetProcAddress(dllHandle, 'OGR_F_SetGeometry');
+  @OGR_F_GetGeometryRef := GetProcAddress(dllHandle, 'OGR_F_GetGeometryRef');
+  @OGR_F_Clone := GetProcAddress(dllHandle, 'OGR_F_Clone');
+  @OGR_F_Equal := GetProcAddress(dllHandle, 'OGR_F_Equal');
+  @OGR_F_GetFieldCount := GetProcAddress(dllHandle, 'OGR_F_GetFieldCount');
+  @OGR_F_GetFieldDefnRef := GetProcAddress(dllHandle, 'OGR_F_GetFieldDefnRef');
+  @OGR_F_GetFieldIndex := GetProcAddress(dllHandle, 'OGR_F_GetFieldIndex');
+  @OGR_F_IsFieldSet := GetProcAddress(dllHandle, 'OGR_F_IsFieldSet');
+  @OGR_F_UnsetField := GetProcAddress(dllHandle, 'OGR_F_UnsetField');
+  @OGR_F_GetRawFieldRef := GetProcAddress(dllHandle, 'OGR_F_GetRawFieldRef');
+  @OGR_F_GetFieldAsInteger := GetProcAddress(dllHandle, 'OGR_F_GetFieldAsInteger');
+  @OGR_F_GetFieldAsDouble := GetProcAddress(dllHandle, 'OGR_F_GetFieldAsDouble');
+  @OGR_F_GetFieldAsString := GetProcAddress(dllHandle, 'OGR_F_GetFieldAsString');
+  @OGR_F_GetFieldAsIntegerList := GetProcAddress(dllHandle, 'OGR_F_GetFieldAsIntegerList');
+  @OGR_F_GetFieldAsDoubleList := GetProcAddress(dllHandle, 'OGR_F_GetFieldAsDoubleList');
+  @OGR_F_GetFieldAsStringList := GetProcAddress(dllHandle, 'OGR_F_GetFieldAsStringList');
+  @OGR_F_GetFieldAsBinary := GetProcAddress(dllHandle, 'OGR_F_GetFieldAsBinary');
+  @OGR_F_GetFieldAsDateTime := GetProcAddress(dllHandle, 'OGR_F_GetFieldAsDateTime');
+  @OGR_F_SetFieldInteger := GetProcAddress(dllHandle, 'OGR_F_SetFieldInteger');
+  @OGR_F_SetFieldDouble := GetProcAddress(dllHandle, 'OGR_F_SetFieldDouble');
+  @OGR_F_SetFieldString := GetProcAddress(dllHandle, 'OGR_F_SetFieldString');
+  @OGR_F_SetFieldIntegerList := GetProcAddress(dllHandle, 'OGR_F_SetFieldIntegerList');
+  @OGR_F_SetFieldDoubleList := GetProcAddress(dllHandle, 'OGR_F_SetFieldDoubleList');
+  @OGR_F_SetFieldStringList := GetProcAddress(dllHandle, 'OGR_F_SetFieldStringList');
+  @OGR_F_SetFieldRaw := GetProcAddress(dllHandle, 'OGR_F_SetFieldRaw');
+  @OGR_F_SetFieldBinary := GetProcAddress(dllHandle, 'OGR_F_SetFieldBinary');
+  @OGR_F_SetFieldDateTime := GetProcAddress(dllHandle, 'OGR_F_SetFieldDateTime');
+  @OGR_F_GetFID := GetProcAddress(dllHandle, 'OGR_F_GetFID');
+  @OGR_F_SetFID := GetProcAddress(dllHandle, 'OGR_F_SetFID');
+  @OGR_F_DumpReadable := GetProcAddress(dllHandle, 'OGR_F_DumpReadable');
+  @OGR_F_SetFrom := GetProcAddress(dllHandle, 'OGR_F_SetFrom');
+  @OGR_F_SetFromWithMap := GetProcAddress(dllHandle, 'OGR_F_SetFromWithMap');
+  @OGR_F_GetStyleString := GetProcAddress(dllHandle, 'OGR_F_GetStyleString');
+  @OGR_F_SetStyleString := GetProcAddress(dllHandle, 'OGR_F_SetStyleString');
+  @OGR_F_SetStyleStringDirectly := GetProcAddress(dllHandle, 'OGR_F_SetStyleStringDirectly');
+  @OGR_L_Update := GetProcAddress(dllHandle, 'OGR_L_Update');
+  @OGR_L_GetSpatialFilter := GetProcAddress(dllHandle, 'OGR_L_GetSpatialFilter');
+  @OGR_L_SetSpatialFilter := GetProcAddress(dllHandle, 'OGR_L_SetSpatialFilter');
+  @OGR_L_SetSpatialFilterRect := GetProcAddress(dllHandle, 'OGR_L_SetSpatialFilterRect');
+  @OGR_L_SetAttributeFilter := GetProcAddress(dllHandle, 'OGR_L_SetAttributeFilter');
+  @OGR_L_ResetReading := GetProcAddress(dllHandle, 'OGR_L_ResetReading');
+  @OGR_L_GetNextFeature := GetProcAddress(dllHandle, 'OGR_L_GetNextFeature');
+  @OGR_L_GetName := GetProcAddress(dllHandle, 'OGR_L_GetName');
+  @OGR_L_SetNextByIndex := GetProcAddress(dllHandle, 'OGR_L_SetNextByIndex');
+  @OGR_L_GetFeature := GetProcAddress(dllHandle, 'OGR_L_GetFeature');
+  @OGR_L_SetFeature := GetProcAddress(dllHandle, 'OGR_L_SetFeature');
+  @OGR_L_CreateFeature := GetProcAddress(dllHandle, 'OGR_L_CreateFeature');
+  @OGR_L_DeleteFeature := GetProcAddress(dllHandle, 'OGR_L_DeleteFeature');
+  @OGR_L_GetLayerDefn := GetProcAddress(dllHandle, 'OGR_L_GetLayerDefn');
+  @OGR_L_GetSpatialRef := GetProcAddress(dllHandle, 'OGR_L_GetSpatialRef');
+  @OGR_L_GetFeatureCount := GetProcAddress(dllHandle, 'OGR_L_GetFeatureCount');
+  @OGR_L_GetExtent := GetProcAddress(dllHandle, 'OGR_L_GetExtent');
+  @OGR_L_TestCapability := GetProcAddress(dllHandle, 'OGR_L_TestCapability');
+  @OGR_L_CreateField := GetProcAddress(dllHandle, 'OGR_L_CreateField');
+  @OGR_L_StartTransaction := GetProcAddress(dllHandle, 'OGR_L_StartTransaction');
+  @OGR_L_CommitTransaction := GetProcAddress(dllHandle, 'OGR_L_CommitTransaction');
+  @OGR_L_RollbackTransaction := GetProcAddress(dllHandle, 'OGR_L_RollbackTransaction');
+  @OGR_L_SyncToDisk := GetProcAddress(dllHandle, 'OGR_L_SyncToDisk');
+  @OGR_L_GetFIDColumn := GetProcAddress(dllHandle, 'OGR_L_GetFIDColumn');
+  @OGR_L_GetGeometryColumn := GetProcAddress(dllHandle, 'OGR_L_GetGeometryColumn');
+  @OGR_L_SetIgnoredFields := GetProcAddress(dllHandle, 'OGR_L_SetIgnoredFields');
+  @OGR_DS_Destroy := GetProcAddress(dllHandle, 'OGR_DS_Destroy');
+  @OGR_DS_GetName := GetProcAddress(dllHandle, 'OGR_DS_GetName');
+  @OGR_DS_GetLayerCount := GetProcAddress(dllHandle, 'OGR_DS_GetLayerCount');
+  @OGR_DS_GetLayer := GetProcAddress(dllHandle, 'OGR_DS_GetLayer');
+  @OGR_DS_GetLayerByName := GetProcAddress(dllHandle, 'OGR_DS_GetLayerByName');
+  @OGR_DS_DeleteLayer := GetProcAddress(dllHandle, 'OGR_DS_DeleteLayer');
+  @OGR_DS_GetDriver := GetProcAddress(dllHandle, 'OGR_DS_GetDriver');
+  @OGR_DS_CreateLayer := GetProcAddress(dllHandle, 'OGR_DS_CreateLayer');
+  @OGR_DS_CopyLayer := GetProcAddress(dllHandle, 'OGR_DS_CopyLayer');
+  @OGR_DS_TestCapability := GetProcAddress(dllHandle, 'OGR_DS_TestCapability');
+  @OGR_DS_ExecuteSQL := GetProcAddress(dllHandle, 'OGR_DS_ExecuteSQL');
+  @OGR_DS_ReleaseResultSet := GetProcAddress(dllHandle, 'OGR_DS_ReleaseResultSet');
+  @OGR_DS_SyncToDisk := GetProcAddress(dllHandle, 'OGR_DS_SyncToDisk');
+  @OGR_Dr_GetName := GetProcAddress(dllHandle, 'OGR_Dr_GetName');
+  @OGR_Dr_Open := GetProcAddress(dllHandle, 'OGR_Dr_Open');
+  @OGR_Dr_TestCapability := GetProcAddress(dllHandle, 'OGR_Dr_TestCapability');
+  @OGR_Dr_CreateDataSource := GetProcAddress(dllHandle, 'OGR_Dr_CreateDataSource');
+  @OGR_Dr_CopyDataSource := GetProcAddress(dllHandle, 'OGR_Dr_CopyDataSource');
+  @OGR_Dr_DeleteDataSource := GetProcAddress(dllHandle, 'OGR_Dr_DeleteDataSource');
+  @OGROpen  := GetProcAddress(dllHandle, 'OGROpen');
+  @OGRReleaseDataSource := GetProcAddress(dllHandle, 'OGRReleaseDataSource');
+  @OGRRegisterDriver := GetProcAddress(dllHandle, 'OGRRegisterDriver');
+  @OGRDeregisterDriver := GetProcAddress(dllHandle, 'OGRDeregisterDriver');
+  @OGRGetDriverCount := GetProcAddress(dllHandle, 'OGRGetDriverCount');
+  @OGRGetDriver := GetProcAddress(dllHandle, 'OGRGetDriver');
+  @OGRGetDriverByName := GetProcAddress(dllHandle, 'OGRGetDriverByName');
+  @OGRGetOpenDSCount := GetProcAddress(dllHandle, 'OGRGetOpenDSCount');
+  @OGRGetOpenDS := GetProcAddress(dllHandle, 'OGRGetOpenDS');
+  @OGRRegisterAll := GetProcAddress(dllHandle, 'OGRRegisterAll');
+  @OGRCleanupAll := GetProcAddress(dllHandle, 'OGRCleanupAll');
+  @OGR_SM_Create := GetProcAddress(dllHandle, 'OGR_SM_Create');
+  @OGR_SM_Destroy := GetProcAddress(dllHandle, 'OGR_SM_Destroy');
+  @OGR_SM_InitFromFeature := GetProcAddress(dllHandle, 'OGR_SM_InitFromFeature');
+  @OGR_SM_InitStyleString := GetProcAddress(dllHandle, 'OGR_SM_InitStyleString');
+  @OGR_SM_GetPartCount := GetProcAddress(dllHandle, 'OGR_SM_GetPartCount');
+  @OGR_SM_GetPart := GetProcAddress(dllHandle, 'OGR_SM_GetPart');
+  @OGR_SM_AddPart := GetProcAddress(dllHandle, 'OGR_SM_AddPart');
+  @OGR_SM_AddStyle := GetProcAddress(dllHandle, 'OGR_SM_AddStyle');
+  @OGR_ST_Create := GetProcAddress(dllHandle, 'OGR_ST_Create');
+  @OGR_ST_Destroy := GetProcAddress(dllHandle, 'OGR_ST_Destroy');
+  @OGR_ST_GetType := GetProcAddress(dllHandle, 'OGR_ST_GetType');
+  @OGR_ST_GetUnit := GetProcAddress(dllHandle, 'OGR_ST_GetUnit');
+  @OGR_ST_SetUnit := GetProcAddress(dllHandle, 'OGR_ST_SetUnit');
+  @OGR_ST_GetParamStr := GetProcAddress(dllHandle, 'OGR_ST_GetParamStr');
+  @OGR_ST_GetParamNum := GetProcAddress(dllHandle, 'OGR_ST_GetParamNum');
+  @OGR_ST_GetParamDbl := GetProcAddress(dllHandle, 'OGR_ST_GetParamDbl');
+  @OGR_ST_SetParamStr := GetProcAddress(dllHandle, 'OGR_ST_SetParamStr');
+  @OGR_ST_SetParamNum := GetProcAddress(dllHandle, 'OGR_ST_SetParamNum');
+  @OGR_ST_SetParamDbl := GetProcAddress(dllHandle, 'OGR_ST_SetParamDbl');
+  @OGR_ST_GetStyleString := GetProcAddress(dllHandle, 'OGR_ST_GetStyleString');
+  @OGR_ST_GetRGBFromString := GetProcAddress(dllHandle, 'OGR_ST_GetRGBFromString');
+  @OGR_STBL_Create := GetProcAddress(dllHandle, 'OGR_STBL_Create');
+  @OGR_STBL_Destroy := GetProcAddress(dllHandle, 'OGR_STBL_Destroy');
+  @OGR_STBL_SaveStyleTable := GetProcAddress(dllHandle, 'OGR_STBL_SaveStyleTable');
+  @OGR_STBL_LoadStyleTable := GetProcAddress(dllHandle, 'OGR_STBL_LoadStyleTable');
+  @OGR_STBL_Find := GetProcAddress(dllHandle, 'OGR_STBL_Find');
+  @OGR_STBL_ResetStyleStringReading := GetProcAddress(dllHandle, 'OGR_STBL_ResetStyleStringReading');
+  @OGR_STBL_GetNextStyle := GetProcAddress(dllHandle, 'OGR_STBL_GetfNextStyle');
+end;
+
+initialization
+  DynamicLoad(LibName);
 end.
 
