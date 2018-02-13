@@ -1,29 +1,3 @@
-{
-  Delphi API for GDAL library
-
-  Copyright (C) 2010 Alexander Bruy (alexander.bruy@gmail.com)
-
-  Based on the sources automatically converted by H2Pas 1.0.0
-  The original files are: gdal.h
-
-  Permission is hereby granted, free of charge, to any person obtaining a
-  copy of this software and associated documentation files (the "Software"),
-  to deal in the Software without restriction, including without limitation
-  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-  and/or sell copies of the Software, and to permit persons to whom the
-  Software is furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included
-  in all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-  DEALINGS IN THE SOFTWARE.
-}
 
 {******************************************************************************
  * $Id: gdal.h 17687 2009-09-25 13:43:56Z dron $
@@ -66,20 +40,14 @@ unit gdal;
 interface
 
 uses
-  gdalcore;
+  gdalcore, windows;
 
-//----------------------------------------------------------------------------
 const
-  { "well known" metadata items }
+
   GDALMD_AREA_OR_POINT = 'AREA_OR_POINT';
   GDALMD_AOP_AREA      = 'Area';
   GDALMD_AOP_POINT     = 'Point';
 
-  { -------------------------------------------------------------------- }
-  {      GDAL Specific error codes.                                      }
-
-  {      error codes 100 to 299 reserved for GDAL.                       }
-  { -------------------------------------------------------------------- }
   CPLE_WrongFormat = 200;
 
   GDAL_DMD_LONGNAME           = 'DMD_LONGNAME';
@@ -98,73 +66,67 @@ const
   GMF_ALPHA       = $04;
   GMF_NODATA      = $08;
 
-//----------------------------------------------------------------------------
 type
-  { Pixel data types }
+
   GDALDataType =
     (
-    GDT_Unknown = 0,     { Unknown or unspecified type }
-    GDT_Byte = 1,        { Eight bit unsigned integer }
-    GDT_UInt16 = 2,      { Sixteen bit unsigned integer }
-    GDT_Int16 = 3,       { Sixteen bit signed integer }
-    GDT_UInt32 = 4,      { Thirty two bit unsigned integer }
-    GDT_Int32 = 5,       { Thirty two bit signed integer }
-    GDT_Float32 = 6,     { Thirty two bit floating point }
-    GDT_Float64 = 7,     { Sixty four bit floating point }
-    GDT_CInt16 = 8,      { Complex Int16 }
-    GDT_CInt32 = 9,      { Complex Int32 }
-    GDT_CFloat32 = 10,   { Complex Float32 }
-    GDT_CFloat64 = 11,   { Complex Float64 }
-    GDT_TypeCount = 12   { maximum type # + 1 }
+    GDT_Unknown = 0,
+    GDT_Byte = 1,
+    GDT_UInt16 = 2,
+    GDT_Int16 = 3,
+    GDT_UInt32 = 4,
+    GDT_Int32 = 5,
+    GDT_Float32 = 6,
+    GDT_Float64 = 7,
+    GDT_CInt16 = 8,
+    GDT_CInt32 = 9,
+    GDT_CFloat32 = 10,
+    GDT_CFloat64 = 11,
+    GDT_TypeCount = 12
     );
 
-  {Flag indicating read/write, or read-only access to data.}
   GDALAccess =
     (
-    GA_ReadOnly = 0,  { Read only (no update) access }
-    GA_Update = 1     { Read/write access }
+    GA_ReadOnly = 0,
+    GA_Update = 1
     );
 
-  { Read/Write flag for RasterIO() method }
   GDALRWFlag =
     (
-    GF_Read = 0,   { Read data }
-    GF_Write = 1   { Write data }
+    GF_Read = 0,
+    GF_Write = 1
     );
 
-  { Types of color interpretation for raster bands. }
   GDALColorInterp =
     (
     GCI_Undefined = 0,
-    GCI_GrayIndex = 1,   { Greyscale }
-    GCI_PaletteIndex = 2,   { Paletted (see associated color table) }
-    GCI_RedBand = 3,   { Red band of RGBA image }
-    GCI_GreenBand = 4,   { Green band of RGBA image }
-    GCI_BlueBand = 5,   { Blue band of RGBA image }
-    GCI_AlphaBand = 6,   { Alpha (0=transparent, 255=opaque) }
-    GCI_HueBand = 7,   { Hue band of HLS image }
-    GCI_SaturationBand = 8,   { Saturation band of HLS image }
-    GCI_LightnessBand = 9,   { Lightness band of HLS image }
-    GCI_CyanBand = 10,  { Cyan band of CMYK image }
-    GCI_MagentaBand = 11,  { Magenta band of CMYK image }
-    GCI_YellowBand = 12,  { Yellow band of CMYK image }
-    GCI_BlackBand = 13,  { Black band of CMLY image }
-    GCI_YCbCr_YBand = 14,  { Y Luminance }
-    GCI_YCbCr_CbBand = 15,  { Cb Chroma }
-    GCI_YCbCr_CrBand = 16,  { Cr Chroma }
-    GCI_Max = 16   { Max current value }
+    GCI_GrayIndex = 1,
+    GCI_PaletteIndex = 2,
+    GCI_RedBand = 3,
+    GCI_GreenBand = 4,
+    GCI_BlueBand = 5,
+    GCI_AlphaBand = 6,
+    GCI_HueBand = 7,
+    GCI_SaturationBand = 8,
+    GCI_LightnessBand = 9,
+    GCI_CyanBand = 10,
+    GCI_MagentaBand = 11,
+    GCI_YellowBand = 12,
+    GCI_BlackBand = 13,
+    GCI_YCbCr_YBand = 14,
+    GCI_YCbCr_CbBand = 15,
+    GCI_YCbCr_CrBand = 16,
+    GCI_Max = 16
     );
 
-  { Types of color interpretations for a GDALColorTable. }
   GDALPaletteInterp =
     (
-    GPI_Gray = 0,  { Grayscale (in GDALColorEntry.c1) }
-    GPI_RGB = 1,   { Red, Green, Blue and Alpha in (in c1, c2, c3 and c4) }
-    GPI_CMYK = 2,  { Cyan, Magenta, Yellow and Black (in c1, c2, c3 and c4) }
-    GPI_HLS = 3    { Hue, Lightness and Saturation (in c1, c2, and c3) }
+    GPI_Gray = 0,
+    GPI_RGB = 1,
+    GPI_CMYK = 2,
+    GPI_HLS = 3
     );
 
-  { Deprecated / unused }
   GDALOptionDefinition = record
     pszOptionName:  CPChar;
     pszValueType:   CPChar;
@@ -172,15 +134,14 @@ type
     papszOptions:   PCPChar;
   end;
 
-  { Ground Control Point }
   GDAL_GCP = record
-    pszId:      CPChar;       { Unique identifier, often numeric }
-    pszInfo:    CPChar;       { Informational message or '' }
-    dfGCPPixel: double;       { Pixel (x) location of GCP on raster }
-    dfGCPLine:  double;       { Line (y) location of GCP on raster }
-    dfGCPX:     double;       { X position of GCP in georeferenced space }
-    dfGCPY:     double;       { Y position of GCP in georeferenced space }
-    dfGCPZ:     double;       { Elevation of GCP, or zero if not known }
+    pszId:      CPChar;
+    pszInfo:    CPChar;
+    dfGCPPixel: double;
+    dfGCPLine:  double;
+    dfGCPX:     double;
+    dfGCPY:     double;
+    dfGCPZ:     double;
   end;
   PGDAL_GCP = ^GDAL_GCP;
 
@@ -206,923 +167,645 @@ type
   end;
 
   GDALColorEntry = record
-    c1: smallint;  { gray, red, cyan or hue }
-    c2: smallint;  { green, magenta, or lightness }
-    c3: smallint;  { blue, yellow, or saturation }
-    c4: smallint;  { alpha or blackband }
+    c1: smallint;
+    c2: smallint;
+    c3: smallint;
+    c4: smallint;
   end;
 
   GDALRATFieldType =
     (
-    GFT_Integer,  { Integer field }
-    GFT_Real,     { Floating point (double) field }
-    GFT_String    { String field }
+    GFT_Integer,
+    GFT_Real,
+    GFT_String
     );
 
   GDALRATFieldUsage =
     (
-    GFU_Generic = 0,      { General purpose field. }
-    GFU_PixelCount = 1,   { Histogram pixel count }
-    GFU_Name = 2,         { Class name }
-    GFU_Min = 3,          { Class range minimum }
-    GFU_Max = 4,          { Class range maximum }
-    GFU_MinMax = 5,       { Class value (min=max) }
-    GFU_Red = 6,          { Red class color (0-255) }
-    GFU_Green = 7,        { Green class color (0-255) }
-    GFU_Blue = 8,         { Blue class color (0-255) }
-    GFU_Alpha = 9,        { Alpha (0=transparent,255=opaque) }
-    GFU_RedMin = 10,      { Color Range Red Minimum }
-    GFU_GreenMin = 11,    { Color Range Green Minimum }
-    GFU_BlueMin = 12,     { Color Range Blue Minimum }
-    GFU_AlphaMin = 13,    { Color Range Alpha Minimum }
-    GFU_RedMax = 14,      { Color Range Red Maximum }
-    GFU_GreenMax = 15,    { Color Range Green Maximum }
-    GFU_BlueMax = 16,     { Color Range Blue Maximum }
-    GFU_AlphaMax = 17,    { Color Range Alpha Maximum }
-    GFU_MaxCount          { Maximum GFU value }
+    GFU_Generic = 0,
+    GFU_PixelCount = 1,
+    GFU_Name = 2,
+    GFU_Min = 3,
+    GFU_Max = 4,
+    GFU_MinMax = 5,
+    GFU_Red = 6,
+    GFU_Green = 7,
+    GFU_Blue = 8,
+    GFU_Alpha = 9,
+    GFU_RedMin = 10,
+    GFU_GreenMin = 11,
+    GFU_BlueMin = 12,
+    GFU_AlphaMin = 13,
+    GFU_RedMax = 14,
+    GFU_GreenMax = 15,
+    GFU_BlueMax = 16,
+    GFU_AlphaMax = 17,
+    GFU_MaxCount
     );
 
-  { Define handle types related to various internal classes }
-
-  { Opaque type used for the C bindings of the C++ GDALMajorObject class }
   GDALMajorObjectH = Pointer;
 
-  { Opaque type used for the C bindings of the C++ GDALDataset class }
   GDALDatasetH = Pointer;
 
-  { Opaque type used for the C bindings of the C++ GDALRasterBand class }
   GDALRasterBandH = Pointer;
 
-  { Opaque type used for the C bindings of the C++ GDALDriver class }
   GDALDriverH = Pointer;
 
-  { Deprecated / unused }
   GDALProjDefH = Pointer;
 
-  { Opaque type used for the C bindings of the C++ GDALColorTable class }
   GDALColorTableH = Pointer;
 
-  { Opaque type used for the C bindings of the C++ GDALRasterAttributeTable class }
   GDALRasterAttributeTableH = Pointer;
 
-  GDALProgressFunc = function(dfComplete: double; pszMessage: CPChar;
-    pProgressArg: Pointer): integer;
-
-//----------------------------------------------------------------------------
-
-{ Get data type size in bits }
-function GDALGetDataTypeSize(eDataType: GDALDataType): longint;
-  stdcall; external LibName;
-
-{ Is data type complex? }
-function GDALDataTypeIsComplex(eDataType: GDALDataType): GIntBig;
-  stdcall; external LibName;
-
-{ Get name of data type }
-function GDALGetDataTypeName(eDataType: GDALDataType): CPChar;
-  stdcall; external LibName;
-
-{ Get data type by symbolic name }
-function GDALGetDataTypeByName(pszName: CPChar): GDALDataType;
-  stdcall; external LibName;
-
-{ Return the smallest data type that can fully express both input data types }
-function GDALDataTypeUnion(eType1: GDALDataType; eType2: GDALDataType): GDALDataType;
-  stdcall; external LibName;
-
-{ Get name of color interpretation }
-function GDALGetColorInterpretationName(eInterp: GDALColorInterp): CPChar;
-  stdcall; external LibName;
-
-{ Get color interpreation by symbolic name }
-function GDALGetColorInterpretationByName(pszName: CPChar): GDALColorInterp;
-  stdcall; external LibName;
-
-{ Get name of palette interpretation }
-function GDALGetPaletteInterpretationName(eInterp: GDALPaletteInterp): CPChar;
-  stdcall; external LibName;
-
- { -------------------------------------------------------------------- }
- {      Callback "progress" function.                                   }
- { -------------------------------------------------------------------- }
- { Stub progress function }
-function GDALDummyProgress(dfComplete: double; pszMessage: CPChar;
-  pData: Pointer): GIntBig; stdcall; external LibName;
-
-{ Simple progress report to terminal }
-function GDALTermProgress(dfComplete: double; pszMessage: CPChar;
-  pProgressArg: Pointer): GIntBig;
-  stdcall; external LibName;
-
-{ Scaled progress transformer }
-function GDALScaledProgress(dfComplete: double; pszMessage: CPChar;
-  pData: Pointer): GIntBig; stdcall; external LibName;
-
-{ Create scaled progress transformer }
-function GDALCreateScaledProgress(dfMin: double; dfMax: double;
-  pfnProgress: GDALProgressFunc; pData: Pointer): Pointer;
-  stdcall; external LibName;
-
-{ Cleanup scaled progress handle }
-procedure GDALDestroyScaledProgress(pData: Pointer); stdcall; external LibName;
-
- { ==================================================================== }
- {      Registration/driver related.                                    }
- { ==================================================================== }
-
-{ Register all known configured GDAL drivers }
-procedure GDALAllRegister; stdcall; external LibName;
-
-{ Create a new dataset with this driver }
-function GDALCreate(hDriver: GDALDriverH; pszFilename: CPChar;
-  nXSize3: GIntBig; nYSize: GIntBig; nBands: GIntBig; eBandType: GDALDataType;
-  papszOptions: PCPChar): GDALDatasetH;
-  stdcall; external LibName;
-
-{ Create a copy of a dataset }
-function GDALCreateCopy(hDriver: GDALDriverH; pszFilename: CPChar;
-  hSrcDS: GDALDatasetH; bStrict: integer; papszOptions: PCPChar;
-  pfnProgress: GDALProgressFunc; pProgressData: Pointer): GDALDatasetH;
-  cdecl; external LibName Name '_GDALCreateCopy@28';
-
-function GDALDatasetCopyLayer(hDS: GDALDatasetH; hSrcLayer: Pointer;
-  pszNewName: CPChar; papszOptions: PCPChar): Pointer;
-  stdcall; external LibName;
-
-function GDALDatasetGetLayer(hDS: GDALDatasetH; iLayer: integer): Pointer;
-  cdecl; external LibName;
-
-function GDALDatasetGetLayerByName(hDS: GDALDatasetH; const pszName: CPChar): Pointer;
-  cdecl; external LibName;
-//  _GDALCreateCopy@28
-
-procedure GDALDatasetReleaseResultSet(hDS: GDALDatasetH; hLayer: Pointer); cdecl;
-  external LibName;
-
-
-function GDALDatasetExecuteSQL(hDS: GDALDatasetH; pszStatement: CPChar;
-  hSpatialFilter: Pointer; pszDialect: CPChar): Pointer; cdecl;
-  external LibName;
-
- { Identify the driver that can open a raster file }
- //function GDALIdentifyDriver(const pszFilename: CPChar;
- //                            papszFileList: PCPChar): GDALDriverH;
- //                             external LibName;
-
-{ Open a raster file as a GDALDataset }
-function GDALOpen(pszFilename: CPChar; eAccess: GDALAccess): GDALDatasetH;
-  cdecl; external LibName Name '_GDALOpen@8';
-
-{ Open a raster file as a GDALDataset.
-  This function works the same as GDALOpen(), but allows the sharing of
-  GDALDataset handles for a dataset with other callers to GDALOpenShared()
-}
-function GDALOpenShared(pszFilename: CPChar; eAccess: GDALAccess): GDALDatasetH;
-  cdecl; external LibName;
-
-{ List open datasets }
-function GDALDumpOpenDatasets(fp: Pointer): GIntBig; cdecl; external LibName;
-
-{ Fetch a driver based on the short name }
-function GDALGetDriverByName(pszName: CPChar): GDALDriverH;
-  cdecl; external LibName;
-
-{ Fetch the number of registered drivers }
-function GDALGetDriverCount: GIntBig;
-  cdecl; external LibName Name '_GDALGetDriverCount@0';
-
-{ Fetch driver by index }
-function GDALGetDriver(iDriver: GIntBig): GDALDriverH;
-  cdecl; external LibName Name '_GDALGetDriver@4';
-
-{ Destroy a GDALDriver }
-procedure GDALDestroyDriver(hDriver: GDALDriverH); cdecl; external LibName;
-
-{ Register a driver for use }
-function GDALRegisterDriver(hDriver: GDALDriverH): GIntBig;
-  cdecl; external LibName;
-
-{ Deregister the passed driver }
-procedure GDALDeregisterDriver(hDriver: GDALDriverH); cdecl; external LibName;
-
-{ Destroy the driver manager. Incidently unloads all managed drivers }
-procedure GDALDestroyDriverManager; cdecl; external LibName;
-
-{ Delete named dataset }
-function GDALDeleteDataset(hDriver: GDALDriverH; pszFilename: CPChar): CPLErr;
-  cdecl; external LibName;
-
-{ Rename a dataset }
-function GDALRenameDataset(hDriver: GDALDriverH; pszNewName: CPChar;
-  pszOldName: CPChar): CPLErr;
-  cdecl; external LibName;
-
-{ Copy the files of a dataset }
-function GDALCopyDatasetFiles(hDriver: GDALDriverH; pszNewName: CPChar;
-  pszOldName: CPChar): CPLErr;
-  cdecl; external LibName;
-
-{ Validate the list of creation options that are handled by a driver }
-function GDALValidateCreationOptions(hDriver: GDALDriverH;
-  papszCreationOptions: PCPChar): GIntBig;
-  cdecl; external LibName;
-
- { The following are deprecated }
- { Return the short name of a driver }
-function GDALGetDriverShortName(hDriver: GDALDriverH): CPChar;
-  cdecl; external LibName;
-
-{ Return the long name of a driver }
-function GDALGetDriverLongName(hDriver: GDALDriverH): CPChar;
-  cdecl; external LibName;
-
-{ Return the URL to the help that describes the driver }
-function GDALGetDriverHelpTopic(hDriver: GDALDriverH): CPChar;
-  cdecl; external LibName Name '_GDALGetDriverHelpTopic@4';
-
-{ Return the list of creation options of the driver }
-function GDALGetDriverCreationOptionList(hDriver: GDALDriverH): CPChar;
-  cdecl; external LibName;
-
- { ==================================================================== }
- {      GDAL_GCP                                                        }
- { ==================================================================== }
-procedure GDALInitGCPs(_para1: GIntBig; _para2: PGDAL_GCP); cdecl; external LibName;
-
-procedure GDALDeinitGCPs(_para1: GIntBig; _para2: PGDAL_GCP); cdecl; external LibName;
-
-function GDALDuplicateGCPs(_para1: GIntBig; _para2: PGDAL_GCP): PGDAL_GCP;
-  cdecl; external LibName;
-
-{ Generate Geotransform from GCPs }
-function GDALGCPsToGeoTransform(nGCPCount: GIntBig; pasGCPs: PGDAL_GCP;
-  padfGeoTransform: Pdouble; bApproxOK: GIntBig): GIntBig;
-  cdecl; external LibName;
-
-{ Invert Geotransform }
-function GDALInvGeoTransform(padfGeoTransformIn: Pdouble;
-  padfInvGeoTransformOut: Pdouble): GIntBig;
-  cdecl; external LibName;
-
-{ Apply GeoTransform to x/y coordinate }
-procedure GDALApplyGeoTransform(padfGeoTransform: Pdouble; dfPixel: double;
-  dfLine: double; pdfGeoX: Pdouble; pdfGeoY: Pdouble); cdecl; external LibName;
-
- { ==================================================================== }
- {      major objects (dataset, and, driver, drivermanager).            }
- { ==================================================================== }
-
-{ Fetch metadata }
-function GDALGetMetadata(hObject: GDALMajorObjectH; pszDomain: CPChar): PCPChar;
-  cdecl; external LibName Name '_GDALGetMetadata@8';
-
-function CSLCount(papszStrList: PCPChar): integer; cdecl; external LibName;
-
-function CSLSave(papszStrList: PCPChar; pszFname: CPChar): GIntBig;
-  cdecl; external LibName;
-procedure CSLDestroy(papszStrList: PCPChar); cdecl;
-  external LibName Name '_CSLDestroy@4';
-
-function CSLGetField(papszStrList: PCPChar; iField: integer): CPChar;
-  cdecl; external LibName;
-
-function GDALGetMetadataDomainList(hObject: GDALMajorObjectH): PCPChar;
-  cdecl; external LibName Name '_GDALGetMetadataDomainList@4';
-{ Set metadata }
-function GDALSetMetadata(hObject: GDALMajorObjectH; papszMD: PCPChar;
-  pszDomain: CPChar): CPLErr; cdecl;
-  external LibName Name '_GDALSetMetadata@12';
-
-{ Fetch single metadata item }
-function GDALGetMetadataItem(hObject: GDALMajorObjectH; pszName: CPChar;
-  pszDomain3: CPChar): CPChar;
-  cdecl; external LibName Name '_GDALGetMetadataItem@12';
-
-{ Set single metadata item }
-function GDALSetMetadataItem(hObject: GDALMajorObjectH; pszName: CPChar;
-  pszValue: CPChar; pszDomain: CPChar): CPLErr;
-  cdecl; external LibName Name '_GDALSetMetadataItem@16';
-
-{ Fetch object description }
-function GDALGetDescription(hObject: GDALMajorObjectH): CPChar;
-  cdecl; external LibName Name '_GDALGetDescription@4';
-
-{ Set object description }
-procedure GDALSetDescription(hObject: GDALMajorObjectH; pszNewDesc: CPChar);
-  cdecl; external LibName Name '_GDALSetDescription@8';
-
- { ==================================================================== }
- {      GDALDataset class ... normally this represents one file.        }
- { ==================================================================== }
-
-{ Fetch the driver to which this dataset relates }
-function GDALGetDatasetDriver(hDataset: GDALDatasetH): GDALDriverH;
-  cdecl; external LibName;
-
-{ Fetch files forming dataset }
-function GDALGetFileList(hDS: GDALDatasetH): PCPChar; cdecl; external LibName;
-
-{ Close GDAL dataset }
-procedure GDALClose(hDS: GDALDatasetH); cdecl; external LibName;
-
-{ Fetch raster width in pixels }
-function GDALGetRasterXSize(hDataset: GDALDatasetH): GIntBig;
-  cdecl; external LibName;
-
-{ Fetch raster height in pixels }
-function GDALGetRasterYSize(hDataset: GDALDatasetH): GIntBig;
-  cdecl; external LibName;
-
-{ Fetch the number of raster bands on this dataset }
-function GDALGetRasterCount(hDS: GDALDatasetH): GIntBig;
-  cdecl; external LibName;
-
-{ Fetch a band object for a dataset }
-function GDALGetRasterBand(hDS: GDALDatasetH; nBandId: GIntBig): GDALRasterBandH;
-  cdecl; external LibName;
-
-{ Add a band to a dataset }
-function GDALAddBand(hDS: GDALDatasetH; eType: GDALDataType;
-  papszOptions: PCPChar): CPLErr; cdecl; external LibName;
-
-{ Read/write a region of image data from multiple bands }
-function GDALDatasetRasterIO(hDS: GDALDatasetH; eRWFlag: GDALRWFlag;
-  nDSXOff: GIntBig; nDSYOff: GIntBig; nDSXSize: GIntBig; nDSYSize: GIntBig;
-  pBuffer: Pointer; nBXSize: GIntBig; nBYSize: GIntBig; eBDataType: GDALDataType;
-  nBandCount: GIntBig; panBandCount: PLongint; nPixelSpace: GIntBig;
-  nLineSpace: GIntBig; nBandSpace: GIntBig): CPLErr;
-  cdecl; external LibName;
-
-{ Advise driver of upcoming read requests }
-function GDALDatasetAdviseRead(hDS: GDALDatasetH; nDSXOff: GIntBig;
-  nDSYOff: GIntBig; nDSXSize: GIntBig; nDSYSize: GIntBig; nBXSize: GIntBig;
-  nBYSize: GIntBig; eBDataType: GDALDataType; nBandCount: GIntBig;
-  panBandCount: PLongint; papszOptions: PCPChar): CPLErr;
-  cdecl; external LibName;
-
-{ Fetch the projection definition string for this dataset }
-function GDALGetProjectionRef(hDS: GDALDatasetH): CPChar;
-  cdecl; external LibName;
-
-{ Set the projection reference string for this dataset }
-function GDALSetProjection(hDS: GDALDatasetH; pszProjection: CPChar): CPLErr;
-  cdecl; external LibName;
-
-{ Fetch the affine transformation coefficients }
-function GDALGetGeoTransform(hDS: GDALDatasetH; padfTransform: Pdouble): CPLErr;
-  cdecl; external LibName;
-
-{ Set the affine transformation coefficients }
-function GDALSetGeoTransform(hDS: GDALDatasetH; padfTransform: Pdouble): CPLErr;
-  cdecl; external LibName;
-
-{ Get number of GCPs }
-function GDALGetGCPCount(hDS: GDALDatasetH): GIntBig; cdecl; external LibName;
-
-{ Get output projection for GCPs }
-function GDALGetGCPProjection(hDS: GDALDatasetH): CPChar;
-  cdecl; external LibName;
-
-{ Fetch GCPs }
-function GDALGetGCPs(hDS: GDALDatasetH): PGDAL_GCP; cdecl; external LibName;
-
-{ Assign GCPs }
-function GDALSetGCPs(hDS: GDALDatasetH; nGCPCount: GIntBig;
-  pasGCPList: PGDAL_GCP; pszGCPProjection: CPChar): CPLErr;
-  cdecl; external LibName;
-
-{ Fetch a format specific internally meaningful handle }
-function GDALGetInternalHandle(hDS: GDALDatasetH; pszRequest: CPChar): Pointer;
-  cdecl; external LibName;
-
-{ Add one to dataset reference count }
-function GDALReferenceDataset(hDataset: GDALDatasetH): GIntBig;
-  cdecl; external LibName;
-
-{ Subtract one from dataset reference count }
-function GDALDereferenceDataset(hDataset: GDALDatasetH): GIntBig;
-  cdecl; external LibName;
-
-{ Build raster overview(s) }
-function GDALBuildOverviews(hDataset: GDALDatasetH; pszResampling: CPChar;
-  nOverviews: GIntBig; panOverviewList: PLongInt; nListBands: GIntBig;
-  panBandList: PLongInt; pfnProgress: GDALProgressFunc; pProgressData: Pointer): CPLErr;
-  cdecl; external LibName;
-
-{ Fetch all open GDAL dataset handles }
-procedure GDALGetOpenDatasets(hDS: GDALDatasetH; pnCount: PLongInt);
-  cdecl; external LibName;
-
-{ Return access flag }
-function GDALGetAccess(hDS: GDALDatasetH): GIntBig; cdecl; external LibName;
-
-{ Flush all write cached data to disk }
-procedure GDALFlushCache(hDS: GDALDatasetH); cdecl; external LibName;
-
-{ Adds a mask band to the dataset }
-function GDALCreateDatasetMaskBand(hDS: GDALDatasetH; nFlags: GIntBig): CPLErr;
-  cdecl; external LibName;
-
-function GDALDatasetCopyWholeRaster(hSrcDS: GDALDatasetH; hDstDS: GDALDatasetH;
-  papszOptions: PCPChar; pfnProgress: GDALProgressFunc; pProgressData: Pointer): CPLErr;
-  cdecl; external LibName;
-
-{ Generate downsampled overviews }
-function GDALRegenerateOverviews(hSrcBand: GDALRasterBandH;
-  nOverviewCount: GIntBig; pahOverviewBands: GDALRasterBandH;
-  pszResampling: CPChar; pfnProgress: GDALProgressFunc; pProgressData: Pointer): CPLErr;
-  cdecl; external LibName;
-
- { ==================================================================== }
- {      GDALRasterBand ... one band/channel in a dataset.               }
- { ==================================================================== }
-
-{ Fetch the pixel data type for this band }
-function GDALGetRasterDataType(hBand: GDALRasterBandH): GDALDataType;
-  cdecl; external LibName;
-
-{ Fetch the "natural" block size of this band }
-procedure GDALGetBlockSize(hBand: GDALRasterBandH; pnXSize: PLongInt;
-  pnYSize: PLongInt); cdecl; external LibName;
-
-{ Advise driver of upcoming read requests }
-function GDALRasterAdviseRead(hBand: GDALRasterBandH; nDSXOff: GIntBig;
-  nDSYOff: GIntBig; nDSXSize: GIntBig; nDSYSize: GIntBig; nBXSize: GIntBig;
-  nBYSize: GIntBig; eBDataType: GDALDataType; papszOptions: PCPChar): CPLErr;
-  cdecl; external LibName;
-
-{ Read/write a region of image data for this band }
-function GDALRasterIO(hBand: GDALRasterBandH; eRWFlag: GDALRWFlag;
-  nDSXOff: GIntBig; nDSYOff: GIntBig; nDSXSize: GIntBig; nDSYSize: GIntBig;
-  pBuffer: Pointer; nBXSize: GIntBig; nBYSize: GIntBig; eBDataType: GDALDataType;
-  nPixelSpace: GIntBig; nLineSpace: GIntBig): CPLErr;
-  cdecl; external LibName;
-
-{ Read a block of image data efficiently }
-function GDALReadBlock(hBand: GDALRasterBandH; nXOff: GIntBig;
-  nYOff: GIntBig; pData: Pointer): CPLErr; cdecl;
-  external LibName;
-
-{ Write a block of image data efficiently }
-function GDALWriteBlock(hBand: GDALRasterBandH; nXOff: GIntBig;
-  nYOff: GIntBig; pData: Pointer): CPLErr;
-  cdecl; external LibName;
-
-{ Fetch XSize of raster }
-function GDALGetRasterBandXSize(hBand: GDALRasterBandH): GIntBig;
-  cdecl; external LibName;
-
-{ Fetch YSize of raster }
-function GDALGetRasterBandYSize(hBand: GDALRasterBandH): GIntBig;
-  cdecl; external LibName;
-
-{ Find out if we have update permission for this band }
-function GDALGetRasterAccess(hBand: GDALRasterBandH): GDALAccess;
-  cdecl; external LibName;
-
-{ Fetch the band number }
-function GDALGetBandNumber(hBand: GDALRasterBandH): GIntBig;
-  cdecl; external LibName;
-
-{ Fetch the owning dataset handle }
-function GDALGetBandDataset(hBand: GDALRasterBandH): GDALDatasetH;
-  cdecl; external LibName;
-
-{ How should this band be interpreted as color?  }
-function GDALGetRasterColorInterpretation(hBand: GDALRasterBandH): GDALColorInterp;
-  cdecl; external LibName;
-
-{ Set color interpretation of a band }
-function GDALSetRasterColorInterpretation(hBand: GDALRasterBandH;
-  eColorInterp: GDALColorInterp): CPLErr;
-  cdecl; external LibName;
-
-{ Fetch the color table associated with band }
-function GDALGetRasterColorTable(hBand: GDALRasterBandH): GDALColorTableH;
-  cdecl; external LibName;
-
-{ Set the raster color table }
-function GDALSetRasterColorTable(hBand: GDALRasterBandH; hCT: GDALColorTableH): CPLErr;
-  cdecl; external LibName;
-
-{ Check for arbitrary overviews }
-function GDALHasArbitraryOverviews(hBand: GDALRasterBandH): GIntBig;
-  cdecl; external LibName;
-
-{ Return the number of overview layers available }
-function GDALGetOverviewCount(hBand: GDALRasterBandH): GIntBig;
-  cdecl; external LibName;
-
-{ Fetch overview raster band object }
-function GDALGetOverview(hBand: GDALRasterBandH; i: GIntBig): GDALRasterBandH;
-  cdecl; external LibName;
-
-{ Fetch the no data value for this band }
-function GDALGetRasterNoDataValue(hBand: GDALRasterBandH; pbSuccess: PLongInt): double;
-  cdecl; external LibName;
-
-{ Set the no data value for this band }
-function GDALSetRasterNoDataValue(hBand: GDALRasterBandH; dfValue: double): CPLErr;
-  cdecl; external LibName;
-
-{ Fetch the list of category names for this raster }
-function GDALGetRasterCategoryNames(hBand: GDALRasterBandH): PCPChar;
-  cdecl; external LibName;
-
-{ Set the category names for this band }
-function GDALSetRasterCategoryNames(hBand: GDALRasterBandH;
-  papszNames: PCPChar): CPLErr;
-  cdecl; external LibName;
-
-{ Fetch the minimum value for this band }
-function GDALGetRasterMinimum(hBand: GDALRasterBandH; pbSuccess: PLongInt): double;
-  cdecl; external LibName;
-
-{ Fetch the maximum value for this band }
-function GDALGetRasterMaximum(hBand: GDALRasterBandH; pbSuccess: PLongInt): double;
-  cdecl; external LibName;
-
-{ Fetch image statistics }
-function GDALGetRasterStatistics(hBand: GDALRasterBandH; bApproxOK: GIntBig;
-  bForce: GIntBig; pdfMin: Pdouble; pdfMax: Pdouble; pdfMean: Pdouble;
-  pdfStdDev: Pdouble): CPLErr;
-  cdecl; external LibName;
-
-{ Compute image statistics }
-function GDALComputeRasterStatistics(hBand: GDALRasterBandH;
-  bApproxOK: GIntBig; pdfMin: Pdouble; pdfMax: Pdouble; pdfMean: Pdouble;
-  pdfStdDev: Pdouble; pfnProgress: GDALProgressFunc; pProgressData: pointer): CPLErr;
-  cdecl; external LibName;
-
-{ Set statistics on band }
-function GDALSetRasterStatistics(hBand: GDALRasterBandH; dfMin: double;
-  dfMax: double; dfMean: double; dfStdDev: double): CPLErr;
-  cdecl; external LibName;
-
-{ Return raster unit type }
-function GDALGetRasterUnitType(hBand: GDALRasterBandH): CPChar;
-  cdecl; external LibName;
-
-{ Fetch the raster value offset }
-function GDALGetRasterOffset(hBand: GDALRasterBandH; pbSuccess: PLongInt): double;
-  cdecl; external LibName;
-
-{ Set scaling offset }
-function GDALSetRasterOffset(hBand: GDALRasterBandH; dfNewOffset: double): CPLErr;
-  cdecl; external LibName;
-
-{ Fetch the raster value scale }
-function GDALGetRasterScale(hBand: GDALRasterBandH; pbSuccess: PLongInt): double;
-  cdecl; external LibName;
-
-{ Set scaling ratio }
-function GDALSetRasterScale(hBand: GDALRasterBandH; dfNewOffset: double): CPLErr;
-  cdecl; external LibName;
-
-{ Compute the min/max values for a band }
-procedure GDALComputeRasterMinMax(hBand: GDALRasterBandH; bApproxOK: GIntBig;
-  adfMinMax: array of double);
-  cdecl; external LibName;
-
-{ Flush raster data cache }
-function GDALFlushRasterCache(hBand: GDALRasterBandH): CPLErr;
-  cdecl; external LibName;
-
-{ Compute raster histogram }
-function GDALGetRasterHistogram(hBand: GDALRasterBandH; dfMin: double;
-  dfMax: double; nBuckets: GIntBig; panHistogram: PLongInt;
-  bIncludeOutOfRange: GIntBig; bApproxOK: GIntBig; pfnProgress: GDALProgressFunc;
-  pProgressData: Pointer): CPLErr;
-  cdecl; external LibName;
-
-{ Fetch default raster histogram }
-function GDALGetDefaultHistogram(hBand: GDALRasterBandH; pdfMin: Pdouble;
-  pdfMax: Pdouble; pnBuckets: PLongInt; ppanHistogram: PLongInt;
-  bForce: GIntBig; pfnProgress: GDALProgressFunc; pProgressData: Pointer): CPLErr;
-  cdecl; external LibName;
-
-{ Set default histogram }
-function GDALSetDefaultHistogram(hBand: GDALRasterBandH; dfMin: double;
-  dfMax: double; nBuckets: GIntBig; panHistogram: PLongInt): CPLErr;
-  cdecl; external LibName;
-
-function GDALGetRandomRasterSample(hBand: GDALRasterBandH; _para2: GIntBig;
-  _para3: Psingle): GIntBig;
-  cdecl; external LibName;
-
-{ Fetch best sampling overview }
-function GDALGetRasterSampleOverview(hBand: GDALRasterBandH;
-  nDesiredSamples: GIntBig): GDALRasterBandH;
-  cdecl; external LibName;
-
-{ Fill this band with a constant value }
-function GDALFillRaster(hBand: GDALRasterBandH; dfRealValue: double;
-  dfImaginaryValue: double): CPLErr;
-  cdecl; external LibName;
-
-function GDALComputeBandStats(hBand: GDALRasterBandH; nSampleStep: GIntBig;
-  pdfMean: Pdouble; pdfStdDev: Pdouble; pfnProgress: GDALProgressFunc;
-  pProgressData: pointer): CPLErr;
-  cdecl; external LibName;
-
-function GDALOverviewMagnitudeCorrection(hBaseBand: GDALRasterBandH;
-  nOverviewCount: GIntBig; pahOverviews: GDALRasterBandH;
-  pfnProgress: GDALProgressFunc; pProgressData: Pointer): CPLErr;
-  cdecl; external LibName;
-
-{ Fetch default Raster Attribute Table }
-function GDALGetDefaultRAT(hBand: GDALRasterBandH): GDALRasterAttributeTableH;
-  cdecl; external LibName;
-
-{ Set default Raster Attribute Table }
-function GDALSetDefaultRAT(hBand: GDALRasterBandH;
-  hRAT: GDALRasterAttributeTableH): CPLErr;
-  cdecl; external LibName;
-
-{ This adds a pixel function to the global list of available pixel
-  functions for derived bands
-}
- //function GDALAddDerivedBandPixelFunc(pszName: CPChar;
- //                                     pfnPixelFunc: GDALDerivedPixelFunc): CPLErr;
- //                                     cdecl; external LibName;
-
-{ Return the mask band associated with the band }
-function GDALGetMaskBand(hBand: GDALRasterBandH): GDALRasterBandH;
-  cdecl; external LibName;
-
-{ Return the status flags of the mask band associated with the band }
-function GDALGetMaskFlags(hBand: GDALRasterBandH): GIntBig;
-  cdecl; external LibName;
-
-{ Adds a mask band to the current band }
-function GDALCreateMaskBand(hBand: GDALRasterBandH; nFlags: GIntBig): CPLErr;
-  cdecl; external LibName;
-
- { -------------------------------------------------------------------- }
- {      Helper functions.                                               }
- { -------------------------------------------------------------------- }
-
-{ General utility option processing }
-function GDALGeneralCmdLineProcessor(nArgc: GIntBig; ppapszArgv: PChar;
-  nOptions: GIntBig): GIntBig;
-  cdecl; external LibName;
-
-{ Byte swap words in-place }
-procedure GDALSwapWords(pData: Pointer; nWordSize: GIntBig;
-  nWordCount: GIntBig; nWordSkip: GIntBig);
-  cdecl; external LibName;
-
-procedure GDALCopyWords(pSrcData: Pointer; eSrcType: GDALDataType;
-  nSrcPixelOffset: GIntBig; pDstData: Pointer; eDstType: GDALDataType;
-  nDstPixelOffset: GIntBig; nWordCount: GIntBig); cdecl; external LibName;
-
-procedure GDALCopyBits(pabySrcData: GByte; nSrcOffset: GIntBig;
-  nSrcStep: GIntBig; pabyDstData: GByte; nDstOffset: GIntBig;
-  nDstStep: GIntBig; nBitCount: GIntBig; nStepCount: GIntBig);
-  cdecl; external LibName;
-
-{ Read ESRI world file }
-function GDALLoadWorldFile(pszFilename: CPChar; padfGeoTransform: Pdouble): GIntBig;
-  cdecl; external LibName;
-
-{ Read ESRI world file }
-function GDALReadWorldFile(pszBaseFilename: CPChar; pszExtension: CPChar;
-  padfGeoTransform: Pdouble): GIntBig;
-  cdecl; external LibName;
-
-{ Write ESRI world file }
-function GDALWriteWorldFile(pszBaseFilename: CPChar; pszExtension: CPChar;
-  padfGeoTransform: Pdouble): GIntBig;
-  cdecl; external LibName;
-
-function GDALLoadTabFile(_para1: CPChar; _para2: Pdouble; _para3: PCPChar;
-  _para4: PLongInt; _para5: PGDAL_GCP): GIntBig;
-  cdecl; external LibName;
-
-
-function GDALReadTabFile(_para1: CPChar; _para2: Pdouble; _para3: PCPChar;
-  _para4: PLongInt; _para5: PGDAL_GCP): GIntBig;
-  cdecl; external LibName;
-
-function GDALLoadOziMapFile(_para1: CPChar; _para2: Pdouble; _para3: PCPChar;
-  _para4: PLongInt; _para5: PGDAL_GCP): GIntBig;
-  cdecl; external LibName;
-
-function GDALReadOziMapFile(_para1: CPChar; _para2: Pdouble; _para3: PCPChar;
-  _para4: PLongInt; _para5: PGDAL_GCP): GIntBig;
-  cdecl; external LibName;
-
-function GDALLoadRPBFile(pszFilename: CPChar; papszSiblingFiles: PCPChar): PCPChar;
-  cdecl; external LibName;
-
-function GDALWriteRPBFile(pszFilename: CPChar; papszMD: PCPChar): CPLErr;
-  cdecl; external LibName;
-
-function GDALLoadIMDFile(pszFilename: CPChar; papszSiblingFiles: PCPChar): PCPChar;
-  cdecl; external LibName;
-
-function GDALWriteIMDFile(pszFilename: CPChar; papszMD: PCPChar): CPLErr;
-  cdecl; external LibName;
-
-function GDALDecToDMS(_para1: double; _para2: CPChar; _para3: GIntBig): CPChar;
-  cdecl; external LibName;
-
-{ Convert a packed DMS value (DDDMMMSSS.SS) into decimal degrees }
-function GDALPackedDMSToDec(dfPacked: double): double; cdecl; external LibName;
-
-{ Convert decimal degrees into packed DMS value (DDDMMMSSS.SS) }
-function GDALDecToPackedDMS(dfDec: double): double; cdecl; external LibName;
-
-{ Get runtime version information }
-function GDALVersionInfo(pszRequest: CPChar): CPChar; cdecl; external LibName;
-
-{ Return TRUE if GDAL library version at runtime matches
-  nVersionMajor.nVersionMinor
-}
-function GDALCheckVersion(nVersionMajor: GIntBig; nVersionMinor: GIntBig;
-  pszCallingComponentName: CPChar): GIntBig; cdecl; external LibName;
-
-function GDALExtractRPCInfo(_para1: PCPChar; _para2: GDALRPCInfo): GIntBig;
-  cdecl; external LibName;
-
- { ==================================================================== }
- {      Color tables.                                                   }
- { ==================================================================== }
-
-{ Construct a new color table }
-function GDALCreateColorTable(eInterp: GDALPaletteInterp): GDALColorTableH;
-  cdecl; external LibName;
-
-{ Destroys a color table }
-procedure GDALDestroyColorTable(hTable: GDALColorTableH);
-  cdecl; external LibName;
-
-{ Make a copy of a color table }
-function GDALCloneColorTable(hTable: GDALColorTableH): GDALColorTableH;
-  cdecl; external LibName;
-
-{ Fetch palette interpretation }
-function GDALGetPaletteInterpretation(hTable: GDALColorTableH): GDALPaletteInterp;
-  cdecl; external LibName;
-
-{ Get number of color entries in table }
-function GDALGetColorEntryCount(hTable: GDALColorTableH): GIntBig;
-  cdecl; external LibName;
-
-{ Fetch a color entry from table }
-function GDALGetColorEntry(hTable: GDALColorTableH; i: GIntBig): GDALColorEntry;
-  cdecl; external LibName;
-
-{ Fetch a table entry in RGB format }
-function GDALGetColorEntryAsRGB(hTable: GDALColorTableH; i: GIntBig;
-  poEntry: GDALColorEntry): GIntBig;
-  cdecl; external LibName;
-
-{ Set entry in color table }
-procedure GDALSetColorEntry(hTable: GDALColorTableH; i: GIntBig;
-  poEntry: GDALColorEntry);
-  cdecl; external LibName;
-
-{ Create color ramp }
-procedure GDALCreateColorRamp(hTable: GDALColorTableH; nStartIndex: GIntBig;
-  psStartColor: GDALColorEntry; nEndIndex: GIntBig; psEndColor: GDALColorEntry);
-  cdecl; external LibName;
-
- { ==================================================================== }
- {      Raster Attribute Table                                          }
- { ==================================================================== }
-
-{ Construct empty table }
-function GDALCreateRasterAttributeTable: GDALRasterAttributeTableH;
-  cdecl; external LibName;
-
-{ Destroys a RAT }
-procedure GDALDestroyRasterAttributeTable(_para1: GDALRasterAttributeTableH);
-  cdecl; external LibName;
-
-{ Fetch table column count }
-function GDALRATGetColumnCount(hRAT: GDALRasterAttributeTableH): GIntBig;
-  cdecl; external LibName;
-
-{ Fetch name of indicated column }
-function GDALRATGetNameOfCol(hRAT: GDALRasterAttributeTableH; iCol: GIntBig): CPChar;
-  cdecl; external LibName;
-
-{ Fetch column usage value }
-function GDALRATGetUsageOfCol(hRAT: GDALRasterAttributeTableH;
-  iCol: GIntBig): GDALRATFieldUsage;
-  cdecl; external LibName;
-
-{ Fetch column type }
-function GDALRATGetTypeOfCol(hRAT: GDALRasterAttributeTableH;
-  iCol: GIntBig): GDALRATFieldType;
-  cdecl; external LibName;
-
-{ Fetch column index for given usage }
-function GDALRATGetColOfUsage(hRAT: GDALRasterAttributeTableH;
-  eUsage: GDALRATFieldUsage): GIntBig;
-  cdecl; external LibName;
-
-{ Fetch row count }
-function GDALRATGetRowCount(hRAT: GDALRasterAttributeTableH): GIntBig;
-  cdecl; external LibName;
-
-{ Fetch field value as a string }
-function GDALRATGetValueAsString(hRAT: GDALRasterAttributeTableH;
-  iRow: GIntBig; iField: GIntBig): CPChar;
-  cdecl; external LibName;
-
-{ Fetch field value as a integer }
-function GDALRATGetValueAsInt(hRAT: GDALRasterAttributeTableH;
-  iRow: GIntBig; iField: GIntBig): GIntBig;
-  cdecl; external LibName;
-
-{ Fetch field value as a double }
-function GDALRATGetValueAsDouble(hRAT: GDALRasterAttributeTableH;
-  iRow: GIntBig; iField: GIntBig): double;
-  cdecl; external LibName;
-
-{ Set field value from string }
-procedure GDALRATSetValueAsString(hRAT: GDALRasterAttributeTableH;
-  iRow: GIntBig; iField: GIntBig; pszValue: CPChar);
-  cdecl; external LibName;
-
-{ Set field value from integer }
-procedure GDALRATSetValueAsInt(hRAT: GDALRasterAttributeTableH;
-  iRow: GIntBig; iField: GIntBig; nValue: GIntBig);
-  cdecl; external LibName;
-
-{ Set field value from double }
-procedure GDALRATSetValueAsDouble(hRAT: GDALRasterAttributeTableH;
-  iRow: GIntBig; iField: GIntBig; dfValue: double);
-  cdecl; external LibName;
-
-{ Set row count }
-procedure GDALRATSetRowCount(hRAT: GDALRasterAttributeTableH; nNewCount: GIntBig);
-  cdecl; external LibName;
-
-{ Create new column }
-function GDALRATCreateColumn(hRAT: GDALRasterAttributeTableH;
-  pszFieldName: CPChar; eFieldType: GDALRATFieldType;
-  eFieldUsage: GDALRATFieldUsage): CPLErr;
-  cdecl; external LibName;
-
-{ Set linear binning information }
-function GDALRATSetLinearBinning(hRAT: GDALRasterAttributeTableH;
-  dfRow0Min: double; dfBinSize: double): CPLErr;
-  cdecl; external LibName;
-
-{ Get linear binning information }
-function GDALRATGetLinearBinning(hRAT: GDALRasterAttributeTableH;
-  pdfRow0Min: Pdouble; pdfBinSize: Pdouble): GIntBig;
-  cdecl; external LibName;
-
-{ Initialize from color table }
-function GDALRATInitializeFromColorTable(hRAT: GDALRasterAttributeTableH;
-  hCT: GDALColorTableH): CPLErr;
-  cdecl; external LibName;
-
-{ Translate to a color table }
-function GDALRATTranslateToColorTable(hRAT: GDALRasterAttributeTableH;
-  nEntryCount: GIntBig): GDALColorTableH;
-  cdecl; external LibName;
-
-{ Dump RAT in readable form }
-procedure GDALRATDumpReadable(hRAT: GDALRasterAttributeTableH; fp: Pointer);
-  cdecl; external LibName;
-
-{ Copy Raster Attribute Table }
-function GDALRATClone(hRAT: GDALRasterAttributeTableH): GDALRasterAttributeTableH;
-  cdecl; external LibName;
-
-{ Get row for pixel value }
-function GDALRATGetRowOfValue(hRAT: GDALRasterAttributeTableH;
-  dfValue: double): GIntBig;
-  cdecl; external LibName;
-
- { ==================================================================== }
- {      GDAL Cache Management                                           }
- { ==================================================================== }
-
-{ Set maximum cache memory }
-procedure GDALSetCacheMax(nBytes: GIntBig); cdecl; external LibName;
-
-{ Get maximum cache memory }
-function GDALGetCacheMax: GIntBig; cdecl; external LibName;
-
-{ Get cache memory used }
-function GDALGetCacheUsed: GIntBig; cdecl; external LibName;
-
-{ Try to flush one cached raster block }
-function GDALFlushCacheBlock: GIntBig; cdecl; external LibName;
-
-//----------------------------------------------------------------------------
-
-function CPLListCount(cpllist: Pointer): integer; cdecl; external LibName;
-
-function CPLMalloc(size: integer): Pointer; cdecl; external LibName;
-procedure VSIFree(p: Pointer); cdecl; external LibName;
+  GDALProgressFunc = function(dfComplete: double; pszMessage: CPChar; pProgressArg: Pointer): integer;
+
+  TGDALGetDataTypeSize = function(eDataType: GDALDataType): longint; stdcall;
+  TGDALDataTypeIsComplex = function(eDataType: GDALDataType): GIntBig; stdcall;
+  TGDALGetDataTypeName = function(eDataType: GDALDataType): CPChar; stdcall;
+  TGDALGetDataTypeByName = function(pszName: CPChar): GDALDataType; stdcall;
+  TGDALDataTypeUnion = function(eType1: GDALDataType; eType2: GDALDataType): GDALDataType; stdcall;
+  TGDALGetColorInterpretationName = function(eInterp: GDALColorInterp): CPChar; stdcall;
+  TGDALGetColorInterpretationByName = function(pszName: CPChar): GDALColorInterp; stdcall;
+  TGDALGetPaletteInterpretationName = function(eInterp: GDALPaletteInterp): CPChar; stdcall;
+  TGDALDummyProgress = function(dfComplete: double; pszMessage: CPChar; pData: Pointer): GIntBig; stdcall;
+  TGDALTermProgress = function(dfComplete: double; pszMessage: CPChar; pProgressArg: Pointer): GIntBig; stdcall;
+  TGDALScaledProgress = function(dfComplete: double; pszMessage: CPChar; pData: Pointer): GIntBig; stdcall;
+  TGDALCreateScaledProgress = function(dfMin: double; dfMax: double; pfnProgress: GDALProgressFunc; pData: Pointer): Pointer; stdcall;
+  TGDALDestroyScaledProgress = procedure(pData: Pointer); stdcall;
+  TGDALAllRegister = procedure stdcall;
+  TGDALCreate      = function(hDriver: GDALDriverH; pszFilename: CPChar; nXSize3: GIntBig; nYSize: GIntBig; nBands: GIntBig; eBandType: GDALDataType; papszOptions: PCPChar): GDALDatasetH; stdcall;
+  TGDALCreateCopy = function(hDriver: GDALDriverH; pszFilename: CPChar; hSrcDS: GDALDatasetH; bStrict: integer; papszOptions: PCPChar; pfnProgress: GDALProgressFunc; pProgressData: Pointer): GDALDatasetH; cdecl;
+  TGDALDatasetCopyLayer = function(hDS: GDALDatasetH; hSrcLayer: Pointer; pszNewName: CPChar; papszOptions: PCPChar): Pointer; stdcall;
+  TGDALDatasetGetLayer = function(hDS: GDALDatasetH; iLayer: integer): Pointer; cdecl;
+  TGDALDatasetGetLayerByName = function(hDS: GDALDatasetH; const pszName: CPChar): Pointer; cdecl;
+  TGDALDatasetReleaseResultSet = procedure(hDS: GDALDatasetH; hLayer: Pointer); cdecl;
+  TGDALDatasetExecuteSQL = function(hDS: GDALDatasetH; pszStatement: CPChar; hSpatialFilter: Pointer; pszDialect: CPChar): Pointer; cdecl;
+  TGDALOpen = function(pszFilename: CPChar; eAccess: GDALAccess): GDALDatasetH; cdecl;
+  TGDALOpenShared = function(pszFilename: CPChar; eAccess: GDALAccess): GDALDatasetH; cdecl;
+  TGDALDumpOpenDatasets = function(fp: Pointer): GIntBig; cdecl;
+  TGDALGetDriverByName = function(pszName: CPChar): GDALDriverH; cdecl;
+  TGDALGetDriverCount = function: GIntBig; cdecl;
+  TGDALGetDriver = function(iDriver: GIntBig): GDALDriverH; cdecl;
+  TGDALDestroyDriver = procedure(hDriver: GDALDriverH); cdecl;
+  TGDALRegisterDriver = function(hDriver: GDALDriverH): GIntBig; cdecl;
+  TGDALDeregisterDriver = procedure(hDriver: GDALDriverH); cdecl;
+  TGDALDestroyDriverManager = procedure; cdecl;
+  TGDALDeleteDataset = function(hDriver: GDALDriverH; pszFilename: CPChar): CPLErr; cdecl;
+  TGDALRenameDataset = function(hDriver: GDALDriverH; pszNewName: CPChar; pszOldName: CPChar): CPLErr; cdecl;
+  TGDALCopyDatasetFiles = function(hDriver: GDALDriverH; pszNewName: CPChar; pszOldName: CPChar): CPLErr; cdecl;
+  TGDALValidateCreationOptions = function(hDriver: GDALDriverH; papszCreationOptions: PCPChar): GIntBig; cdecl;
+  TGDALGetDriverShortName = function(hDriver: GDALDriverH): CPChar; cdecl;
+  TGDALGetDriverLongName = function(hDriver: GDALDriverH): CPChar; cdecl;
+  TGDALGetDriverHelpTopic = function(hDriver: GDALDriverH): CPChar; cdecl;
+  TGDALGetDriverCreationOptionList = function(hDriver: GDALDriverH): CPChar; cdecl;
+  TGDALInitGCPs = procedure(_para1: GIntBig; _para2: PGDAL_GCP); cdecl;
+  TGDALDeinitGCPs = procedure(_para1: GIntBig; _para2: PGDAL_GCP); cdecl;
+  TGDALDuplicateGCPs = function(_para1: GIntBig; _para2: PGDAL_GCP): PGDAL_GCP; cdecl;
+  TGDALGCPsToGeoTransform = function(nGCPCount: GIntBig; pasGCPs: PGDAL_GCP; padfGeoTransform: Pdouble; bApproxOK: GIntBig): GIntBig; cdecl;
+  TGDALInvGeoTransform = function(padfGeoTransformIn: Pdouble; padfInvGeoTransformOut: Pdouble): GIntBig; cdecl;
+  TGDALApplyGeoTransform = procedure(padfGeoTransform: Pdouble; dfPixel: double; dfLine: double; pdfGeoX: Pdouble; pdfGeoY: Pdouble); cdecl;
+  TGDALGetMetadata = function(hObject: GDALMajorObjectH; pszDomain: CPChar): PCPChar; cdecl;
+  TCSLCount = function(papszStrList: PCPChar): integer; cdecl;
+  TCSLSave = function(papszStrList: PCPChar; pszFname: CPChar): GIntBig; cdecl;
+  TCSLDestroy = procedure(papszStrList: PCPChar); cdecl;
+  TCSLGetField = function(papszStrList: PCPChar; iField: integer): CPChar; cdecl;
+  TGDALGetMetadataDomainList = function(hObject: GDALMajorObjectH): PCPChar; cdecl;
+  TGDALSetMetadata = function(hObject: GDALMajorObjectH; papszMD: PCPChar; pszDomain: CPChar): CPLErr; cdecl;
+  TGDALGetMetadataItem = function(hObject: GDALMajorObjectH; pszName: CPChar; pszDomain3: CPChar): CPChar; cdecl;
+  TGDALSetMetadataItem = function(hObject: GDALMajorObjectH; pszName: CPChar; pszValue: CPChar; pszDomain: CPChar): CPLErr; cdecl;
+  TGDALGetDescription = function(hObject: GDALMajorObjectH): CPChar; cdecl;
+  TGDALSetDescription = procedure(hObject: GDALMajorObjectH; pszNewDesc: CPChar); cdecl;
+  TGDALGetDatasetDriver = function(hDataset: GDALDatasetH): GDALDriverH; cdecl;
+  TGDALGetFileList = function(hDS: GDALDatasetH): PCPChar; cdecl;
+  TGDALClose = procedure(hDS: GDALDatasetH); cdecl;
+  TGDALGetRasterXSize = function(hDataset: GDALDatasetH): GIntBig; cdecl;
+  TGDALGetRasterYSize = function(hDataset: GDALDatasetH): GIntBig; cdecl;
+  TGDALGetRasterCount = function(hDS: GDALDatasetH): GIntBig; cdecl;
+  TGDALGetRasterBand = function(hDS: GDALDatasetH; nBandId: GIntBig): GDALRasterBandH; cdecl;
+  TGDALAddBand = function(hDS: GDALDatasetH; eType: GDALDataType; papszOptions: PCPChar): CPLErr; cdecl;
+  TGDALDatasetRasterIO = function(hDS: GDALDatasetH; eRWFlag: GDALRWFlag; nDSXOff: GIntBig; nDSYOff: GIntBig; nDSXSize: GIntBig; nDSYSize: GIntBig; pBuffer: Pointer; nBXSize: GIntBig; nBYSize: GIntBig; eBDataType: GDALDataType; nBandCount: GIntBig; panBandCount: PLongint; nPixelSpace: GIntBig; nLineSpace: GIntBig; nBandSpace: GIntBig): CPLErr; cdecl;
+  TGDALDatasetAdviseRead = function(hDS: GDALDatasetH; nDSXOff: GIntBig; nDSYOff: GIntBig; nDSXSize: GIntBig; nDSYSize: GIntBig; nBXSize: GIntBig; nBYSize: GIntBig; eBDataType: GDALDataType; nBandCount: GIntBig; panBandCount: PLongint; papszOptions: PCPChar): CPLErr; cdecl;
+  TGDALGetProjectionRef = function(hDS: GDALDatasetH): CPChar; cdecl;
+  TGDALSetProjection = function(hDS: GDALDatasetH; pszProjection: CPChar): CPLErr; cdecl;
+  TGDALGetGeoTransform = function(hDS: GDALDatasetH; padfTransform: Pdouble): CPLErr; cdecl;
+  TGDALSetGeoTransform = function(hDS: GDALDatasetH; padfTransform: Pdouble): CPLErr; cdecl;
+  TGDALGetGCPCount = function(hDS: GDALDatasetH): GIntBig; cdecl;
+  TGDALGetGCPProjection = function(hDS: GDALDatasetH): CPChar; cdecl;
+  TGDALGetGCPs = function(hDS: GDALDatasetH): PGDAL_GCP; cdecl;
+  TGDALSetGCPs = function(hDS: GDALDatasetH; nGCPCount: GIntBig; pasGCPList: PGDAL_GCP; pszGCPProjection: CPChar): CPLErr; cdecl;
+  TGDALGetInternalHandle = function(hDS: GDALDatasetH; pszRequest: CPChar): Pointer; cdecl;
+  TGDALReferenceDataset = function(hDataset: GDALDatasetH): GIntBig; cdecl;
+  TGDALDereferenceDataset = function(hDataset: GDALDatasetH): GIntBig; cdecl;
+  TGDALBuildOverviews = function(hDataset: GDALDatasetH; pszResampling: CPChar; nOverviews: GIntBig; panOverviewList: PLongInt; nListBands: GIntBig; panBandList: PLongInt; pfnProgress: GDALProgressFunc; pProgressData: Pointer): CPLErr; cdecl;
+  TGDALGetOpenDatasets = procedure(hDS: GDALDatasetH; pnCount: PLongInt); cdecl;
+  TGDALGetAccess = function(hDS: GDALDatasetH): GIntBig; cdecl;
+  TGDALFlushCache = procedure(hDS: GDALDatasetH); cdecl;
+  TGDALCreateDatasetMaskBand = function(hDS: GDALDatasetH; nFlags: GIntBig): CPLErr; cdecl;
+  TGDALDatasetCopyWholeRaster = function(hSrcDS: GDALDatasetH; hDstDS: GDALDatasetH; papszOptions: PCPChar; pfnProgress: GDALProgressFunc; pProgressData: Pointer): CPLErr; cdecl;
+  TGDALRegenerateOverviews = function(hSrcBand: GDALRasterBandH; nOverviewCount: GIntBig; pahOverviewBands: GDALRasterBandH; pszResampling: CPChar; pfnProgress: GDALProgressFunc; pProgressData: Pointer): CPLErr; cdecl;
+  TGDALGetRasterDataType = function(hBand: GDALRasterBandH): GDALDataType; cdecl;
+  TGDALGetBlockSize = procedure(hBand: GDALRasterBandH; pnXSize: PLongInt; pnYSize: PLongInt); cdecl;
+  TGDALRasterAdviseRead = function(hBand: GDALRasterBandH; nDSXOff: GIntBig; nDSYOff: GIntBig; nDSXSize: GIntBig; nDSYSize: GIntBig; nBXSize: GIntBig; nBYSize: GIntBig; eBDataType: GDALDataType; papszOptions: PCPChar): CPLErr; cdecl;
+  TGDALRasterIO = function(hBand: GDALRasterBandH; eRWFlag: GDALRWFlag; nDSXOff: GIntBig; nDSYOff: GIntBig; nDSXSize: GIntBig; nDSYSize: GIntBig; pBuffer: Pointer; nBXSize: GIntBig; nBYSize: GIntBig; eBDataType: GDALDataType; nPixelSpace: GIntBig; nLineSpace: GIntBig): CPLErr; cdecl;
+  TGDALReadBlock = function(hBand: GDALRasterBandH; nXOff: GIntBig; nYOff: GIntBig; pData: Pointer): CPLErr; cdecl;
+  TGDALWriteBlock = function(hBand: GDALRasterBandH; nXOff: GIntBig; nYOff: GIntBig; pData: Pointer): CPLErr; cdecl;
+  TGDALGetRasterBandXSize = function(hBand: GDALRasterBandH): GIntBig; cdecl;
+  TGDALGetRasterBandYSize = function(hBand: GDALRasterBandH): GIntBig; cdecl;
+  TGDALGetRasterAccess = function(hBand: GDALRasterBandH): GDALAccess; cdecl;
+  TGDALGetBandNumber = function(hBand: GDALRasterBandH): GIntBig; cdecl;
+  TGDALGetBandDataset = function(hBand: GDALRasterBandH): GDALDatasetH; cdecl;
+  TGDALGetRasterColorInterpretation = function(hBand: GDALRasterBandH): GDALColorInterp; cdecl;
+  TGDALSetRasterColorInterpretation = function(hBand: GDALRasterBandH; eColorInterp: GDALColorInterp): CPLErr; cdecl;
+  TGDALGetRasterColorTable = function(hBand: GDALRasterBandH): GDALColorTableH; cdecl;
+  TGDALSetRasterColorTable = function(hBand: GDALRasterBandH; hCT: GDALColorTableH): CPLErr; cdecl;
+  TGDALHasArbitraryOverviews = function(hBand: GDALRasterBandH): GIntBig; cdecl;
+  TGDALGetOverviewCount = function(hBand: GDALRasterBandH): GIntBig; cdecl;
+  TGDALGetOverview = function(hBand: GDALRasterBandH; i: GIntBig): GDALRasterBandH; cdecl;
+  TGDALGetRasterNoDataValue = function(hBand: GDALRasterBandH; pbSuccess: PLongInt): double; cdecl;
+  TGDALSetRasterNoDataValue = function(hBand: GDALRasterBandH; dfValue: double): CPLErr; cdecl;
+  TGDALGetRasterCategoryNames = function(hBand: GDALRasterBandH): PCPChar; cdecl;
+  TGDALSetRasterCategoryNames = function(hBand: GDALRasterBandH; papszNames: PCPChar): CPLErr; cdecl;
+  TGDALGetRasterMinimum = function(hBand: GDALRasterBandH; pbSuccess: PLongInt): double; cdecl;
+  TGDALGetRasterMaximum = function(hBand: GDALRasterBandH; pbSuccess: PLongInt): double; cdecl;
+  TGDALGetRasterStatistics = function(hBand: GDALRasterBandH; bApproxOK: GIntBig; bForce: GIntBig; pdfMin: Pdouble; pdfMax: Pdouble; pdfMean: Pdouble; pdfStdDev: Pdouble): CPLErr; cdecl;
+  TGDALComputeRasterStatistics = function(hBand: GDALRasterBandH; bApproxOK: GIntBig; pdfMin: Pdouble; pdfMax: Pdouble; pdfMean: Pdouble; pdfStdDev: Pdouble; pfnProgress: GDALProgressFunc; pProgressData: pointer): CPLErr; cdecl;
+  TGDALSetRasterStatistics = function(hBand: GDALRasterBandH; dfMin: double; dfMax: double; dfMean: double; dfStdDev: double): CPLErr; cdecl;
+  TGDALGetRasterUnitType = function(hBand: GDALRasterBandH): CPChar; cdecl;
+  TGDALGetRasterOffset = function(hBand: GDALRasterBandH; pbSuccess: PLongInt): double; cdecl;
+  TGDALSetRasterOffset = function(hBand: GDALRasterBandH; dfNewOffset: double): CPLErr; cdecl;
+  TGDALGetRasterScale = function(hBand: GDALRasterBandH; pbSuccess: PLongInt): double; cdecl;
+  TGDALSetRasterScale = function(hBand: GDALRasterBandH; dfNewOffset: double): CPLErr; cdecl;
+  TGDALComputeRasterMinMax = procedure(hBand: GDALRasterBandH; bApproxOK: GIntBig; adfMinMax: array of double); cdecl;
+  TGDALFlushRasterCache = function(hBand: GDALRasterBandH): CPLErr; cdecl;
+  TGDALGetRasterHistogram = function(hBand: GDALRasterBandH; dfMin: double; dfMax: double; nBuckets: GIntBig; panHistogram: PLongInt; bIncludeOutOfRange: GIntBig; bApproxOK: GIntBig; pfnProgress: GDALProgressFunc; pProgressData: Pointer): CPLErr; cdecl;
+  TGDALGetDefaultHistogram = function(hBand: GDALRasterBandH; pdfMin: Pdouble; pdfMax: Pdouble; pnBuckets: PLongInt; ppanHistogram: PLongInt; bForce: GIntBig; pfnProgress: GDALProgressFunc; pProgressData: Pointer): CPLErr; cdecl;
+  TGDALSetDefaultHistogram = function(hBand: GDALRasterBandH; dfMin: double; dfMax: double; nBuckets: GIntBig; panHistogram: PLongInt): CPLErr; cdecl;
+  TGDALGetRandomRasterSample = function(hBand: GDALRasterBandH; _para2: GIntBig; _para3: Psingle): GIntBig; cdecl;
+  TGDALGetRasterSampleOverview = function(hBand: GDALRasterBandH; nDesiredSamples: GIntBig): GDALRasterBandH; cdecl;
+  TGDALFillRaster = function(hBand: GDALRasterBandH; dfRealValue: double; dfImaginaryValue: double): CPLErr; cdecl;
+  TGDALComputeBandStats = function(hBand: GDALRasterBandH; nSampleStep: GIntBig; pdfMean: Pdouble; pdfStdDev: Pdouble; pfnProgress: GDALProgressFunc; pProgressData: pointer): CPLErr; cdecl;
+  TGDALOverviewMagnitudeCorrection = function(hBaseBand: GDALRasterBandH; nOverviewCount: GIntBig; pahOverviews: GDALRasterBandH; pfnProgress: GDALProgressFunc; pProgressData: Pointer): CPLErr; cdecl;
+  TGDALGetDefaultRAT = function(hBand: GDALRasterBandH): GDALRasterAttributeTableH; cdecl;
+  TGDALSetDefaultRAT = function(hBand: GDALRasterBandH; hRAT: GDALRasterAttributeTableH): CPLErr; cdecl;
+  TGDALGetMaskBand = function(hBand: GDALRasterBandH): GDALRasterBandH; cdecl;
+  TGDALGetMaskFlags = function(hBand: GDALRasterBandH): GIntBig; cdecl;
+  TGDALCreateMaskBand = function(hBand: GDALRasterBandH; nFlags: GIntBig): CPLErr; cdecl;
+  TGDALGeneralCmdLineProcessor = function(nArgc: GIntBig; ppapszArgv: PChar; nOptions: GIntBig): GIntBig; cdecl;
+  TGDALSwapWords = procedure(pData: Pointer; nWordSize: GIntBig; nWordCount: GIntBig; nWordSkip: GIntBig); cdecl;
+  TGDALCopyWords = procedure(pSrcData: Pointer; eSrcType: GDALDataType; nSrcPixelOffset: GIntBig; pDstData: Pointer; eDstType: GDALDataType; nDstPixelOffset: GIntBig; nWordCount: GIntBig); cdecl;
+  TGDALCopyBits = procedure(pabySrcData: GByte; nSrcOffset: GIntBig; nSrcStep: GIntBig; pabyDstData: GByte; nDstOffset: GIntBig; nDstStep: GIntBig; nBitCount: GIntBig; nStepCount: GIntBig); cdecl;
+  TGDALLoadWorldFile = function(pszFilename: CPChar; padfGeoTransform: Pdouble): GIntBig; cdecl;
+  TGDALReadWorldFile = function(pszBaseFilename: CPChar; pszExtension: CPChar; padfGeoTransform: Pdouble): GIntBig; cdecl;
+  TGDALWriteWorldFile = function(pszBaseFilename: CPChar; pszExtension: CPChar; padfGeoTransform: Pdouble): GIntBig; cdecl;
+  TGDALLoadTabFile = function(_para1: CPChar; _para2: Pdouble; _para3: PCPChar; _para4: PLongInt; _para5: PGDAL_GCP): GIntBig; cdecl;
+  TGDALReadTabFile = function(_para1: CPChar; _para2: Pdouble; _para3: PCPChar; _para4: PLongInt; _para5: PGDAL_GCP): GIntBig; cdecl;
+  TGDALLoadOziMapFile = function(_para1: CPChar; _para2: Pdouble; _para3: PCPChar; _para4: PLongInt; _para5: PGDAL_GCP): GIntBig; cdecl;
+  TGDALReadOziMapFile = function(_para1: CPChar; _para2: Pdouble; _para3: PCPChar; _para4: PLongInt; _para5: PGDAL_GCP): GIntBig; cdecl;
+  TGDALLoadRPBFile = function(pszFilename: CPChar; papszSiblingFiles: PCPChar): PCPChar; cdecl;
+  TGDALWriteRPBFile = function(pszFilename: CPChar; papszMD: PCPChar): CPLErr; cdecl;
+  TGDALLoadIMDFile = function(pszFilename: CPChar; papszSiblingFiles: PCPChar): PCPChar; cdecl;
+  TGDALWriteIMDFile = function(pszFilename: CPChar; papszMD: PCPChar): CPLErr; cdecl;
+  TGDALDecToDMS = function(_para1: double; _para2: CPChar; _para3: GIntBig): CPChar; cdecl;
+  TGDALPackedDMSToDec = function(dfPacked: double): double; cdecl;
+  TGDALDecToPackedDMS = function(dfDec: double): double; cdecl;
+  TGDALVersionInfo = function(pszRequest: CPChar): CPChar; cdecl;
+  TGDALCheckVersion = function(nVersionMajor: GIntBig; nVersionMinor: GIntBig; pszCallingComponentName: CPChar): GIntBig; cdecl;
+  TGDALExtractRPCInfo = function(_para1: PCPChar; _para2: GDALRPCInfo): GIntBig; cdecl;
+  TGDALCreateColorTable = function(eInterp: GDALPaletteInterp): GDALColorTableH; cdecl;
+  TGDALDestroyColorTable = procedure(hTable: GDALColorTableH); cdecl;
+  TGDALCloneColorTable = function(hTable: GDALColorTableH): GDALColorTableH; cdecl;
+  TGDALGetPaletteInterpretation = function(hTable: GDALColorTableH): GDALPaletteInterp; cdecl;
+  TGDALGetColorEntryCount = function(hTable: GDALColorTableH): GIntBig; cdecl;
+  TGDALGetColorEntry = function(hTable: GDALColorTableH; i: GIntBig): GDALColorEntry; cdecl;
+  TGDALGetColorEntryAsRGB = function(hTable: GDALColorTableH; i: GIntBig; poEntry: GDALColorEntry): GIntBig; cdecl;
+  TGDALSetColorEntry = procedure(hTable: GDALColorTableH; i: GIntBig; poEntry: GDALColorEntry); cdecl;
+  TGDALCreateColorRamp = procedure(hTable: GDALColorTableH; nStartIndex: GIntBig; psStartColor: GDALColorEntry; nEndIndex: GIntBig; psEndColor: GDALColorEntry); cdecl;
+  TGDALCreateRasterAttributeTable = function: GDALRasterAttributeTableH; cdecl;
+  TGDALDestroyRasterAttributeTable = procedure(_para1: GDALRasterAttributeTableH); cdecl;
+  TGDALRATGetColumnCount = function(hRAT: GDALRasterAttributeTableH): GIntBig; cdecl;
+  TGDALRATGetNameOfCol = function(hRAT: GDALRasterAttributeTableH; iCol: GIntBig): CPChar; cdecl;
+  TGDALRATGetUsageOfCol = function(hRAT: GDALRasterAttributeTableH; iCol: GIntBig): GDALRATFieldUsage; cdecl;
+  TGDALRATGetTypeOfCol = function(hRAT: GDALRasterAttributeTableH; iCol: GIntBig): GDALRATFieldType; cdecl;
+  TGDALRATGetColOfUsage = function(hRAT: GDALRasterAttributeTableH; eUsage: GDALRATFieldUsage): GIntBig; cdecl;
+  TGDALRATGetRowCount = function(hRAT: GDALRasterAttributeTableH): GIntBig; cdecl;
+  TGDALRATGetValueAsString = function(hRAT: GDALRasterAttributeTableH; iRow: GIntBig; iField: GIntBig): CPChar; cdecl;
+  TGDALRATGetValueAsInt = function(hRAT: GDALRasterAttributeTableH; iRow: GIntBig; iField: GIntBig): GIntBig; cdecl;
+  TGDALRATGetValueAsDouble = function(hRAT: GDALRasterAttributeTableH; iRow: GIntBig; iField: GIntBig): double; cdecl;
+  TGDALRATSetValueAsString = procedure(hRAT: GDALRasterAttributeTableH; iRow: GIntBig; iField: GIntBig; pszValue: CPChar); cdecl;
+  TGDALRATSetValueAsInt = procedure(hRAT: GDALRasterAttributeTableH; iRow: GIntBig; iField: GIntBig; nValue: GIntBig); cdecl;
+  TGDALRATSetValueAsDouble = procedure(hRAT: GDALRasterAttributeTableH; iRow: GIntBig; iField: GIntBig; dfValue: double); cdecl;
+  TGDALRATSetRowCount = procedure(hRAT: GDALRasterAttributeTableH; nNewCount: GIntBig); cdecl;
+  TGDALRATCreateColumn = function(hRAT: GDALRasterAttributeTableH; pszFieldName: CPChar; eFieldType: GDALRATFieldType; eFieldUsage: GDALRATFieldUsage): CPLErr; cdecl;
+  TGDALRATSetLinearBinning = function(hRAT: GDALRasterAttributeTableH; dfRow0Min: double; dfBinSize: double): CPLErr; cdecl;
+  TGDALRATGetLinearBinning = function(hRAT: GDALRasterAttributeTableH; pdfRow0Min: Pdouble; pdfBinSize: Pdouble): GIntBig; cdecl;
+  TGDALRATInitializeFromColorTable = function(hRAT: GDALRasterAttributeTableH; hCT: GDALColorTableH): CPLErr; cdecl;
+  TGDALRATTranslateToColorTable = function(hRAT: GDALRasterAttributeTableH; nEntryCount: GIntBig): GDALColorTableH; cdecl;
+  TGDALRATDumpReadable = procedure(hRAT: GDALRasterAttributeTableH; fp: Pointer); cdecl;
+  TGDALRATClone = function(hRAT: GDALRasterAttributeTableH): GDALRasterAttributeTableH; cdecl;
+  TGDALRATGetRowOfValue = function(hRAT: GDALRasterAttributeTableH; dfValue: double): GIntBig; cdecl;
+  TGDALSetCacheMax = procedure(nBytes: GIntBig); cdecl;
+  TGDALGetCacheMax = function: GIntBig; cdecl;
+  TGDALGetCacheUsed = function: GIntBig; cdecl;
+  TGDALFlushCacheBlock = function: GIntBig; cdecl;
+  TCPLListCount = function(cpllist: Pointer): integer; cdecl;
+  TCPLMalloc = function(size: integer): Pointer; cdecl;
+  TVSIFree = procedure(p: Pointer); cdecl;
+
+var
+  GDALGetDataTypeSize: TGDALGetDataTypeSize;
+  GDALDataTypeIsComplex: TGDALDataTypeIsComplex;
+  GDALGetDataTypeName: TGDALGetDataTypeName;
+  GDALGetDataTypeByName: TGDALGetDataTypeByName;
+  GDALDataTypeUnion: TGDALDataTypeUnion;
+  GDALGetColorInterpretationName: TGDALGetColorInterpretationName;
+  GDALGetColorInterpretationByName: TGDALGetColorInterpretationByName;
+  GDALGetPaletteInterpretationName: TGDALGetPaletteInterpretationName;
+  GDALDummyProgress: TGDALDummyProgress;
+  GDALTermProgress:  TGDALTermProgress;
+  GDALScaledProgress: TGDALScaledProgress;
+  GDALCreateScaledProgress: TGDALCreateScaledProgress;
+  GDALDestroyScaledProgress: TGDALDestroyScaledProgress;
+  GDALAllRegister:   TGDALAllRegister;
+  GDALCreate:        TGDALCreate;
+  GDALCreateCopy:    TGDALCreateCopy;
+  GDALDatasetCopyLayer: TGDALDatasetCopyLayer;
+  GDALDatasetGetLayer: TGDALDatasetGetLayer;
+  GDALDatasetGetLayerByName: TGDALDatasetGetLayerByName;
+  GDALDatasetReleaseResultSet: TGDALDatasetReleaseResultSet;
+  GDALDatasetExecuteSQL: TGDALDatasetExecuteSQL;
+  GDALOpen:          TGDALOpen;
+  GDALOpenShared:    TGDALOpenShared;
+  GDALDumpOpenDatasets: TGDALDumpOpenDatasets;
+  GDALGetDriverByName: TGDALGetDriverByName;
+  GDALGetDriverCount: TGDALGetDriverCount;
+  GDALGetDriver:     TGDALGetDriver;
+  GDALDestroyDriver: TGDALDestroyDriver;
+  GDALRegisterDriver: TGDALRegisterDriver;
+  GDALDeregisterDriver: TGDALDeregisterDriver;
+  GDALDestroyDriverManager: TGDALDestroyDriverManager;
+  GDALDeleteDataset: TGDALDeleteDataset;
+  GDALRenameDataset: TGDALRenameDataset;
+  GDALCopyDatasetFiles: TGDALCopyDatasetFiles;
+  GDALValidateCreationOptions: TGDALValidateCreationOptions;
+  GDALGetDriverShortName: TGDALGetDriverShortName;
+  GDALGetDriverLongName: TGDALGetDriverLongName;
+  GDALGetDriverHelpTopic: TGDALGetDriverHelpTopic;
+  GDALGetDriverCreationOptionList: TGDALGetDriverCreationOptionList;
+  GDALInitGCPs:      TGDALInitGCPs;
+  GDALDeinitGCPs:    TGDALDeinitGCPs;
+  GDALDuplicateGCPs: TGDALDuplicateGCPs;
+  GDALGCPsToGeoTransform: TGDALGCPsToGeoTransform;
+  GDALInvGeoTransform: TGDALInvGeoTransform;
+  GDALApplyGeoTransform: TGDALApplyGeoTransform;
+  GDALGetMetadata:   TGDALGetMetadata;
+  CSLCount:          TCSLCount;
+  CSLSave:           TCSLSave;
+  CSLDestroy:        TCSLDestroy;
+  CSLGetField:       TCSLGetField;
+  GDALGetMetadataDomainList: TGDALGetMetadataDomainList;
+  GDALSetMetadata:   TGDALSetMetadata;
+  GDALGetMetadataItem: TGDALGetMetadataItem;
+  GDALSetMetadataItem: TGDALSetMetadataItem;
+  GDALGetDescription: TGDALGetDescription;
+  GDALSetDescription: TGDALSetDescription;
+  GDALGetDatasetDriver: TGDALGetDatasetDriver;
+  GDALGetFileList:   TGDALGetFileList;
+  GDALClose:         TGDALClose;
+  GDALGetRasterXSize: TGDALGetRasterXSize;
+  GDALGetRasterYSize: TGDALGetRasterYSize;
+  GDALGetRasterCount: TGDALGetRasterCount;
+  GDALGetRasterBand: TGDALGetRasterBand;
+  GDALAddBand:       TGDALAddBand;
+  GDALDatasetRasterIO: TGDALDatasetRasterIO;
+  GDALDatasetAdviseRead: TGDALDatasetAdviseRead;
+  GDALGetProjectionRef: TGDALGetProjectionRef;
+  GDALSetProjection: TGDALSetProjection;
+  GDALGetGeoTransform: TGDALGetGeoTransform;
+  GDALSetGeoTransform: TGDALSetGeoTransform;
+  GDALGetGCPCount:   TGDALGetGCPCount;
+  GDALGetGCPProjection: TGDALGetGCPProjection;
+  GDALGetGCPs:       TGDALGetGCPs;
+  GDALSetGCPs:       TGDALSetGCPs;
+  GDALGetInternalHandle: TGDALGetInternalHandle;
+  GDALReferenceDataset: TGDALReferenceDataset;
+  GDALDereferenceDataset: TGDALDereferenceDataset;
+  GDALBuildOverviews: TGDALBuildOverviews;
+  GDALGetOpenDatasets: TGDALGetOpenDatasets;
+  GDALGetAccess:     TGDALGetAccess;
+  GDALFlushCache:    TGDALFlushCache;
+  GDALCreateDatasetMaskBand: TGDALCreateDatasetMaskBand;
+  GDALDatasetCopyWholeRaster: TGDALDatasetCopyWholeRaster;
+  GDALRegenerateOverviews: TGDALRegenerateOverviews;
+  GDALGetRasterDataType: TGDALGetRasterDataType;
+  GDALGetBlockSize:  TGDALGetBlockSize;
+  GDALRasterAdviseRead: TGDALRasterAdviseRead;
+  GDALRasterIO:      TGDALRasterIO;
+  GDALReadBlock:     TGDALReadBlock;
+  GDALWriteBlock:    TGDALWriteBlock;
+  GDALGetRasterBandXSize: TGDALGetRasterBandXSize;
+  GDALGetRasterBandYSize: TGDALGetRasterBandYSize;
+  GDALGetRasterAccess: TGDALGetRasterAccess;
+  GDALGetBandNumber: TGDALGetBandNumber;
+  GDALGetBandDataset: TGDALGetBandDataset;
+  GDALGetRasterColorInterpretation: TGDALGetRasterColorInterpretation;
+  GDALSetRasterColorInterpretation: TGDALSetRasterColorInterpretation;
+  GDALGetRasterColorTable: TGDALGetRasterColorTable;
+  GDALSetRasterColorTable: TGDALSetRasterColorTable;
+  GDALHasArbitraryOverviews: TGDALHasArbitraryOverviews;
+  GDALGetOverviewCount: TGDALGetOverviewCount;
+  GDALGetOverview:   TGDALGetOverview;
+  GDALGetRasterNoDataValue: TGDALGetRasterNoDataValue;
+  GDALSetRasterNoDataValue: TGDALSetRasterNoDataValue;
+  GDALGetRasterCategoryNames: TGDALGetRasterCategoryNames;
+  GDALSetRasterCategoryNames: TGDALSetRasterCategoryNames;
+  GDALGetRasterMinimum: TGDALGetRasterMinimum;
+  GDALGetRasterMaximum: TGDALGetRasterMaximum;
+  GDALGetRasterStatistics: TGDALGetRasterStatistics;
+  GDALComputeRasterStatistics: TGDALComputeRasterStatistics;
+  GDALSetRasterStatistics: TGDALSetRasterStatistics;
+  GDALGetRasterUnitType: TGDALGetRasterUnitType;
+  GDALGetRasterOffset: TGDALGetRasterOffset;
+  GDALSetRasterOffset: TGDALSetRasterOffset;
+  GDALGetRasterScale: TGDALGetRasterScale;
+  GDALSetRasterScale: TGDALSetRasterScale;
+  GDALComputeRasterMinMax: TGDALComputeRasterMinMax;
+  GDALFlushRasterCache: TGDALFlushRasterCache;
+  GDALGetRasterHistogram: TGDALGetRasterHistogram;
+  GDALGetDefaultHistogram: TGDALGetDefaultHistogram;
+  GDALSetDefaultHistogram: TGDALSetDefaultHistogram;
+  GDALGetRandomRasterSample: TGDALGetRandomRasterSample;
+  GDALGetRasterSampleOverview: TGDALGetRasterSampleOverview;
+  GDALFillRaster:    TGDALFillRaster;
+  GDALComputeBandStats: TGDALComputeBandStats;
+  GDALOverviewMagnitudeCorrection: TGDALOverviewMagnitudeCorrection;
+  GDALGetDefaultRAT: TGDALGetDefaultRAT;
+  GDALSetDefaultRAT: TGDALSetDefaultRAT;
+  GDALGetMaskBand:   TGDALGetMaskBand;
+  GDALGetMaskFlags:  TGDALGetMaskFlags;
+  GDALCreateMaskBand: TGDALCreateMaskBand;
+  GDALGeneralCmdLineProcessor: TGDALGeneralCmdLineProcessor;
+  GDALSwapWords:     TGDALSwapWords;
+  GDALCopyWords:     TGDALCopyWords;
+  GDALCopyBits:      TGDALCopyBits;
+  GDALLoadWorldFile: TGDALLoadWorldFile;
+  GDALReadWorldFile: TGDALReadWorldFile;
+  GDALWriteWorldFile: TGDALWriteWorldFile;
+  GDALLoadTabFile:   TGDALLoadTabFile;
+  GDALReadTabFile:   TGDALReadTabFile;
+  GDALLoadOziMapFile: TGDALLoadOziMapFile;
+  GDALReadOziMapFile: TGDALReadOziMapFile;
+  GDALLoadRPBFile:   TGDALLoadRPBFile;
+  GDALWriteRPBFile:  TGDALWriteRPBFile;
+  GDALLoadIMDFile:   TGDALLoadIMDFile;
+  GDALWriteIMDFile:  TGDALWriteIMDFile;
+  GDALDecToDMS:      TGDALDecToDMS;
+  GDALPackedDMSToDec: TGDALPackedDMSToDec;
+  GDALDecToPackedDMS: TGDALDecToPackedDMS;
+  GDALVersionInfo:   TGDALVersionInfo;
+  GDALCheckVersion:  TGDALCheckVersion;
+  GDALExtractRPCInfo: TGDALExtractRPCInfo;
+  GDALCreateColorTable: TGDALCreateColorTable;
+  GDALDestroyColorTable: TGDALDestroyColorTable;
+  GDALCloneColorTable: TGDALCloneColorTable;
+  GDALGetPaletteInterpretation: TGDALGetPaletteInterpretation;
+  GDALGetColorEntryCount: TGDALGetColorEntryCount;
+  GDALGetColorEntry: TGDALGetColorEntry;
+  GDALGetColorEntryAsRGB: TGDALGetColorEntryAsRGB;
+  GDALSetColorEntry: TGDALSetColorEntry;
+  GDALCreateColorRamp: TGDALCreateColorRamp;
+  GDALCreateRasterAttributeTable: TGDALCreateRasterAttributeTable;
+  GDALDestroyRasterAttributeTable: TGDALDestroyRasterAttributeTable;
+  GDALRATGetColumnCount: TGDALRATGetColumnCount;
+  GDALRATGetNameOfCol: TGDALRATGetNameOfCol;
+  GDALRATGetUsageOfCol: TGDALRATGetUsageOfCol;
+  GDALRATGetTypeOfCol: TGDALRATGetTypeOfCol;
+  GDALRATGetColOfUsage: TGDALRATGetColOfUsage;
+  GDALRATGetRowCount: TGDALRATGetRowCount;
+  GDALRATGetValueAsString: TGDALRATGetValueAsString;
+  GDALRATGetValueAsInt: TGDALRATGetValueAsInt;
+  GDALRATGetValueAsDouble: TGDALRATGetValueAsDouble;
+  GDALRATSetValueAsString: TGDALRATSetValueAsString;
+  GDALRATSetValueAsInt: TGDALRATSetValueAsInt;
+  GDALRATSetValueAsDouble: TGDALRATSetValueAsDouble;
+  GDALRATSetRowCount: TGDALRATSetRowCount;
+  GDALRATCreateColumn: TGDALRATCreateColumn;
+  GDALRATSetLinearBinning: TGDALRATSetLinearBinning;
+  GDALRATGetLinearBinning: TGDALRATGetLinearBinning;
+  GDALRATInitializeFromColorTable: TGDALRATInitializeFromColorTable;
+  GDALRATTranslateToColorTable: TGDALRATTranslateToColorTable;
+  GDALRATDumpReadable: TGDALRATDumpReadable;
+  GDALRATClone:      TGDALRATClone;
+  GDALRATGetRowOfValue: TGDALRATGetRowOfValue;
+  GDALSetCacheMax:   TGDALSetCacheMax;
+  GDALGetCacheMax:   TGDALGetCacheMax;
+  GDALGetCacheUsed:  TGDALGetCacheUsed;
+  GDALFlushCacheBlock: TGDALFlushCacheBlock;
+  CPLListCount:      TCPLListCount;
+  CPLMalloc:         TCPLMalloc;
+  VSIFree:           TVSIFree;
 
 implementation
 
+procedure DynamicLoad(const ALibName: string);
+var
+  dllHandle: cardinal;
+begin
+  dllHandle := LoadLibrary(PAnsiChar(ALibName));
+  @VSIFree  := GetProcAddress(dllHandle, 'VSIFree');
+  @GDALGetDataTypeSize := GetProcAddress(dllHandle, 'GDALGetDataTypeSize');
+  @GDALDataTypeIsComplex := GetProcAddress(dllHandle, 'GDALDataTypeIsComplex');
+  @GDALGetDataTypeName := GetProcAddress(dllHandle, 'GDALGetDataTypeName');
+  @GDALGetDataTypeByName := GetProcAddress(dllHandle, 'GDALGetDataTypeByName');
+  @GDALDataTypeUnion := GetProcAddress(dllHandle, 'GDALDataTypeUnion');
+  @GDALGetColorInterpretationName := GetProcAddress(dllHandle, 'GDALGetColorInterpretationName');
+  @GDALGetColorInterpretationByName := GetProcAddress(dllHandle, 'GDALGetColorInterpretationByName');
+  @GDALGetPaletteInterpretationName := GetProcAddress(dllHandle, 'GDALGetPaletteInterpretationName');
+  @GDALDummyProgress := GetProcAddress(dllHandle, 'GDALDummyProgress');
+  @GDALTermProgress := GetProcAddress(dllHandle, 'GDALTermProgress');
+  @GDALScaledProgress := GetProcAddress(dllHandle, 'GDALScaledProgress');
+  @GDALCreateScaledProgress := GetProcAddress(dllHandle, 'GDALCreateScaledProgress');
+  @GDALDestroyScaledProgress := GetProcAddress(dllHandle, 'GDALDestroyScaledProgress');
+  @GDALAllRegister := GetProcAddress(dllHandle, 'GDALAllRegister');
+  @GDALCreate := GetProcAddress(dllHandle, 'GDALCreate');
+  @GDALCreateCopy := GetProcAddress(dllHandle, 'GDALCreateCopy');
+  @GDALDatasetCopyLayer := GetProcAddress(dllHandle, 'GDALDatasetCopyLayer');
+  @GDALDatasetGetLayer := GetProcAddress(dllHandle, 'GDALDatasetGetLayer');
+  @GDALDatasetGetLayerByName := GetProcAddress(dllHandle, 'GDALDatasetGetLayerByName');
+  @GDALDatasetReleaseResultSet := GetProcAddress(dllHandle, 'GDALDatasetReleaseResultSet');
+  @GDALDatasetExecuteSQL := GetProcAddress(dllHandle, 'GDALDatasetExecuteSQL');
+  @GDALOpen := GetProcAddress(dllHandle, 'GDALOpen');
+  @GDALOpenShared := GetProcAddress(dllHandle, 'GDALOpenShared');
+  @GDALDumpOpenDatasets := GetProcAddress(dllHandle, 'GDALDumpOpenDatasets');
+  @GDALGetDriverByName := GetProcAddress(dllHandle, 'GDALGetDriverByName');
+  @GDALGetDriverCount := GetProcAddress(dllHandle, 'GDALGetDriverCount');
+  @GDALGetDriver := GetProcAddress(dllHandle, 'GDALGetDriver');
+  @GDALDestroyDriver := GetProcAddress(dllHandle, 'GDALDestroyDriver');
+  @GDALRegisterDriver := GetProcAddress(dllHandle, 'GDALRegisterDriver');
+  @GDALDeregisterDriver := GetProcAddress(dllHandle, 'GDALDeregisterDriver');
+  @GDALDestroyDriverManager := GetProcAddress(dllHandle, 'GDALDestroyDriverManager');
+  @GDALDeleteDataset := GetProcAddress(dllHandle, 'GDALDeleteDataset');
+  @GDALRenameDataset := GetProcAddress(dllHandle, 'GDALRenameDataset');
+  @GDALCopyDatasetFiles := GetProcAddress(dllHandle, 'GDALCopyDatasetFiles');
+  @GDALValidateCreationOptions := GetProcAddress(dllHandle, 'GDALValidateCreationOptions');
+  @GDALGetDriverShortName := GetProcAddress(dllHandle, 'GDALGetDriverShortName');
+  @GDALGetDriverLongName := GetProcAddress(dllHandle, 'GDALGetDriverLongName');
+  @GDALGetDriverHelpTopic := GetProcAddress(dllHandle, 'GDALGetDriverHelpTopic');
+  @GDALGetDriverCreationOptionList := GetProcAddress(dllHandle, 'GDALGetDriverCreationOptionList');
+  @GDALInitGCPs := GetProcAddress(dllHandle, 'GDALInitGCPs');
+  @GDALDeinitGCPs := GetProcAddress(dllHandle, 'GDALDeinitGCPs');
+  @GDALDuplicateGCPs := GetProcAddress(dllHandle, 'GDALDuplicateGCPs');
+  @GDALGCPsToGeoTransform := GetProcAddress(dllHandle, 'GDALGCPsToGeoTransform');
+  @GDALInvGeoTransform := GetProcAddress(dllHandle, 'GDALInvGeoTransform');
+  @GDALApplyGeoTransform := GetProcAddress(dllHandle, 'GDALApplyGeoTransform');
+  @GDALGetMetadata := GetProcAddress(dllHandle, 'GDALGetMetadata');
+  @CSLCount := GetProcAddress(dllHandle, 'CSLCount');
+  @CSLSave  := GetProcAddress(dllHandle, 'CSLSave');
+  @CSLDestroy := GetProcAddress(dllHandle, 'CSLDestroy');
+  @CSLGetField := GetProcAddress(dllHandle, 'CSLGetField');
+  @GDALGetMetadataDomainList := GetProcAddress(dllHandle, 'GDALGetMetadataDomainList');
+  @GDALSetMetadata := GetProcAddress(dllHandle, 'GDALSetMetadata');
+  @GDALGetMetadataItem := GetProcAddress(dllHandle, 'GDALGetMetadataItem');
+  @GDALSetMetadataItem := GetProcAddress(dllHandle, 'GDALSetMetadataItem');
+  @GDALGetDescription := GetProcAddress(dllHandle, 'GDALGetDescription');
+  @GDALSetDescription := GetProcAddress(dllHandle, 'GDALSetDescription');
+  @GDALGetDatasetDriver := GetProcAddress(dllHandle, 'GDALGetDatasetDriver');
+  @GDALGetFileList := GetProcAddress(dllHandle, 'GDALGetFileList');
+  @GDALClose := GetProcAddress(dllHandle, 'GDALClose');
+  @GDALGetRasterXSize := GetProcAddress(dllHandle, 'GDALGetRasterXSize');
+  @GDALGetRasterYSize := GetProcAddress(dllHandle, 'GDALGetRasterYSize');
+  @GDALGetRasterCount := GetProcAddress(dllHandle, 'GDALGetRasterCount');
+  @GDALGetRasterBand := GetProcAddress(dllHandle, 'GDALGetRasterBand');
+  @GDALAddBand := GetProcAddress(dllHandle, 'GDALAddBand');
+  @GDALDatasetRasterIO := GetProcAddress(dllHandle, 'GDALDatasetRasterIO');
+  @GDALDatasetAdviseRead := GetProcAddress(dllHandle, 'GDALDatasetAdviseRead');
+  @GDALGetProjectionRef := GetProcAddress(dllHandle, 'GDALGetProjectionRef');
+  @GDALSetProjection := GetProcAddress(dllHandle, 'GDALSetProjection');
+  @GDALGetGeoTransform := GetProcAddress(dllHandle, 'GDALGetGeoTransform');
+  @GDALSetGeoTransform := GetProcAddress(dllHandle, 'GDALSetGeoTransform');
+  @GDALGetGCPCount := GetProcAddress(dllHandle, 'GDALGetGCPCount');
+  @GDALGetGCPProjection := GetProcAddress(dllHandle, 'GDALGetGCPProjection');
+  @GDALGetGCPs := GetProcAddress(dllHandle, 'GDALGetGCPs');
+  @GDALSetGCPs := GetProcAddress(dllHandle, 'GDALSetGCPs');
+  @GDALGetInternalHandle := GetProcAddress(dllHandle, 'GDALGetInternalHandle');
+  @GDALReferenceDataset := GetProcAddress(dllHandle, 'GDALReferenceDataset');
+  @GDALDereferenceDataset := GetProcAddress(dllHandle, 'GDALDereferenceDataset');
+  @GDALBuildOverviews := GetProcAddress(dllHandle, 'GDALBuildOverviews');
+  @GDALGetOpenDatasets := GetProcAddress(dllHandle, 'GDALGetOpenDatasets');
+  @GDALGetAccess := GetProcAddress(dllHandle, 'GDALGetAccess');
+  @GDALFlushCache := GetProcAddress(dllHandle, 'GDALFlushCache');
+  @GDALCreateDatasetMaskBand := GetProcAddress(dllHandle, 'GDALCreateDatasetMaskBand');
+  @GDALDatasetCopyWholeRaster := GetProcAddress(dllHandle, 'GDALDatasetCopyWholeRaster');
+  @GDALRegenerateOverviews := GetProcAddress(dllHandle, 'GDALRegenerateOverviews');
+  @GDALGetRasterDataType := GetProcAddress(dllHandle, 'GDALGetRasterDataType');
+  @GDALGetBlockSize := GetProcAddress(dllHandle, 'GDALGetBlockSize');
+  @GDALRasterAdviseRead := GetProcAddress(dllHandle, 'GDALRasterAdviseRead');
+  @GDALRasterIO := GetProcAddress(dllHandle, 'GDALRasterIO');
+  @GDALReadBlock := GetProcAddress(dllHandle, 'GDALReadBlock');
+  @GDALWriteBlock := GetProcAddress(dllHandle, 'GDALWriteBlock');
+  @GDALGetRasterBandXSize := GetProcAddress(dllHandle, 'GDALGetRasterBandXSize');
+  @GDALGetRasterBandYSize := GetProcAddress(dllHandle, 'GDALGetRasterBandYSize');
+  @GDALGetRasterAccess := GetProcAddress(dllHandle, 'GDALGetRasterAccess');
+  @GDALGetBandNumber := GetProcAddress(dllHandle, 'GDALGetBandNumber');
+  @GDALGetBandDataset := GetProcAddress(dllHandle, 'GDALGetBandDataset');
+  @GDALGetRasterColorInterpretation := GetProcAddress(dllHandle, 'GDALGetRasterColorInterpretation');
+  @GDALSetRasterColorInterpretation := GetProcAddress(dllHandle, 'GDALSetRasterColorInterpretation');
+  @GDALGetRasterColorTable := GetProcAddress(dllHandle, 'GDALGetRasterColorTable');
+  @GDALSetRasterColorTable := GetProcAddress(dllHandle, 'GDALSetRasterColorTable');
+  @GDALHasArbitraryOverviews := GetProcAddress(dllHandle, 'GDALHasArbitraryOverviews');
+  @GDALGetOverviewCount := GetProcAddress(dllHandle, 'GDALGetOverviewCount');
+  @GDALGetOverview := GetProcAddress(dllHandle, 'GDALGetOverview');
+  @GDALGetRasterNoDataValue := GetProcAddress(dllHandle, 'GDALGetRasterNoDataValue');
+  @GDALSetRasterNoDataValue := GetProcAddress(dllHandle, 'GDALSetRasterNoDataValue');
+  @GDALGetRasterCategoryNames := GetProcAddress(dllHandle, 'GDALGetRasterCategoryNames');
+  @GDALSetRasterCategoryNames := GetProcAddress(dllHandle, 'GDALSetRasterCategoryNames');
+  @GDALGetRasterMinimum := GetProcAddress(dllHandle, 'GDALGetRasterMinimum');
+  @GDALGetRasterMaximum := GetProcAddress(dllHandle, 'GDALGetRasterMaximum');
+  @GDALGetRasterStatistics := GetProcAddress(dllHandle, 'GDALGetRasterStatistics');
+  @GDALComputeRasterStatistics := GetProcAddress(dllHandle, 'GDALComputeRasterStatistics');
+  @GDALSetRasterStatistics := GetProcAddress(dllHandle, 'GDALSetRasterStatistics');
+  @GDALGetRasterUnitType := GetProcAddress(dllHandle, 'GDALGetRasterUnitType');
+  @GDALGetRasterOffset := GetProcAddress(dllHandle, 'GDALGetRasterOffset');
+  @GDALSetRasterOffset := GetProcAddress(dllHandle, 'GDALSetRasterOffset');
+  @GDALGetRasterScale := GetProcAddress(dllHandle, 'GDALGetRasterScale');
+  @GDALSetRasterScale := GetProcAddress(dllHandle, 'GDALSetRasterScale');
+  @GDALComputeRasterMinMax := GetProcAddress(dllHandle, 'GDALComputeRasterMinMax');
+  @GDALFlushRasterCache := GetProcAddress(dllHandle, 'GDALFlushRasterCache');
+  @GDALGetRasterHistogram := GetProcAddress(dllHandle, 'GDALGetRasterHistogram');
+  @GDALGetDefaultHistogram := GetProcAddress(dllHandle, 'GDALGetDefaultHistogram');
+  @GDALSetDefaultHistogram := GetProcAddress(dllHandle, 'GDALSetDefaultHistogram');
+  @GDALGetRandomRasterSample := GetProcAddress(dllHandle, 'GDALGetRandomRasterSample');
+  @GDALGetRasterSampleOverview := GetProcAddress(dllHandle, 'GDALGetRasterSampleOverview');
+  @GDALFillRaster := GetProcAddress(dllHandle, 'GDALFillRaster');
+  @GDALComputeBandStats := GetProcAddress(dllHandle, 'GDALComputeBandStats');
+  @GDALOverviewMagnitudeCorrection := GetProcAddress(dllHandle, 'GDALOverviewMagnitudeCorrection');
+  @GDALGetDefaultRAT := GetProcAddress(dllHandle, 'GDALGetDefaultRAT');
+  @GDALSetDefaultRAT := GetProcAddress(dllHandle, 'GDALSetDefaultRAT');
+  @GDALGetMaskBand := GetProcAddress(dllHandle, 'GDALGetMaskBand');
+  @GDALGetMaskFlags := GetProcAddress(dllHandle, 'GDALGetMaskFlags');
+  @GDALCreateMaskBand := GetProcAddress(dllHandle, 'GDALCreateMaskBand');
+  @GDALGeneralCmdLineProcessor := GetProcAddress(dllHandle, 'GDALGeneralCmdLineProcessor');
+  @GDALSwapWords := GetProcAddress(dllHandle, 'GDALSwapWords');
+  @GDALCopyWords := GetProcAddress(dllHandle, 'GDALCopyWords');
+  @GDALCopyBits := GetProcAddress(dllHandle, 'GDALCopyBits');
+  @GDALLoadWorldFile := GetProcAddress(dllHandle, 'GDALLoadWorldFile');
+  @GDALReadWorldFile := GetProcAddress(dllHandle, 'GDALReadWorldFile');
+  @GDALWriteWorldFile := GetProcAddress(dllHandle, 'GDALWriteWorldFile');
+  @GDALLoadTabFile := GetProcAddress(dllHandle, 'GDALLoadTabFile');
+  @GDALReadTabFile := GetProcAddress(dllHandle, 'GDALReadTabFile');
+  @GDALLoadOziMapFile := GetProcAddress(dllHandle, 'GDALLoadOziMapFile');
+  @GDALReadOziMapFile := GetProcAddress(dllHandle, 'GDALReadOziMapFile');
+  @GDALLoadRPBFile := GetProcAddress(dllHandle, 'GDALLoadRPBFile');
+  @GDALWriteRPBFile := GetProcAddress(dllHandle, 'GDALWriteRPBFile');
+  @GDALLoadIMDFile := GetProcAddress(dllHandle, 'GDALLoadIMDFile');
+  @GDALWriteIMDFile := GetProcAddress(dllHandle, 'GDALWriteIMDFile');
+  @GDALDecToDMS := GetProcAddress(dllHandle, 'GDALDecToDMS');
+  @GDALPackedDMSToDec := GetProcAddress(dllHandle, 'GDALPackedDMSToDec');
+  @GDALDecToPackedDMS := GetProcAddress(dllHandle, 'GDALDecToPackedDMS');
+  @GDALVersionInfo := GetProcAddress(dllHandle, 'GDALVersionInfo');
+  @GDALCheckVersion := GetProcAddress(dllHandle, 'GDALCheckVersion');
+  @GDALExtractRPCInfo := GetProcAddress(dllHandle, 'GDALExtractRPCInfo');
+  @GDALCreateColorTable := GetProcAddress(dllHandle, 'GDALCreateColorTable');
+  @GDALDestroyColorTable := GetProcAddress(dllHandle, 'GDALDestroyColorTable');
+  @GDALCloneColorTable := GetProcAddress(dllHandle, 'GDALCloneColorTable');
+  @GDALGetPaletteInterpretation := GetProcAddress(dllHandle, 'GDALGetPaletteInterpretation');
+  @GDALGetColorEntryCount := GetProcAddress(dllHandle, 'GDALGetColorEntryCount');
+  @GDALGetColorEntry := GetProcAddress(dllHandle, 'GDALGetColorEntry');
+  @GDALGetColorEntryAsRGB := GetProcAddress(dllHandle, 'GDALGetColorEntryAsRGB');
+  @GDALSetColorEntry := GetProcAddress(dllHandle, 'GDALSetColorEntry');
+  @GDALCreateColorRamp := GetProcAddress(dllHandle, 'GDALCreateColorRamp');
+  @GDALCreateRasterAttributeTable := GetProcAddress(dllHandle, 'GDALCreateRasterAttributeTable');
+  @GDALDestroyRasterAttributeTable := GetProcAddress(dllHandle, 'GDALDestroyRasterAttributeTable');
+  @GDALRATGetColumnCount := GetProcAddress(dllHandle, 'GDALRATGetColumnCount');
+  @GDALRATGetNameOfCol := GetProcAddress(dllHandle, 'GDALRATGetNameOfCol');
+  @GDALRATGetUsageOfCol := GetProcAddress(dllHandle, 'GDALRATGetUsageOfCol');
+  @GDALRATGetTypeOfCol := GetProcAddress(dllHandle, 'GDALRATGetTypeOfCol');
+  @GDALRATGetColOfUsage := GetProcAddress(dllHandle, 'GDALRATGetColOfUsage');
+  @GDALRATGetRowCount := GetProcAddress(dllHandle, 'GDALRATGetRowCount');
+  @GDALRATGetValueAsString := GetProcAddress(dllHandle, 'GDALRATGetValueAsString');
+  @GDALRATGetValueAsInt := GetProcAddress(dllHandle, 'GDALRATGetValueAsInt');
+  @GDALRATGetValueAsDouble := GetProcAddress(dllHandle, 'GDALRATGetValueAsDouble');
+  @GDALRATSetValueAsString := GetProcAddress(dllHandle, 'GDALRATSetValueAsString');
+  @GDALRATSetValueAsInt := GetProcAddress(dllHandle, 'GDALRATSetValueAsInt');
+  @GDALRATSetValueAsDouble := GetProcAddress(dllHandle, 'GDALRATSetValueAsDouble');
+  @GDALRATSetRowCount := GetProcAddress(dllHandle, 'GDALRATSetRowCount');
+  @GDALRATCreateColumn := GetProcAddress(dllHandle, 'GDALRATCreateColumn');
+  @GDALRATSetLinearBinning := GetProcAddress(dllHandle, 'GDALRATSetLinearBinning');
+  @GDALRATGetLinearBinning := GetProcAddress(dllHandle, 'GDALRATGetLinearBinning');
+  @GDALRATInitializeFromColorTable := GetProcAddress(dllHandle, 'GDALRATInitializeFromColorTable');
+  @GDALRATTranslateToColorTable := GetProcAddress(dllHandle, 'GDALRATTranslateToColorTable');
+  @GDALRATDumpReadable := GetProcAddress(dllHandle, 'GDALRATDumpReadable');
+  @GDALRATClone := GetProcAddress(dllHandle, 'GDALRATClone');
+  @GDALRATGetRowOfValue := GetProcAddress(dllHandle, 'GDALRATGetRowOfValue');
+  @GDALSetCacheMax := GetProcAddress(dllHandle, 'GDALSetCacheMax');
+  @GDALGetCacheMax := GetProcAddress(dllHandle, 'GDALGetCacheMax');
+  @GDALGetCacheUsed := GetProcAddress(dllHandle, 'GDALGetCacheUsed');
+  @GDALFlushCacheBlock := GetProcAddress(dllHandle, 'GDALFlushCacheBlock');
+  @CPLListCount := GetProcAddress(dllHandle, 'CPLListCount');
+  @CPLMalloc := GetProcAddress(dllHandle, 'CPLMalloc');
+end;
+
+initialization
+  DynamicLoad(LibName);
+
 end.
+
